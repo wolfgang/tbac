@@ -5,7 +5,7 @@ type TokenizerResult = Result<Vec<Token>, String>;
 pub struct Tokenizer {
     input_chars: Vec<char>,
     result: Vec<Token>,
-    position: usize
+    position: usize,
 }
 
 impl Tokenizer {
@@ -13,24 +13,25 @@ impl Tokenizer {
         Self {
             input_chars: input.chars().collect(),
             result: Vec::with_capacity(128),
-            position: 0
+            position: 0,
         }
     }
 
     pub fn tokenize(&mut self) -> TokenizerResult {
         while self.has_input() {
-            if self.current_char().is_uppercase() {
-                let mut buffer = String::with_capacity(16);
-                while self.has_input() && self.current_char().is_uppercase() {
-                    buffer.push(self.current_char());
-                    self.position += 1;
-                }
-
-                self.result.push(Self::keyword_token(&buffer));
-            }
+            if self.current_char().is_uppercase() { self.read_keyword() }
             self.position += 1;
         }
         Ok(self.result.clone())
+    }
+
+    fn read_keyword(&mut self) {
+        let mut buffer = String::with_capacity(16);
+        while self.has_input() && self.current_char().is_uppercase() {
+            buffer.push(self.current_char());
+            self.position += 1;
+        }
+        self.result.push(Self::keyword_token(&buffer));
     }
 
     fn keyword_token(buffer: &String) -> Token {
@@ -49,6 +50,5 @@ impl Tokenizer {
 
     fn current_char(&self) -> char {
         self.input_chars[self.position]
-
     }
 }
