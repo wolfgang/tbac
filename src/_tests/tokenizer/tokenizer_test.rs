@@ -64,3 +64,9 @@ fn returns_error_if_string_is_unterminated() {
     assert_eq!(tokenize(r#"PRINT "hello" PRINT "hellooo"#),
                Err("Unterminated string 'hellooo'".to_string()));
 }
+
+#[test]
+fn returns_error_if_encountering_unknown_token() {
+    assert_eq!(tokenize("PRINT 123 %"),
+               Err("Unrecognized character '%'".to_string()));
+}

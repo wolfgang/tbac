@@ -20,13 +20,24 @@ impl Tokenizer {
     pub fn tokenize(&mut self) -> TokenizerResult {
         while self.has_input() {
             self.skip_whitespace();
-            if self.current_char_is(|c| c.is_uppercase()) { self.read_keyword()? }
-            if self.current_char_is(|c| c == '"') { self.read_string()? }
-            if self.current_char_is(|c| c.is_digit(10)) { self.read_number() }
+            if self.current_char_is(|c| c.is_uppercase()) {
+                self.read_keyword()?;
+                continue
+            }
+            if self.current_char_is(|c| c == '"') {
+                self.read_string()?;
+                continue;
+            }
+            if self.current_char_is(|c| c.is_digit(10)) {
+                self.read_number();
+                continue
+            }
             if self.current_char_is(|c| c == '>') {
                 self.result.push(Token::gt());
                 self.consume_char();
+                continue;
             }
+            return Err(format!("Unrecognized character '{}'", self.current_char()));
         }
         Ok(self.result.clone())
     }
