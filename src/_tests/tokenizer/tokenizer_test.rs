@@ -43,6 +43,17 @@ fn tokenizes_numbers() {
 }
 
 #[test]
+fn tokenize_gt() {
+    assert_eq!(tokenize("12 > 10"),
+               Ok(vec![
+                   Token::number("12"),
+                   Token::gt(),
+                   Token::number("10")
+               ])
+    )
+}
+
+#[test]
 fn returns_error_if_keyword_is_unknown() {
     assert_eq!(tokenize("PRINT NOPE"),
                Err("Unknown keyword 'NOPE'".to_string()));

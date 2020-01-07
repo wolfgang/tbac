@@ -23,6 +23,10 @@ impl Tokenizer {
             if self.current_char_is(|c| c.is_uppercase()) { self.read_keyword()? }
             if self.current_char_is(|c| c == '"') { self.read_string()? }
             if self.current_char_is(|c| c.is_digit(10)) { self.read_number() }
+            if self.current_char_is(|c| c == '>') {
+                self.result.push(Token::gt());
+                self.consume_char();
+            }
         }
         Ok(self.result.clone())
     }
