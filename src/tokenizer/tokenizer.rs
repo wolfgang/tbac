@@ -3,17 +3,20 @@ use crate::tokenizer::token::Token;
 type TokenizerResult = Result<Vec<Token>, String>;
 
 pub struct Tokenizer {
-    input_chars: Vec<char>
+    input_chars: Vec<char>,
+    result: Vec<Token>
 }
 
 impl Tokenizer {
     pub fn new(input: &str) -> Self {
-        Self { input_chars: input.chars().collect() }
+        Self {
+            input_chars: input.chars().collect(),
+            result: Vec::with_capacity(128)
+        }
     }
 
-    pub fn tokenize(&self) -> TokenizerResult {
+    pub fn tokenize(&mut self) -> TokenizerResult {
         let mut position = 0;
-        let mut result = Vec::with_capacity(128);
         while position < self.input_chars.len() {
             if self.input_chars[position].is_uppercase() {
                 let mut buffer = String::with_capacity(16);
@@ -22,11 +25,11 @@ impl Tokenizer {
                     position += 1;
                 }
 
-                result.push(Self::keyword_token(&buffer));
+                self.result.push(Self::keyword_token(&buffer));
             }
             position += 1;
         }
-        Ok(result)
+        Ok(self.result.clone())
     }
 
     fn keyword_token(buffer: &String) -> Token {

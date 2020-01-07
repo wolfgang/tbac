@@ -1,6 +1,6 @@
 use TokenType::*;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub enum TokenType {
     PRINT,
     IF,
@@ -10,7 +10,7 @@ pub enum TokenType {
     STRING,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Token {
     pub ttype: TokenType,
     pub value: String,
