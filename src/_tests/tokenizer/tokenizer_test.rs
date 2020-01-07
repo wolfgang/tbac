@@ -14,7 +14,7 @@ fn tokenizes_print_statement_without_parameters() {
 
 #[test]
 fn tokenizes_all_keywords() {
-    let input = r#"PRINT IF THEN GT"#;
+    let input = "PRINT IF THEN GT";
     let result = Tokenizer::new(input).tokenize();
 
     assert_eq!(result, Ok(vec![
@@ -23,5 +23,13 @@ fn tokenizes_all_keywords() {
         Token::then(),
         Token::gt(),
     ]))
+
+}
+
+#[test]
+fn returns_error_if_keyword_is_unknown() {
+    let input = "PRINT NOPE IF";
+    let result = Tokenizer::new(input).tokenize();
+    assert_eq!(result, Err("Unknown keyword 'NOPE'".to_string()));
 
 }

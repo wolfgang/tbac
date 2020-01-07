@@ -19,28 +19,35 @@ impl Tokenizer {
 
     pub fn tokenize(&mut self) -> TokenizerResult {
         while self.has_input() {
-            if self.current_char().is_uppercase() { self.read_keyword() }
+            if self.current_char().is_uppercase() { self.read_keyword()? }
             self.position += 1;
         }
         Ok(self.result.clone())
     }
 
-    fn read_keyword(&mut self) {
+    fn read_keyword(&mut self) -> Result<(), String> {
         let mut buffer = String::with_capacity(16);
         while self.has_input() && self.current_char().is_uppercase() {
             buffer.push(self.current_char());
             self.position += 1;
         }
-        self.result.push(Self::keyword_token(&buffer));
+
+        match Self::keyword_token(&buffer) {
+            Some(token) => {
+                self.result.push(token);
+                Ok(())
+            }
+            None => { Err(format!("Unknown keyword '{}'", buffer)) }
+        }
     }
 
-    fn keyword_token(buffer: &String) -> Token {
+    fn keyword_token(buffer: &String) -> Option<Token> {
         match buffer.as_str() {
-            "PRINT" => { Token::print() }
-            "IF" => { Token::iff() }
-            "THEN" => { Token::then() }
-            "GT" => { Token::gt() }
-            _ => { Token::number("1234") }
+            "PRINT" => { Some(Token::print()) }
+            "IF" => { Some(Token::iff()) }
+            "THEN" => { Some(Token::then()) }
+            "GT" => { Some(Token::gt()) }
+            _ => { None }
         }
     }
 
