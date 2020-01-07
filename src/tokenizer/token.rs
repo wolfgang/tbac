@@ -10,6 +10,7 @@ pub enum TokenType {
     STRING,
 }
 
+#[derive(PartialEq, Debug)]
 pub struct Token {
     pub ttype: TokenType,
     pub value: String,
