@@ -45,6 +45,9 @@ impl Tokenizer {
     fn read_string(&mut self) -> Result<(), String> {
         self.consume_char();
         let buffer = self.consume_chars_while(|c| c != '"');
+        if !self.has_input() {
+            return Err(format!("Unterminated string '{}'", buffer))
+        }
         self.consume_char();
         self.result.push(Token::string(buffer.as_str()));
         Ok(())

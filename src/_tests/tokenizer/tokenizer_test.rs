@@ -35,10 +35,12 @@ fn tokenizes_string_literals() {
 
 #[test]
 fn returns_error_if_keyword_is_unknown() {
-    assert_eq!(tokenize("PRINT NOPE"), Err("Unknown keyword 'NOPE'".to_string()));
+    assert_eq!(tokenize("PRINT NOPE"),
+               Err("Unknown keyword 'NOPE'".to_string()));
 }
 
 #[test]
 fn returns_error_if_string_is_unterminated() {
-
+    assert_eq!(tokenize(r#"PRINT "hello" PRINT "hellooo"#),
+               Err("Unterminated string 'hellooo'".to_string()));
 }
