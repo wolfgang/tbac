@@ -18,11 +18,11 @@ impl Tokenizer {
     }
 
     pub fn tokenize(&mut self) -> TokenizerResult {
-        while self.position < self.input_chars.len() {
-            if self.input_chars[self.position].is_uppercase() {
+        while self.has_input() {
+            if self.current_char().is_uppercase() {
                 let mut buffer = String::with_capacity(16);
-                while self.position < self.input_chars.len() && self.input_chars[self.position].is_uppercase() {
-                    buffer.push(self.input_chars[self.position]);
+                while self.has_input() && self.current_char().is_uppercase() {
+                    buffer.push(self.current_char());
                     self.position += 1;
                 }
 
@@ -41,5 +41,14 @@ impl Tokenizer {
             "GT" => { Token::gt() }
             _ => { Token::number("1234") }
         }
+    }
+
+    fn has_input(&self) -> bool {
+        self.position < self.input_chars.len()
+    }
+
+    fn current_char(&self) -> char {
+        self.input_chars[self.position]
+
     }
 }
