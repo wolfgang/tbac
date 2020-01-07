@@ -22,13 +22,20 @@ impl Tokenizer {
                     position += 1;
                 }
 
-                if buffer.as_str() == "PRINT" { result.push(Token::print()) }
-                if buffer.as_str() == "IF" { result.push(Token::iff())};
-                if buffer.as_str() == "THEN" { result.push(Token::then())};
-                if buffer.as_str() == "GT" { result.push(Token::gt())};
+                result.push(Self::keyword_token(&buffer));
             }
             position += 1;
         }
         Ok(result)
+    }
+
+    fn keyword_token(buffer: &String) -> Token {
+        match buffer.as_str() {
+            "PRINT" => { Token::print() }
+            "IF" => { Token::iff() }
+            "THEN" => { Token::then() }
+            "GT" => { Token::gt() }
+            _ => { Token::number("1234") }
+        }
     }
 }
