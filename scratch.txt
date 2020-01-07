@@ -1,0 +1,26 @@
+IF 2 > 1 THEN PRINT "YES"
+
+1. Tokenizer
+
+
+enum TokenType {
+x    IF,
+x    PRINT,
+x    THEN
+x    GT
+    NUM
+    STRING
+}
+
+struct Token {
+    type: TokenType
+    value: String
+}
+
+Tokens:
+IF
+Expression (number for now)
+GT
+THEN
+PRINT
+String Literal
