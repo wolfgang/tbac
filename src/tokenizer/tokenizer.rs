@@ -4,30 +4,31 @@ type TokenizerResult = Result<Vec<Token>, String>;
 
 pub struct Tokenizer {
     input_chars: Vec<char>,
-    result: Vec<Token>
+    result: Vec<Token>,
+    position: usize
 }
 
 impl Tokenizer {
     pub fn new(input: &str) -> Self {
         Self {
             input_chars: input.chars().collect(),
-            result: Vec::with_capacity(128)
+            result: Vec::with_capacity(128),
+            position: 0
         }
     }
 
     pub fn tokenize(&mut self) -> TokenizerResult {
-        let mut position = 0;
-        while position < self.input_chars.len() {
-            if self.input_chars[position].is_uppercase() {
+        while self.position < self.input_chars.len() {
+            if self.input_chars[self.position].is_uppercase() {
                 let mut buffer = String::with_capacity(16);
-                while position < self.input_chars.len() && self.input_chars[position].is_uppercase() {
-                    buffer.push(self.input_chars[position]);
-                    position += 1;
+                while self.position < self.input_chars.len() && self.input_chars[self.position].is_uppercase() {
+                    buffer.push(self.input_chars[self.position]);
+                    self.position += 1;
                 }
 
                 self.result.push(Self::keyword_token(&buffer));
             }
-            position += 1;
+            self.position += 1;
         }
         Ok(self.result.clone())
     }
