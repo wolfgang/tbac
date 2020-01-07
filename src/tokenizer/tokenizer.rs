@@ -19,11 +19,17 @@ impl Tokenizer {
 
     pub fn tokenize(&mut self) -> TokenizerResult {
         while self.has_input() {
+            self.skip_whitespace();
             if self.current_char().is_uppercase() { self.read_keyword()? }
-            if self.has_input() && self.current_char() == '"' { self.read_string() ? }
-            self.position += 1;
+            if self.has_input() && self.current_char() == '"' { self.read_string()? }
         }
         Ok(self.result.clone())
+    }
+
+    fn skip_whitespace(&mut self) {
+        while self.has_input() && self.current_char().is_whitespace() {
+            self.consume_char();
+        }
     }
 
     fn read_keyword(&mut self) -> Result<(), String> {
@@ -47,12 +53,10 @@ impl Tokenizer {
         while self.has_input() && self.current_char() != '"' {
             buffer.push(self.consume_char());
         }
-
-        self.result.push(Token::string(buffer.as_str()));
         self.consume_char();
 
-        return Ok(())
-
+        self.result.push(Token::string(buffer.as_str()));
+        Ok(())
     }
 
     fn keyword_token(buffer: &String) -> Option<Token> {
@@ -78,5 +82,4 @@ impl Tokenizer {
     fn current_char(&self) -> char {
         self.input_chars[self.position]
     }
-
 }
