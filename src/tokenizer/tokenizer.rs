@@ -49,7 +49,7 @@ impl Tokenizer {
     fn read_keyword(&mut self) -> Result<(), String> {
         let buffer = self.consume_chars_while(|c| c.is_uppercase());
 
-        match Self::keyword_token(&buffer) {
+        match Token::from_keyword(&buffer) {
             Some(token) => {
                 self.result.push(token);
                 Ok(())
@@ -81,15 +81,6 @@ impl Tokenizer {
         }
 
         buffer
-    }
-
-    fn keyword_token(buffer: &String) -> Option<Token> {
-        match buffer.as_str() {
-            "PRINT" => { Some(Token::print()) }
-            "IF" => { Some(Token::iff()) }
-            "THEN" => { Some(Token::then()) }
-            _ => { None }
-        }
     }
 
     fn current_char_is<F>(&self, pred: F) -> bool where F: Fn(char) -> bool {

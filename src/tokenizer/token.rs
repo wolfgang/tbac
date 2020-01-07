@@ -17,6 +17,15 @@ pub struct Token {
 }
 
 impl Token {
+    pub fn from_keyword(name: &String) -> Option<Token> {
+        match name.as_str() {
+            "PRINT" => { Some(Token::print()) }
+            "IF" => { Some(Token::iff()) }
+            "THEN" => { Some(Token::then()) }
+            _ => { None }
+        }
+    }
+
     pub fn print() -> Self { Self::with_empty_value(PRINT) }
     pub fn iff() -> Self { Self::with_empty_value(IF) }
     pub fn then() -> Self { Self::with_empty_value(THEN) }
