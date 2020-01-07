@@ -1,48 +1,44 @@
+use crate::tokenizer::{Tokenizer, TokenizerResult};
 use crate::tokenizer::Token;
-use crate::tokenizer::Tokenizer;
+
+fn tokenize(input: &str) -> TokenizerResult {
+    Tokenizer::new(input).tokenize()
+}
 
 #[test]
 fn tokenizes_print_statement_without_parameters() {
-    let input = r#"PRINT"#;
-    let result = Tokenizer::new(input).tokenize();
-
-    assert_eq!(result, Ok(vec![
-        Token::print()
-    ]))
-
+    assert_eq!(tokenize("PRINT"),
+               Ok(vec![Token::print()]))
 }
 
 #[test]
 fn tokenizes_all_keywords() {
-    let input = "PRINT IF THEN GT";
-    let result = Tokenizer::new(input).tokenize();
-
-    assert_eq!(result, Ok(vec![
-        Token::print(),
-        Token::iff(),
-        Token::then(),
-        Token::gt(),
-    ]))
+    assert_eq!(tokenize("PRINT IF THEN GT"),
+               Ok(vec![
+                   Token::print(),
+                   Token::iff(),
+                   Token::then(),
+                   Token::gt(),
+               ]))
 }
 
 #[test]
 fn tokenizes_string_literals() {
-    let input = r#"PRINT "hello" PRINT "world""#;
-    let result = Tokenizer::new(input).tokenize();
-
-    assert_eq!(result, Ok(vec![
-        Token::print(),
-        Token::string("hello"),
-        Token::print(),
-        Token::string("world"),
-    ]))
-
+    assert_eq!(tokenize(r#"PRINT "hello" PRINT "world""#),
+               Ok(vec![
+                   Token::print(),
+                   Token::string("hello"),
+                   Token::print(),
+                   Token::string("world"),
+               ]))
 }
 
 #[test]
 fn returns_error_if_keyword_is_unknown() {
-    let input = "PRINT NOPE IF";
-    let result = Tokenizer::new(input).tokenize();
-    assert_eq!(result, Err("Unknown keyword 'NOPE'".to_string()));
+    assert_eq!(tokenize("PRINT NOPE"), Err("Unknown keyword 'NOPE'".to_string()));
+}
+
+#[test]
+fn returns_error_if_string_is_unterminated() {
 
 }

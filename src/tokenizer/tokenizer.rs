@@ -1,6 +1,6 @@
 use crate::tokenizer::token::Token;
 
-type TokenizerResult = Result<Vec<Token>, String>;
+pub type TokenizerResult = Result<Vec<Token>, String>;
 
 pub struct Tokenizer {
     input_chars: Vec<char>,
