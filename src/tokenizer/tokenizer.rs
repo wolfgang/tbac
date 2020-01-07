@@ -88,7 +88,6 @@ impl Tokenizer {
             "PRINT" => { Some(Token::print()) }
             "IF" => { Some(Token::iff()) }
             "THEN" => { Some(Token::then()) }
-            "GT" => { Some(Token::gt()) }
             _ => { None }
         }
     }
