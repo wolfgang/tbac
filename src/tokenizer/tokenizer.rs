@@ -29,8 +29,7 @@ impl Tokenizer {
     fn read_keyword(&mut self) -> Result<(), String> {
         let mut buffer = String::with_capacity(16);
         while self.has_input() && self.current_char().is_uppercase() {
-            buffer.push(self.current_char());
-            self.position += 1;
+            buffer.push(self.consume_char());
         }
 
         match Self::keyword_token(&buffer) {
@@ -43,14 +42,14 @@ impl Tokenizer {
     }
 
     fn read_string(&mut self) -> Result<(), String> {
-        self.position += 1;
+        self.consume_char();
         let mut buffer = String::with_capacity(128);
         while self.has_input() && self.current_char() != '"' {
-            buffer.push(self.current_char());
-            self.position += 1;
+            buffer.push(self.consume_char());
         }
 
         self.result.push(Token::string(buffer.as_str()));
+        self.consume_char();
 
         return Ok(())
 
@@ -70,7 +69,14 @@ impl Tokenizer {
         self.position < self.input_chars.len()
     }
 
+    fn consume_char(&mut self) -> char {
+        let c = self.current_char();
+        self.position += 1;
+        c
+    }
+
     fn current_char(&self) -> char {
         self.input_chars[self.position]
     }
+
 }
