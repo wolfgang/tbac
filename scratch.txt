@@ -8,8 +8,8 @@ x    IF,
 x    PRINT,
 x    THEN
 x    GT
-    NUM
-    STRING
+x    NUM
+x    STRING
 }
 
 struct Token {

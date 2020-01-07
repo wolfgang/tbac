@@ -34,6 +34,15 @@ fn tokenizes_string_literals() {
 }
 
 #[test]
+fn tokenizes_numbers() {
+    assert_eq!(tokenize("PRINT 12345"),
+               Ok(vec![
+                   Token::print(),
+                   Token::number("12345")
+               ]))
+}
+
+#[test]
 fn returns_error_if_keyword_is_unknown() {
     assert_eq!(tokenize("PRINT NOPE"),
                Err("Unknown keyword 'NOPE'".to_string()));

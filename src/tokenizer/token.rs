@@ -17,10 +17,10 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn print() -> Self { Self::keyword(PRINT) }
-    pub fn iff() -> Self { Self::keyword(IF) }
-    pub fn then() -> Self { Self::keyword(THEN) }
-    pub fn gt() -> Self { Self::keyword(GT) }
+    pub fn print() -> Self { Self::with_empty_value(PRINT) }
+    pub fn iff() -> Self { Self::with_empty_value(IF) }
+    pub fn then() -> Self { Self::with_empty_value(THEN) }
+    pub fn gt() -> Self { Self::with_empty_value(GT) }
 
     pub fn number(value: &str) -> Self {
         Self { ttype: NUMBER, value: String::from(value) }
@@ -30,7 +30,7 @@ impl Token {
         Self { ttype: STRING, value: String::from(value) }
     }
 
-    fn keyword(ttype: TokenType) -> Self {
+    fn with_empty_value(ttype: TokenType) -> Self {
         Self { ttype, value: String::from("") }
     }
 }

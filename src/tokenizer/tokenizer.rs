@@ -20,8 +20,9 @@ impl Tokenizer {
     pub fn tokenize(&mut self) -> TokenizerResult {
         while self.has_input() {
             self.skip_whitespace();
-            if self.current_char().is_uppercase() { self.read_keyword()? }
-            if self.has_input() && self.current_char() == '"' { self.read_string()? }
+            if self.current_char_is(|c| c.is_uppercase()) { self.read_keyword()? }
+            if self.current_char_is(|c| c == '"') { self.read_string()? }
+            if self.current_char_is(|c| c.is_digit(10)) { self.read_number() }
         }
         Ok(self.result.clone())
     }
@@ -46,11 +47,16 @@ impl Tokenizer {
         self.consume_char();
         let buffer = self.consume_chars_while(|c| c != '"');
         if !self.has_input() {
-            return Err(format!("Unterminated string '{}'", buffer))
+            return Err(format!("Unterminated string '{}'", buffer));
         }
         self.consume_char();
         self.result.push(Token::string(buffer.as_str()));
         Ok(())
+    }
+
+    fn read_number(&mut self) {
+        let buffer = self.consume_chars_while(|c| c.is_digit(10));
+        self.result.push(Token::number(buffer.as_str()))
     }
 
     fn consume_chars_while<F>(&mut self, pred: F) -> String where F: Fn(char) -> bool {
@@ -70,6 +76,10 @@ impl Tokenizer {
             "GT" => { Some(Token::gt()) }
             _ => { None }
         }
+    }
+
+    fn current_char_is<F>(&self, pred: F) -> bool where F: Fn(char) -> bool {
+        self.has_input() && pred(self.current_char())
     }
 
     fn has_input(&self) -> bool {
