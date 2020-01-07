@@ -27,16 +27,11 @@ impl Tokenizer {
     }
 
     fn skip_whitespace(&mut self) {
-        while self.has_input() && self.current_char().is_whitespace() {
-            self.consume_char();
-        }
+        self.consume_chars_while(|c| c.is_whitespace());
     }
 
     fn read_keyword(&mut self) -> Result<(), String> {
-        let mut buffer = String::with_capacity(16);
-        while self.has_input() && self.current_char().is_uppercase() {
-            buffer.push(self.consume_char());
-        }
+        let buffer = self.consume_chars_while(|c| c.is_uppercase());
 
         match Self::keyword_token(&buffer) {
             Some(token) => {
@@ -49,14 +44,19 @@ impl Tokenizer {
 
     fn read_string(&mut self) -> Result<(), String> {
         self.consume_char();
-        let mut buffer = String::with_capacity(128);
-        while self.has_input() && self.current_char() != '"' {
-            buffer.push(self.consume_char());
-        }
+        let buffer = self.consume_chars_while(|c| c != '"');
         self.consume_char();
-
         self.result.push(Token::string(buffer.as_str()));
         Ok(())
+    }
+
+    fn consume_chars_while<F>(&mut self, pred: F) -> String where F: Fn(char) -> bool {
+        let mut buffer = String::with_capacity(128);
+        while self.has_input() && pred(self.current_char()) {
+            buffer.push(self.consume_char());
+        }
+
+        buffer
     }
 
     fn keyword_token(buffer: &String) -> Option<Token> {
