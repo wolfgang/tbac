@@ -23,6 +23,19 @@ fn tokenizes_all_keywords() {
         Token::then(),
         Token::gt(),
     ]))
+}
+
+#[test]
+fn tokenizes_string_literals() {
+    let input = r#"PRINT "hello" PRINT "world""#;
+    let result = Tokenizer::new(input).tokenize();
+
+    assert_eq!(result, Ok(vec![
+        Token::print(),
+        Token::string("hello"),
+        Token::print(),
+        Token::string("world"),
+    ]))
 
 }
 

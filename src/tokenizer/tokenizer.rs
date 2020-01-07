@@ -20,6 +20,7 @@ impl Tokenizer {
     pub fn tokenize(&mut self) -> TokenizerResult {
         while self.has_input() {
             if self.current_char().is_uppercase() { self.read_keyword()? }
+            if self.has_input() && self.current_char() == '"' { self.read_string() ? }
             self.position += 1;
         }
         Ok(self.result.clone())
@@ -39,6 +40,20 @@ impl Tokenizer {
             }
             None => { Err(format!("Unknown keyword '{}'", buffer)) }
         }
+    }
+
+    fn read_string(&mut self) -> Result<(), String> {
+        self.position += 1;
+        let mut buffer = String::with_capacity(128);
+        while self.has_input() && self.current_char() != '"' {
+            buffer.push(self.current_char());
+            self.position += 1;
+        }
+
+        self.result.push(Token::string(buffer.as_str()));
+
+        return Ok(())
+
     }
 
     fn keyword_token(buffer: &String) -> Option<Token> {
