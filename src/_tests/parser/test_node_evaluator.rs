@@ -2,6 +2,12 @@ use crate::parser::ifnode::IfNode;
 use crate::parser::node_evaluator::NodeEvaluator;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
+use crate::parser::node::Node;
+
+pub fn test_eval(node: &dyn Node) -> String {
+    let mut evaluator = TestNodeEvaluator::new();
+    node.eval(&mut evaluator)
+}
 
 pub struct TestNodeEvaluator {
     pub(crate) code: Vec<String>
