@@ -5,7 +5,6 @@ pub enum TokenType {
     PRINT,
     IF,
     THEN,
-    GT,
     RELOP,
     NUMBER,
     STRING,
@@ -30,7 +29,6 @@ impl Token {
     pub fn print() -> Self { Self::with_empty_value(PRINT) }
     pub fn iff() -> Self { Self::with_empty_value(IF) }
     pub fn then() -> Self { Self::with_empty_value(THEN) }
-    pub fn gt() -> Self { Self::with_empty_value(GT) }
 
     pub fn relop(op: char) -> Self {
         Self { ttype: RELOP, value: format!("{}", op) }

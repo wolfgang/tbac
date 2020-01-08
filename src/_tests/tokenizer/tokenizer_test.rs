@@ -46,7 +46,7 @@ fn tokenize_gt() {
     assert_eq!(tokenize("12 > 10"),
                Ok(vec![
                    Token::number("12"),
-                   Token::gt(),
+                   Token::relop('>'),
                    Token::number("10")
                ])
     )

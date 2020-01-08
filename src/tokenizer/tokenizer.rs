@@ -33,7 +33,7 @@ impl Tokenizer {
                 continue
             }
             if self.current_char_is(|c| c == '>') {
-                self.result.push(Token::gt());
+                self.result.push(Token::relop('>'));
                 self.consume_char();
                 continue;
             }
