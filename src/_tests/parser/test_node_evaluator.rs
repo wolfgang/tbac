@@ -1,15 +1,17 @@
-use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
 use crate::parser::print_node::PrintNode;
 
-
-struct TestNodeEvaluator {
-    code: Vec<String>
+pub struct TestNodeEvaluator {
+    pub(crate) code: Vec<String>
 }
 
 impl TestNodeEvaluator {
     pub fn new() -> Self {
         Self { code: Vec::with_capacity(32) }
+    }
+
+    pub fn assert_code(&self, expected_code: Vec<&str>) {
+        assert_eq!(self.code, expected_code);
     }
 }
 
@@ -19,12 +21,4 @@ impl NodeEvaluator for TestNodeEvaluator {
     }
 }
 
-#[test]
-fn print_node_eval() {
-    let node = PrintNode::new("hello");
-    let mut code_generator = TestNodeEvaluator::new();
 
-    node.eval(&mut code_generator);
-
-    assert_eq!(code_generator.code, vec!["print hello"]);
-}
