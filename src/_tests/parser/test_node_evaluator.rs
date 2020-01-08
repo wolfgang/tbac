@@ -1,6 +1,7 @@
+use crate::parser::ifnode::IfNode;
 use crate::parser::node_evaluator::NodeEvaluator;
-use crate::parser::print_node::PrintNode;
 use crate::parser::number_node::NumberNode;
+use crate::parser::print_node::PrintNode;
 
 pub struct TestNodeEvaluator {
     pub(crate) code: Vec<String>
@@ -23,6 +24,14 @@ impl NodeEvaluator for TestNodeEvaluator {
 
     fn eval_number(&mut self, node: &NumberNode) -> String {
         format!("{}", node.value)
+    }
+
+    fn eval_if(&mut self, node: &IfNode) -> String {
+        format!("if {} {} {} {}",
+                node.left.eval(self),
+                node.relop,
+                node.right.eval(self),
+                node.then.eval(self))
     }
 }
 
