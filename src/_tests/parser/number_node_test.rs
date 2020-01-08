@@ -6,6 +6,6 @@ use crate::parser::node::Node;
 fn eval() {
     let mut evaluator = TestNodeEvaluator::new();
     let node = NumberNode::new(1234);
-    node.eval(&mut evaluator);
-    evaluator.assert_code(vec!["1234"]);
+    let code = node.eval(&mut evaluator);
+    assert_eq!(code, "1234");
 }

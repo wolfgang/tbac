@@ -12,8 +12,8 @@ impl PrintNode {
 }
 
 impl Node for PrintNode {
-    fn eval(&self, evaluator: &mut dyn NodeEvaluator) {
-        evaluator.eval_print(&self);
+    fn eval(&self, evaluator: &mut dyn NodeEvaluator) -> String {
+        evaluator.eval_print(&self)
     }
 }
 

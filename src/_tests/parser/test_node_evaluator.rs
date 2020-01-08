@@ -17,12 +17,12 @@ impl TestNodeEvaluator {
 }
 
 impl NodeEvaluator for TestNodeEvaluator {
-    fn eval_print(&mut self, node: &PrintNode) {
-        self.code.push(format!("print {}", node.string_param));
+    fn eval_print(&mut self, node: &PrintNode) -> String {
+        format!("print {}", node.string_param)
     }
 
-    fn eval_number(&mut self, node: &NumberNode) {
-        self.code.push(format!("{}", node.value));
+    fn eval_number(&mut self, node: &NumberNode) -> String {
+        format!("{}", node.value)
     }
 }
 

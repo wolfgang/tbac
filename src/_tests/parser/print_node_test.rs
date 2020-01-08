@@ -7,7 +7,7 @@ use crate::parser::print_node::PrintNode;
 fn eval() {
     let mut evaluator = TestNodeEvaluator::new();
     let node = PrintNode::new("hello");
-    node.eval(&mut evaluator);
+    let code = node.eval(&mut evaluator);
 
-    evaluator.assert_code(vec!["print hello"]);
+    assert_eq!(code, "print hello");
 }
