@@ -30,13 +30,13 @@ impl Parser {
 
     fn parse_statement(&mut self) -> Result<Box<dyn Node>, String> {
         let token = &self.tokens[self.position];
+        self.position += 1;
+
         if token.ttype == PRINT {
-            self.position += 1;
             let param_token = self.consume_token(STRING)?;
             return Ok(PrintNode::new(param_token.value.as_str()));
         }
         if token.ttype == IF {
-            self.position += 1;
             let left_token = self.consume_token(NUMBER)?;
             let relop_token = self.consume_token(RELOP)?;
             let right_token = self.consume_token(NUMBER)?;
@@ -53,6 +53,10 @@ impl Parser {
     }
 
     fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
+        if self.position == self.tokens.len() {
+            return Err(format!("Expected {:?} but reached the end", expected));
+        }
+
         let token = self.tokens[self.position].clone();
         if token.ttype != expected {
             return Err(format!("Expected {:?} but got {:?}", expected, token.ttype));

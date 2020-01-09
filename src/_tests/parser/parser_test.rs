@@ -89,8 +89,19 @@ fn return_error_if_print_has_non_string_argument() {
 
     let result = parse(&tokens);
     assert_parse_error(result, "Expected STRING but got THEN");
+}
+
+#[test]
+fn return_error_if_print_has_no_argument() {
+    let tokens = vec![
+        Token::print()
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Expected STRING but reached the end");
 
 }
+
 
 fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()
