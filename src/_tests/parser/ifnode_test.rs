@@ -17,5 +17,5 @@ fn eval() {
     assert_eq!(node.relop, '>');
     assert_print_node(&node.then, "impossible");
 
-    assert_eq!(test_eval(&node), "eval_if")
+    assert_eq!(test_eval(&*node), "eval_if")
 }

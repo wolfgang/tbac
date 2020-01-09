@@ -1,10 +1,10 @@
 use crate::parser::ifnode::IfNode;
+use crate::parser::node::Node;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
-use crate::parser::node::Node;
 use crate::tokenizer::token::TokenType;
 
 pub struct Parser {
@@ -41,13 +41,13 @@ impl Parser {
             let left_token = self.consume_token(NUMBER)?;
             let relop_token = self.consume_token(RELOP)?;
             let right_token = self.consume_token(NUMBER)?;
-            let _then_token = self.consume_token(THEN)?;
-            let statement_node : Box<dyn Node> = self.parse_statement().unwrap();
-            return Ok(Box::new(IfNode::new(
+            self.consume_token(THEN)?;
+            let statement_node = self.parse_statement()?;
+            return Ok(IfNode::new(
                 NumberNode::new(left_token.value.parse::<i32>().unwrap()),
                 NumberNode::new(right_token.value.parse::<i32>().unwrap()),
                 relop_token.value.chars().nth(0).unwrap(),
-                statement_node)))
+                statement_node))
         } else {
             return Err("Expected command token here".to_string());
         }

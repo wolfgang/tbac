@@ -11,8 +11,8 @@ pub struct IfNode {
 }
 
 impl IfNode {
-    pub fn new(left: Box<dyn Node>, right: Box<dyn Node>, relop: char, then: Box<dyn Node>) -> Self {
-        Self { left, right, relop, then }
+    pub fn new(left: Box<dyn Node>, right: Box<dyn Node>, relop: char, then: Box<dyn Node>) -> Box<Self> {
+        Box::new(Self { left, right, relop, then })
     }
 }
 
