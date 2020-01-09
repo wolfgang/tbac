@@ -1,6 +1,8 @@
 use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
+use std::any::Any;
 
+#[derive(PartialEq, Debug)]
 pub struct PrintNode {
     pub string_param: String
 }
@@ -15,5 +17,10 @@ impl Node for PrintNode {
     fn eval(&self, evaluator: &mut dyn NodeEvaluator) -> String {
         evaluator.eval_print(&self)
     }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
 }
 

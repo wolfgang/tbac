@@ -1,5 +1,6 @@
 use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
+use std::any::Any;
 
 pub struct IfNode {
     pub left: Box<dyn Node>,
@@ -19,5 +20,9 @@ impl IfNode {
 impl Node for IfNode {
     fn eval(&self, evaluator: &mut dyn NodeEvaluator) -> String {
         evaluator.eval_if(&self)
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
