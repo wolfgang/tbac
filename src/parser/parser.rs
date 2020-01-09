@@ -32,8 +32,7 @@ impl Parser {
         let token = &self.tokens[self.position];
         if token.ttype == PRINT {
             self.position += 1;
-            let param_token = &self.tokens[self.position];
-            self.position += 1;
+            let param_token = self.consume_token(STRING)?;
             return Ok(PrintNode::new(param_token.value.as_str()));
         }
         if token.ttype == IF {

@@ -80,6 +80,18 @@ fn return_error_if_first_token_is_not_command() {
 
 }
 
+#[test]
+fn return_error_if_print_has_non_string_argument() {
+    let tokens = vec![
+        Token::print(),
+        Token::then()
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Expected STRING but got THEN");
+
+}
+
 fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()
 }
