@@ -76,7 +76,7 @@ fn return_error_if_first_token_is_not_command() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected command token here");
+    assert_parse_error(result, "Expected command token but got STRING");
 
 }
 

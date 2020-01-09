@@ -8,6 +8,7 @@ pub enum TokenType {
     RELOP,
     NUMBER,
     STRING,
+    ANY
 }
 
 #[derive(PartialEq, Debug, Clone)]

@@ -29,8 +29,7 @@ impl Parser {
     }
 
     fn parse_statement(&mut self) -> Result<Box<dyn Node>, String> {
-        let token = &self.tokens[self.position];
-        self.position += 1;
+        let token = self.consume_token(ANY)?;
 
         if token.ttype == PRINT {
             let param_token = self.consume_token(STRING)?;
@@ -48,7 +47,7 @@ impl Parser {
                 relop_token.value.chars().nth(0).unwrap(),
                 statement_node))
         } else {
-            return Err("Expected command token here".to_string());
+            return Err(format!("Expected command token but got {:?}", token.ttype));
         }
     }
 
@@ -58,7 +57,7 @@ impl Parser {
         }
 
         let token = self.tokens[self.position].clone();
-        if token.ttype != expected {
+        if expected != ANY && token.ttype != expected {
             return Err(format!("Expected {:?} but got {:?}", expected, token.ttype));
         }
         self.position += 1;
