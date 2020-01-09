@@ -44,16 +44,16 @@ impl Parser {
     }
 
     fn parse_if(&mut self) -> Result<Box<dyn Node>, String> {
-        let left_token = self.consume_token(NUMBER)?;
-        let relop_token = self.consume_token(RELOP)?;
-        let right_token = self.consume_token(NUMBER)?;
+        let left = self.consume_token(NUMBER)?;
+        let relop = self.consume_token(RELOP)?;
+        let right = self.consume_token(NUMBER)?;
         self.consume_token(THEN)?;
-        let statement_node = self.parse_statement()?;
+        let statement = self.parse_statement()?;
         Ok(IfNode::new(
-            NumberNode::new(left_token.value.parse::<i32>().unwrap()),
-            NumberNode::new(right_token.value.parse::<i32>().unwrap()),
-            relop_token.value.chars().nth(0).unwrap(),
-            statement_node))
+            Self::number_node_from(&left),
+            Self::number_node_from(&right),
+            relop.value.chars().nth(0).unwrap(),
+            statement))
     }
 
     fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
@@ -67,5 +67,9 @@ impl Parser {
         }
         self.position += 1;
         Ok(token)
+    }
+
+    fn number_node_from(token: &Token) -> Box<NumberNode> {
+        NumberNode::new(token.value.parse::<i32>().unwrap())
     }
 }
