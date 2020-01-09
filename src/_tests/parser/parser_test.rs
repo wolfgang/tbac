@@ -134,6 +134,20 @@ fn return_error_if_print_has_no_argument() {
 
 }
 
+#[test]
+fn return_error_if_then_branch_is_not_a_command() {
+    let tokens = vec![
+        Token::iff(),
+        Token::number("1111"),
+        Token::relop('>'),
+        Token::number("2222"),
+        Token::then(),
+        Token::string("hello")
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Expected command token but got STRING");
+}
 
 fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()
