@@ -1,6 +1,7 @@
 use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
 
+#[derive(PartialEq, Debug)]
 pub struct NumberNode {
     pub value: i32
 }

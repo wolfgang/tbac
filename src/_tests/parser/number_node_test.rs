@@ -4,5 +4,6 @@ use crate::parser::number_node::NumberNode;
 #[test]
 fn eval() {
     let node = NumberNode::new(1234);
-    assert_eq!(test_eval(&node), "1234");
+    assert_eq!(node.value, 1234);
+    assert_eq!(test_eval(&node), "eval_number");
 }

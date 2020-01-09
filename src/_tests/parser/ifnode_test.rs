@@ -9,5 +9,6 @@ fn eval() {
     let right = NumberNode::new(2222);
     let then = PrintNode::new("impossible");
     let node = IfNode::new(left, right, '>', then);
-    assert_eq!(test_eval(&node), "if 1111 > 2222 print impossible")
+
+    assert_eq!(test_eval(&node), "eval_if")
 }

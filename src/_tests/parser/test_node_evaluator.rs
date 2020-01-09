@@ -24,20 +24,16 @@ impl TestNodeEvaluator {
 }
 
 impl NodeEvaluator for TestNodeEvaluator {
-    fn eval_print(&mut self, node: &PrintNode) -> String {
-        format!("print {}", node.string_param)
+    fn eval_print(&mut self, _: &PrintNode) -> String {
+        "eval_print".to_string()
     }
 
-    fn eval_number(&mut self, node: &NumberNode) -> String {
-        format!("{}", node.value)
+    fn eval_number(&mut self, _: &NumberNode) -> String {
+        "eval_number".to_string()
     }
 
-    fn eval_if(&mut self, node: &IfNode) -> String {
-        format!("if {} {} {} {}",
-                node.left.eval(self),
-                node.relop,
-                node.right.eval(self),
-                node.then.eval(self))
+    fn eval_if(&mut self, _: &IfNode) -> String {
+        "eval_if".to_string()
     }
 }
 
