@@ -40,8 +40,17 @@ fn parse_if_node() {
     assert_eq!(as_node::<NumberNode>(&if_node.left), &NumberNode::new(1111));
     assert_eq!(as_node::<NumberNode>(&if_node.right), &NumberNode::new(2222));
     assert_eq!(as_node::<PrintNode>(&if_node.then), &PrintNode::new("hello"));
+}
 
-//    assert_eq!()
+#[test]
+fn return_error_if_if_token_not_followed_by_number() {
+    let tokens = vec![
+        Token::iff(),
+        Token::string("abcd"),
+    ];
+
+    let result = parse(&tokens);
+    assert!(result.is_err());
 }
 
 #[test]

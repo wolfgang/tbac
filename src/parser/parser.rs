@@ -3,8 +3,9 @@ use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::tokenizer::Token;
-use crate::tokenizer::token::TokenType::{IF, PRINT};
+use crate::tokenizer::token::TokenType::*;
 use crate::parser::node::Node;
+use crate::tokenizer::token::TokenType;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -37,10 +38,10 @@ impl Parser {
         }
         if token.ttype == IF {
             self.position += 1;
-            let left_token = self.consume_token();
-            let relop_token = self.consume_token();
-            let right_token = self.consume_token();
-            let _then_token = self.consume_token();
+            let left_token = self.consume_token(NUMBER)?;
+            let relop_token = self.consume_token(RELOP)?;
+            let right_token = self.consume_token(NUMBER)?;
+            let _then_token = self.consume_token(THEN)?;
             let statement_node : Box<dyn Node> = self.parse_statement().unwrap();
             return Ok(Box::new(IfNode::new3(
                 Box::new(NumberNode::new(left_token.value.parse::<i32>().unwrap())),
@@ -52,10 +53,13 @@ impl Parser {
         }
     }
 
-    fn consume_token(&mut self) -> Token {
+    fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
         let token = self.tokens[self.position].clone();
+        if token.ttype != expected {
+            return Err("Unexpected token".to_string())
+        }
         self.position += 1;
-        token
+        Ok(token)
 
     }
 }
