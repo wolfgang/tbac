@@ -13,7 +13,7 @@ impl Parser {
         Self { tokens: tokens.clone(), position: 0 }
     }
 
-    pub fn parse(&mut self) -> SequenceNode {
+    pub fn parse(&mut self) -> Result<SequenceNode, String> {
         let mut root = SequenceNode::new();
 
         while self.position < self.tokens.len() {
@@ -24,10 +24,13 @@ impl Parser {
                 let param_token = &self.tokens[self.position];
                 root.add(PrintNode::new(param_token.value.as_str()))
             }
+            else {
+                return Err("Expected command token here".to_string())
+            }
 
             self.position += 1;
         }
 
-        root
+        Ok(root)
     }
 }

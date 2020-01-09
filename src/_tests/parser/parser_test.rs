@@ -11,11 +11,23 @@ fn parse_print_node() {
         Token::string("hello")
     ];
 
-    let node = parse(&tokens);
+    let node = parse(&tokens).unwrap();
     assert_eq!(node.children.len(), 1);
     assert_eq!(as_node::<PrintNode>(&node.children[0]), &PrintNode::new("hello"))
 }
 
-fn parse(tokens: &Vec<Token>) -> SequenceNode {
+#[test]
+fn return_error_if_first_token_is_not_command() {
+    let tokens = vec![
+        Token::string("hello")
+    ];
+
+    let result = parse(&tokens);
+    assert!(result.is_err());
+    assert_eq!(result.err(), Some("Expected command token here".to_string()))
+
+}
+
+fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()
 }
