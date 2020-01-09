@@ -39,24 +39,20 @@ impl Parser {
             self.position += 1;
             let left_token = self.tokens[self.position].clone();
             self.position += 1;
-//            let relop_token = &self.tokens[self.position];
+            let relop_token = self.tokens[self.position].clone();
             self.position += 1;
-//            let right_token = &self.tokens[self.position];
+            let right_token = self.tokens[self.position].clone();
             self.position += 1;
-//            let then_token = &self.tokens[self.position];
+            let _then_token = &self.tokens[self.position];
             self.position += 1;
             let statement_node : Box<dyn Node> = self.parse_statement().unwrap();
             return Ok(Box::new(IfNode::new3(
-                Box::new(NumberNode::new(0)),
-                Box::new(NumberNode::new(1)),
-                '>',
+                Box::new(NumberNode::new(left_token.value.parse::<i32>().unwrap())),
+                Box::new(NumberNode::new(right_token.value.parse::<i32>().unwrap())),
+                relop_token.value.chars().nth(0).unwrap(),
                 statement_node)))
         } else {
             return Err("Expected command token here".to_string());
         }
-    }
-
-    fn test(&self) -> Box<dyn Node> {
-        Box::new(PrintNode::new("hello"))
     }
 }
