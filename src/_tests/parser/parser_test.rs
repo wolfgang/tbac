@@ -1,11 +1,17 @@
 use crate::tokenizer::Token;
 use crate::parser::parser::Parser;
+use crate::_tests::helpers::as_node;
+use crate::parser::print_node::PrintNode;
 
 #[test]
-fn return_empty_sequence_node_for_empty_token_list() {
-    let tokens: Vec<Token>= Vec::new();
-    let mut parser = Parser::new(&tokens);
-    let sequence_node = parser.parse();
+fn parse_print_node() {
+    let tokens = vec![
+        Token::print(),
+        Token::string("hello")
+    ];
 
-    assert_eq!(sequence_node.children.len(), 0);
+    let mut parser = Parser::new(&tokens);
+    let node = parser.parse();
+    assert_eq!(node.children.len(), 1);
+    assert_eq!(as_node::<PrintNode>(&node.children[0]), &PrintNode::new("hello"))
 }
