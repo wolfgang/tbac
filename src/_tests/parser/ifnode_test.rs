@@ -7,10 +7,10 @@ use crate::_tests::helpers::as_node;
 #[test]
 fn eval() {
     let node = IfNode::new(
-        NumberNode::new(1111),
-        NumberNode::new(2222),
+        Box::new(NumberNode::new(1111)),
+        Box::new(NumberNode::new(2222)),
         '>',
-        PrintNode::new("impossible"));
+        Box::new(PrintNode::new("impossible")));
 
     assert_eq!(as_node::<NumberNode>(&node.left), &NumberNode::new(1111));
     assert_eq!(as_node::<NumberNode>(&node.right), &NumberNode::new(2222));
