@@ -1,7 +1,10 @@
+use crate::parser::ifnode::IfNode;
+use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::tokenizer::Token;
-use crate::tokenizer::token::TokenType::PRINT;
+use crate::tokenizer::token::TokenType::{IF, PRINT};
+use crate::parser::node::Node;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -17,20 +20,43 @@ impl Parser {
         let mut root = SequenceNode::new();
 
         while self.position < self.tokens.len() {
-            let token = &self.tokens[self.position];
-
-            if token.ttype == PRINT {
-                self.position += 1;
-                let param_token = &self.tokens[self.position];
-                root.add(PrintNode::new(param_token.value.as_str()))
-            }
-            else {
-                return Err("Expected command token here".to_string())
-            }
-
-            self.position += 1;
+            let statement = self.parse_statement()?;
+            root.add2(statement);
         }
 
         Ok(root)
+    }
+
+    fn parse_statement(&mut self) -> Result<Box<dyn Node>, String> {
+        let token = &self.tokens[self.position];
+        if token.ttype == PRINT {
+            self.position += 1;
+            let param_token = &self.tokens[self.position];
+            self.position += 1;
+            return Ok(Box::new(PrintNode::new(param_token.value.as_str())));
+        }
+        if token.ttype == IF {
+            self.position += 1;
+            let left_token = self.tokens[self.position].clone();
+            self.position += 1;
+//            let relop_token = &self.tokens[self.position];
+            self.position += 1;
+//            let right_token = &self.tokens[self.position];
+            self.position += 1;
+//            let then_token = &self.tokens[self.position];
+            self.position += 1;
+            let statement_node : Box<dyn Node> = self.parse_statement().unwrap();
+            return Ok(Box::new(IfNode::new3(
+                Box::new(NumberNode::new(0)),
+                Box::new(NumberNode::new(1)),
+                '>',
+                statement_node)))
+        } else {
+            return Err("Expected command token here".to_string());
+        }
+    }
+
+    fn test(&self) -> Box<dyn Node> {
+        Box::new(PrintNode::new("hello"))
     }
 }

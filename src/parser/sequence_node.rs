@@ -16,6 +16,10 @@ impl SequenceNode {
     pub fn add<T>(&mut self, node: T) where T: Node + 'static {
         self.children.push(Box::new(node))
     }
+    pub fn add2(&mut self, node: Box<dyn Node>)  {
+        self.children.push(node)
+    }
+
 }
 
 impl Node for SequenceNode {
