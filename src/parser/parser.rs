@@ -22,7 +22,7 @@ impl Parser {
 
         while self.position < self.tokens.len() {
             let statement = self.parse_statement()?;
-            root.add2(statement);
+            root.add(statement);
         }
 
         Ok(root)
@@ -34,7 +34,7 @@ impl Parser {
             self.position += 1;
             let param_token = &self.tokens[self.position];
             self.position += 1;
-            return Ok(Box::new(PrintNode::new(param_token.value.as_str())));
+            return Ok(PrintNode::new(param_token.value.as_str()));
         }
         if token.ttype == IF {
             self.position += 1;

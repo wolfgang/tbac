@@ -15,7 +15,7 @@ fn parse_print_node() {
 
     let node = parse(&tokens).unwrap();
     assert_eq!(node.children.len(), 1);
-    assert_eq!(as_node::<PrintNode>(&node.children[0]), &PrintNode::new("hello"))
+    assert_eq!(as_node::<PrintNode>(&node.children[0]), &*PrintNode::new("hello"))
 }
 
 #[test]
@@ -39,7 +39,7 @@ fn parse_if_node() {
 
     assert_eq!(as_node::<NumberNode>(&if_node.left), &*NumberNode::new(1111));
     assert_eq!(as_node::<NumberNode>(&if_node.right), &*NumberNode::new(2222));
-    assert_eq!(as_node::<PrintNode>(&if_node.then), &PrintNode::new("hello"));
+    assert_eq!(as_node::<PrintNode>(&if_node.then), &*PrintNode::new("hello"));
 }
 
 #[test]

@@ -8,8 +8,8 @@ pub struct PrintNode {
 }
 
 impl PrintNode {
-    pub fn new(param: &str) -> Self {
-        Self { string_param: param.to_string() }
+    pub fn new(param: &str) -> Box<Self> {
+        Box::new(Self { string_param: param.to_string() })
     }
 }
 

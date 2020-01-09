@@ -6,5 +6,5 @@ use crate::parser::print_node::PrintNode;
 fn eval() {
     let node = PrintNode::new("hello");
     assert_eq!(node.string_param, "hello");
-    assert_eq!(test_eval(&node), "eval_print");
+    assert_eq!(test_eval(&*node), "eval_print");
 }
