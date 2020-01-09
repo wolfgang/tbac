@@ -37,6 +37,7 @@ fn parse_if_statement() {
     let if_node = as_node::<IfNode>(&node.children[0]);
     assert_number_node(&if_node.left, 1111);
     assert_number_node(&if_node.right, 2222);
+    assert_eq!(if_node.relop, '>');
     assert_print_node(&if_node.then, "hello");
 }
 
@@ -68,7 +69,7 @@ fn parse_if_statement_with_if_statement_in_then() {
         Token::then(),
         Token::iff(),
         Token::number("3333"),
-        Token::relop('>'),
+        Token::relop('<'),
         Token::number("4444"),
         Token::then(),
         Token::print(),
@@ -83,10 +84,13 @@ fn parse_if_statement_with_if_statement_in_then() {
     let if_node = as_node::<IfNode>(&node.children[0]);
     assert_number_node(&if_node.left, 1111);
     assert_number_node(&if_node.right, 2222);
+    assert_eq!(if_node.relop, '>');
+
 
     let then_node = as_node::<IfNode>(&if_node.then);
     assert_number_node(&then_node.left, 3333);
     assert_number_node(&then_node.right, 4444);
+    assert_eq!(then_node.relop, '<');
     assert_print_node(&then_node.then, "hello");
 }
 
