@@ -31,24 +31,29 @@ impl Parser {
     fn parse_statement(&mut self) -> Result<Box<dyn Node>, String> {
         let token = self.consume_token(ANY)?;
 
-        if token.ttype == PRINT {
-            let param_token = self.consume_token(STRING)?;
-            return Ok(PrintNode::new(param_token.value.as_str()));
+        match token.ttype {
+            PRINT => { self.parse_print() }
+            IF => { self.parse_if() }
+            _ => Err(format!("Expected command token but got {:?}", token.ttype))
         }
-        if token.ttype == IF {
-            let left_token = self.consume_token(NUMBER)?;
-            let relop_token = self.consume_token(RELOP)?;
-            let right_token = self.consume_token(NUMBER)?;
-            self.consume_token(THEN)?;
-            let statement_node = self.parse_statement()?;
-            return Ok(IfNode::new(
-                NumberNode::new(left_token.value.parse::<i32>().unwrap()),
-                NumberNode::new(right_token.value.parse::<i32>().unwrap()),
-                relop_token.value.chars().nth(0).unwrap(),
-                statement_node))
-        } else {
-            return Err(format!("Expected command token but got {:?}", token.ttype));
-        }
+    }
+
+    fn parse_print(&mut self) -> Result<Box<dyn Node>, String> {
+        let param_token = self.consume_token(STRING)?;
+        Ok(PrintNode::new(param_token.value.as_str()))
+    }
+
+    fn parse_if(&mut self) -> Result<Box<dyn Node>, String> {
+        let left_token = self.consume_token(NUMBER)?;
+        let relop_token = self.consume_token(RELOP)?;
+        let right_token = self.consume_token(NUMBER)?;
+        self.consume_token(THEN)?;
+        let statement_node = self.parse_statement()?;
+        Ok(IfNode::new(
+            NumberNode::new(left_token.value.parse::<i32>().unwrap()),
+            NumberNode::new(right_token.value.parse::<i32>().unwrap()),
+            relop_token.value.chars().nth(0).unwrap(),
+            statement_node))
     }
 
     fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
@@ -62,6 +67,5 @@ impl Parser {
         }
         self.position += 1;
         Ok(token)
-
     }
 }
