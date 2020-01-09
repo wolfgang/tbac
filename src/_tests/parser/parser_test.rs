@@ -37,8 +37,8 @@ fn parse_if_node() {
 
     let if_node = as_node::<IfNode>(&node.children[0]);
 
-    assert_eq!(as_node::<NumberNode>(&if_node.left), &NumberNode::new(1111));
-    assert_eq!(as_node::<NumberNode>(&if_node.right), &NumberNode::new(2222));
+    assert_eq!(as_node::<NumberNode>(&if_node.left), &*NumberNode::new(1111));
+    assert_eq!(as_node::<NumberNode>(&if_node.right), &*NumberNode::new(2222));
     assert_eq!(as_node::<PrintNode>(&if_node.then), &PrintNode::new("hello"));
 }
 

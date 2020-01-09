@@ -1,6 +1,7 @@
+use std::any::Any;
+
 use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
-use std::any::Any;
 
 #[derive(PartialEq, Debug)]
 pub struct NumberNode {
@@ -8,8 +9,8 @@ pub struct NumberNode {
 }
 
 impl NumberNode {
-    pub fn new(value: i32) -> Self {
-        Self {value}
+    pub fn new(value: i32) -> Box<Self> {
+        Box::new(Self { value })
     }
 }
 
@@ -21,5 +22,4 @@ impl Node for NumberNode {
     fn as_any(&self) -> &dyn Any {
         self
     }
-
 }

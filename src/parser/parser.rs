@@ -44,8 +44,8 @@ impl Parser {
             let _then_token = self.consume_token(THEN)?;
             let statement_node : Box<dyn Node> = self.parse_statement().unwrap();
             return Ok(Box::new(IfNode::new(
-                Box::new(NumberNode::new(left_token.value.parse::<i32>().unwrap())),
-                Box::new(NumberNode::new(right_token.value.parse::<i32>().unwrap())),
+                NumberNode::new(left_token.value.parse::<i32>().unwrap()),
+                NumberNode::new(right_token.value.parse::<i32>().unwrap()),
                 relop_token.value.chars().nth(0).unwrap(),
                 statement_node)))
         } else {
