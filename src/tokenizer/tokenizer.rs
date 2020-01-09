@@ -32,9 +32,8 @@ impl Tokenizer {
                 self.read_number();
                 continue
             }
-            if self.current_char_is(|c| c == '>') {
-                self.result.push(Token::relop('>'));
-                self.consume_char();
+            if self.current_char_is(|c| c == '>' || c == '<' || c == '=') {
+                self.read_relop();
                 continue;
             }
             return Err(format!("Unrecognized character '{}'", self.current_char()));
@@ -72,6 +71,11 @@ impl Tokenizer {
     fn read_number(&mut self) {
         let buffer = self.consume_chars_while(|c| c.is_digit(10));
         self.result.push(Token::number(buffer.as_str()))
+    }
+
+    fn read_relop(&mut self) {
+        self.result.push(Token::relop(self.current_char()));
+        self.consume_char();
     }
 
     fn consume_chars_while<F>(&mut self, pred: F) -> String where F: Fn(char) -> bool {

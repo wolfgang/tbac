@@ -53,6 +53,18 @@ fn tokenize_gt() {
 }
 
 #[test]
+fn tokenize_relops() {
+    assert_eq!(tokenize("> < ="),
+               Ok(vec![
+                   Token::relop('>'),
+                   Token::relop('<'),
+                   Token::relop('='),
+               ])
+    )
+}
+
+
+#[test]
 fn returns_error_if_keyword_is_unknown() {
     assert_eq!(tokenize("PRINT NOPE"),
                Err("Unknown keyword 'NOPE'".to_string()));
