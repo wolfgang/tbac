@@ -37,14 +37,10 @@ impl Parser {
         }
         if token.ttype == IF {
             self.position += 1;
-            let left_token = self.tokens[self.position].clone();
-            self.position += 1;
-            let relop_token = self.tokens[self.position].clone();
-            self.position += 1;
-            let right_token = self.tokens[self.position].clone();
-            self.position += 1;
-            let _then_token = &self.tokens[self.position];
-            self.position += 1;
+            let left_token = self.consume_token();
+            let relop_token = self.consume_token();
+            let right_token = self.consume_token();
+            let _then_token = self.consume_token();
             let statement_node : Box<dyn Node> = self.parse_statement().unwrap();
             return Ok(Box::new(IfNode::new3(
                 Box::new(NumberNode::new(left_token.value.parse::<i32>().unwrap())),
@@ -54,5 +50,12 @@ impl Parser {
         } else {
             return Err("Expected command token here".to_string());
         }
+    }
+
+    fn consume_token(&mut self) -> Token {
+        let token = self.tokens[self.position].clone();
+        self.position += 1;
+        token
+
     }
 }
