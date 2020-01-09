@@ -56,7 +56,7 @@ impl Parser {
     fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
         let token = self.tokens[self.position].clone();
         if token.ttype != expected {
-            return Err("Unexpected token".to_string())
+            return Err(format!("Expected {:?} but got {:?}", expected, token.ttype));
         }
         self.position += 1;
         Ok(token)

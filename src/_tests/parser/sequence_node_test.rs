@@ -16,5 +16,3 @@ fn construct_and_eval() {
 
     assert_eq!(test_eval(&node), "eval_numbereval_print");
 }
-
-
