@@ -41,6 +41,24 @@ fn parse_if_node() {
 }
 
 #[test]
+fn parse_two_statements() {
+    let tokens = vec![
+        Token::print(),
+        Token::string("hello"),
+        Token::print(),
+        Token::string("world")
+    ];
+
+    let result = parse(&tokens);
+    assert!(result.is_ok());
+    let node = result.unwrap();
+    assert_eq!(node.children.len(), 2);
+
+    assert_print_node(&node.children[0], "hello");
+    assert_print_node(&node.children[1], "world");
+}
+
+#[test]
 fn return_error_if_if_token_not_followed_by_number() {
     let tokens = vec![
         Token::iff(),
