@@ -1,5 +1,6 @@
 use crate::code_generator::CodeGenerator;
 use crate::parser::ifnode::IfNode;
+use crate::parser::let_node::LetNode;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
@@ -25,6 +26,15 @@ fn generate_if_statement() {
 
     assert_eq!(generate_code(&root),
                "if (10 < 20) {\n  console.log('hello');\n}\n");
+}
+
+#[test]
+fn generate_let_statement() {
+    let mut root = SequenceNode::new();
+    root.add(LetNode::new('A', NumberNode::new(1234)));
+
+    assert_eq!(generate_code(&root),
+               "let A = 1234;\n");
 }
 
 #[test]

@@ -31,7 +31,7 @@ impl NodeEvaluator for CodeGenerator {
                 node.then.eval(self))
     }
 
-    fn eval_let(&self, _node: &LetNode) -> String {
-        "let not implemented yet".to_string()
+    fn eval_let(&self, node: &LetNode) -> String {
+        format!("let {} = {};\n", node.var, node.value.eval(self))
     }
 }
