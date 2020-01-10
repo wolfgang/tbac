@@ -4,6 +4,7 @@ use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::node::Node;
+use crate::parser::let_node::LetNode;
 
 pub struct CodeGenerator {}
 
@@ -28,5 +29,9 @@ impl NodeEvaluator for CodeGenerator {
                 node.relop,
                 node.right.eval(self),
                 node.then.eval(self))
+    }
+
+    fn eval_let(&self, _node: &LetNode) -> String {
+        "let not implemented yet".to_string()
     }
 }

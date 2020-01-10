@@ -3,6 +3,7 @@ use crate::parser::node_evaluator::NodeEvaluator;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::node::Node;
+use crate::parser::let_node::LetNode;
 
 pub fn test_eval(node: &dyn Node) -> String {
     let mut evaluator = TestNodeEvaluator::new();
@@ -34,6 +35,10 @@ impl NodeEvaluator for TestNodeEvaluator {
 
     fn eval_if(&self, _: &IfNode) -> String {
         "eval_if".to_string()
+    }
+
+    fn eval_let(&self, _: &LetNode) -> String {
+        "eval_let".to_string()
     }
 }
 
