@@ -10,7 +10,7 @@ fn generate_print_statement() {
     root.add(PrintNode::new("hello world"));
 
     assert_eq!(generate_code(&root),
-               r#"console.log("hello world")"#)
+               r#"console.log("hello world");"#)
 }
 
 #[test]
@@ -24,7 +24,17 @@ fn generate_if_statement() {
             PrintNode::new("hello")));
 
     assert_eq!(generate_code(&root),
-               r#"if (10 < 20) { console.log("hello") }"#)
+               r#"if (10 < 20) { console.log("hello"); }"#);
+}
+
+#[test]
+fn generate_multiple_statements() {
+    let mut root = SequenceNode::new();
+    root.add(PrintNode::new("hello"));
+    root.add(PrintNode::new("world"));
+
+    assert_eq!(generate_code(&root),
+               "console.log(\"hello\");console.log(\"world\");");
 }
 
 fn generate_code(root: &SequenceNode) -> String {
