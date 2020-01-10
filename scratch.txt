@@ -1,6 +1,6 @@
 Things left to do:
 
-Error handling at high-level (compiler)
+X Error handling at high-level (compiler)
 
 Newlines?
 

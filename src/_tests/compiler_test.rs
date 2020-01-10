@@ -3,7 +3,7 @@ use crate::compiler::compile;
 #[test]
 fn compiles_if_statement() {
     let tb_code = r#"IF 2 > 1 THEN PRINT "YES""#;
-    let expected_js_code = "if (2 > 1) { console.log('YES'); }\n";
+    let expected_js_code = "if (2 > 1) {\n  console.log('YES');\n}\n";
 
     let result = compile(tb_code);
 

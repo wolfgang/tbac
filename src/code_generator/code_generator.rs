@@ -15,7 +15,7 @@ impl CodeGenerator {
 
 impl NodeEvaluator for CodeGenerator {
     fn eval_print(&self, node: &PrintNode) -> String {
-        format!("console.log('{}');", node.string_param)
+        format!("console.log('{}');\n", node.string_param)
     }
 
     fn eval_number(&self, node: &NumberNode) -> String {
@@ -23,7 +23,7 @@ impl NodeEvaluator for CodeGenerator {
     }
 
     fn eval_if(&self, node: &IfNode) -> String {
-        format!("if ({} {} {}) {{ {} }}\n",
+        format!("if ({} {} {}) {{\n  {}}}\n",
                 node.left.eval(self),
                 node.relop,
                 node.right.eval(self),
