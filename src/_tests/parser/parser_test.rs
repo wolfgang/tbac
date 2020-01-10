@@ -3,6 +3,7 @@ use crate::parser::parser::Parser;
 use crate::_tests::helpers::*;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::ifnode::IfNode;
+use crate::parser::let_node::LetNode;
 
 #[test]
 fn parse_print_node() {
@@ -93,6 +94,28 @@ fn parse_if_statement_with_if_statement_in_then() {
     assert_eq!(then_node.relop, '<');
     assert_print_node(&then_node.then, "hello");
 }
+
+#[test]
+fn parse_let_node() {
+    let tokens = vec![
+        Token::lett(),
+        Token::var('A'),
+        Token::relop('='),
+        Token::number(1234)
+    ];
+    let result = parse(&tokens);
+
+    assert!(result.is_ok());
+
+    let node = result.unwrap();
+    assert_eq!(node.children.len(), 1);
+
+    let let_node = as_node::<LetNode>(&node.children[0]);
+    assert_eq!(let_node.var, 'A');
+    assert_number_node(&let_node.value, 1234);
+
+}
+
 
 #[test]
 fn return_error_if_if_token_not_followed_by_number() {

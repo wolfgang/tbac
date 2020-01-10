@@ -6,6 +6,7 @@ use crate::parser::sequence_node::SequenceNode;
 use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
+use crate::parser::let_node::LetNode;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -34,6 +35,7 @@ impl Parser {
         match token.ttype {
             PRINT => { self.parse_print() }
             IF => { self.parse_if() }
+            LET => { self.parse_let() }
             _ => Err(format!("Expected command token but got {:?}", token.ttype))
         }
     }
@@ -54,6 +56,13 @@ impl Parser {
             Self::number_node_from(&right),
             relop.value.chars().next().unwrap(),
             statement))
+    }
+
+    fn parse_let(&mut self) -> Result<Box<dyn Node>, String> {
+        let var = self.consume_token(VAR)?;
+        let _equal_sign = self.consume_token(RELOP)?;
+        let value = self.consume_token(NUMBER)?;
+        Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
     }
 
     fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
