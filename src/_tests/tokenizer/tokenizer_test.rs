@@ -75,6 +75,17 @@ fn tokenize_vars() {
                ]))
 }
 
+#[test]
+fn handles_surrounding_whitespace() {
+    assert_eq!(tokenize("   \n A B <  \n  "),
+               Ok(vec![
+                   Token::var('A'),
+                   Token::var('B'),
+                   Token::relop('<'),
+               ])
+    )
+}
+
 
 #[test]
 fn returns_error_if_keyword_is_unknown() {

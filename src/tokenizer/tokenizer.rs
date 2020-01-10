@@ -22,7 +22,7 @@ impl Tokenizer {
             self.skip_whitespace();
             if self.current_char_is(|c| c.is_uppercase()) {
                 self.read_uppercase_str()?;
-                continue
+                continue;
             }
             if self.current_char_is(|c| c == '"') {
                 self.read_string()?;
@@ -30,13 +30,15 @@ impl Tokenizer {
             }
             if self.current_char_is(|c| c.is_digit(10)) {
                 self.read_number();
-                continue
+                continue;
             }
             if self.current_char_is(|c| c == '>' || c == '<' || c == '=') {
                 self.read_relop();
                 continue;
             }
-            return Err(format!("Unrecognized character '{}'", self.current_char()));
+            if self.has_input() {
+                return Err(format!("Unrecognized character '{}'", self.current_char()));
+            }
         }
         Ok(self.result.clone())
     }

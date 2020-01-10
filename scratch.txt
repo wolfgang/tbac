@@ -3,8 +3,9 @@ Next:
 [X] Tokenize variable name
 [X] Tokenize LET
 [X] Parse LET
-
-Parse variable in additon to number in if expressions
+[X] Parse variable in additon to number in if expressions
+[ ] Enable 'expression' as PRINT arg (number of var)
+[ ] Handle real expressions like 1+2, a+c 1*b
 
 
 Things left to do:
