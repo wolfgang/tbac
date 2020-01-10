@@ -104,7 +104,6 @@ fn parse_let_node() {
         Token::number(1234)
     ];
     let result = parse(&tokens);
-
     assert!(result.is_ok());
 
     let node = result.unwrap();
@@ -113,7 +112,6 @@ fn parse_let_node() {
     let let_node = as_node::<LetNode>(&node.children[0]);
     assert_eq!(let_node.var, 'A');
     assert_number_node(&let_node.value, 1234);
-
 }
 
 
@@ -174,6 +172,19 @@ fn return_error_if_then_branch_is_not_a_command() {
 
     let result = parse(&tokens);
     assert_parse_error(result, "Expected command token but got STRING");
+}
+
+#[test]
+fn return_error_if_let_not_followed_by_equal_sign() {
+    let tokens = vec![
+        Token::lett(),
+        Token::var('A'),
+        Token::relop('<'),
+        Token::number(1234)
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Expected = after LET but got <");
 }
 
 fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {

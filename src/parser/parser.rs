@@ -60,7 +60,10 @@ impl Parser {
 
     fn parse_let(&mut self) -> Result<Box<dyn Node>, String> {
         let var = self.consume_token(VAR)?;
-        let _equal_sign = self.consume_token(RELOP)?;
+        let relop = self.consume_token(RELOP)?;
+        if relop.value.as_str() != "=" {
+            return Err(format!("Expected = after LET but got {}", relop.value));
+        }
         let value = self.consume_token(NUMBER)?;
         Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
     }
