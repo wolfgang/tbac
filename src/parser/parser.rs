@@ -9,6 +9,9 @@ use crate::tokenizer::token::TokenType;
 use crate::parser::let_node::LetNode;
 use crate::parser::var_node::VarNode;
 
+type NodeResult = Result<Box<dyn Node>, String>;
+type TokenResult = Result<Token, String>;
+
 pub struct Parser {
     tokens: Vec<Token>,
     position: usize,
@@ -30,7 +33,7 @@ impl Parser {
         Ok(root)
     }
 
-    fn parse_statement(&mut self) -> Result<Box<dyn Node>, String> {
+    fn parse_statement(&mut self) -> NodeResult {
         let token = self.consume_token(ANY)?;
 
         match token.ttype {
@@ -41,12 +44,12 @@ impl Parser {
         }
     }
 
-    fn parse_print(&mut self) -> Result<Box<dyn Node>, String> {
+    fn parse_print(&mut self) -> NodeResult {
         let param_token = self.consume_token(STRING)?;
         Ok(PrintNode::new(param_token.value.as_str()))
     }
 
-    fn parse_if(&mut self) -> Result<Box<dyn Node>, String> {
+    fn parse_if(&mut self) -> NodeResult {
         let left = self.parse_expression()?;
         let relop = self.consume_token(RELOP)?;
         let right = self.parse_expression()?;
@@ -59,14 +62,14 @@ impl Parser {
             statement))
     }
 
-    fn parse_let(&mut self) -> Result<Box<dyn Node>, String> {
+    fn parse_let(&mut self) -> NodeResult {
         let var = self.consume_token(VAR)?;
         self.consume_relop("=")?;
         let value = self.consume_token(NUMBER)?;
         Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
     }
 
-    fn parse_expression(&mut self) -> Result<Box<dyn Node>, String>  {
+    fn parse_expression(&mut self) -> NodeResult  {
         if self.peek_token()? == NUMBER {
             let token = self.consume_token(NUMBER)?;
             return Ok(Self::number_node_from(&token));
@@ -76,7 +79,7 @@ impl Parser {
         Ok(Self::var_node_from(&token))
     }
 
-    fn consume_relop(&mut self, expected: &str) -> Result<Token, String> {
+    fn consume_relop(&mut self, expected: &str) -> TokenResult {
         let relop = self.consume_token(RELOP)?;
         if relop.value.as_str() != expected {
             return Err(format!("Expected {} but got {}", expected, relop.value));
@@ -84,7 +87,7 @@ impl Parser {
         Ok(relop)
     }
 
-    fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
+    fn consume_token(&mut self, expected: TokenType) -> TokenResult {
         if self.position == self.tokens.len() {
             return Err(format!("Expected {:?} but reached the end", expected));
         }

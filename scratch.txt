@@ -7,6 +7,7 @@ Next:
 [ ] Enable 'expression' as PRINT arg (number of var)
 [ ] Handle real expressions like 1+2, a+c 1*b
 
+LiteralNode instead of NumberNode + VarNode?
 
 Things left to do:
 
