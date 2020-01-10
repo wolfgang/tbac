@@ -10,7 +10,7 @@ fn generate_print_statement() {
     let mut root = SequenceNode::new();
     root.add(PrintNode::new("hello world"));
 
-    let mut code_generator = CodeGenerator::new();
+    let mut code_generator = CodeGenerator::default();
 
     let code = root.eval(&mut code_generator);
 
@@ -27,7 +27,7 @@ fn generate_if_statement() {
             '<',
             PrintNode::new("hello")));
 
-    let mut code_generator = CodeGenerator::new();
+    let mut code_generator = CodeGenerator::default();
     let code = root.eval(&mut code_generator);
     assert_eq!(code, r#"if (10 < 20) { console.log("hello") }"#)
 }

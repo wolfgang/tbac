@@ -15,7 +15,7 @@ impl NumberNode {
 }
 
 impl Node for NumberNode {
-    fn eval(&self, evaluator: &mut dyn NodeEvaluator) -> String {
+    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String {
         evaluator.eval_number(&self)
     }
 

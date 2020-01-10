@@ -24,15 +24,15 @@ impl TestNodeEvaluator {
 }
 
 impl NodeEvaluator for TestNodeEvaluator {
-    fn eval_print(&mut self, _: &PrintNode) -> String {
+    fn eval_print(&self, _: &PrintNode) -> String {
         "eval_print".to_string()
     }
 
-    fn eval_number(&mut self, _: &NumberNode) -> String {
+    fn eval_number(&self, _: &NumberNode) -> String {
         "eval_number".to_string()
     }
 
-    fn eval_if(&mut self, _: &IfNode) -> String {
+    fn eval_if(&self, _: &IfNode) -> String {
         "eval_if".to_string()
     }
 }

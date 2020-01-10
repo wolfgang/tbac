@@ -20,7 +20,7 @@ impl SequenceNode {
 }
 
 impl Node for SequenceNode {
-    fn eval(&self, evaluator: &mut dyn NodeEvaluator) -> String {
+    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String {
         self.children.iter().fold(
             String::with_capacity(512),
             |acc, child| format!("{}{}", acc, child.eval(evaluator)))
