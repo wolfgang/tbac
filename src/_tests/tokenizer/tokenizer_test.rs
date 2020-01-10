@@ -63,6 +63,17 @@ fn tokenize_relops() {
     )
 }
 
+#[test]
+fn tokenize_vars() {
+    assert_eq!(tokenize("A PRINT B 1234"),
+               Ok(vec![
+                   Token::var('A'),
+                   Token::print(),
+                   Token::var('B'),
+                   Token::number("1234")
+               ]))
+}
+
 
 #[test]
 fn returns_error_if_keyword_is_unknown() {

@@ -21,7 +21,7 @@ impl Tokenizer {
         while self.has_input() {
             self.skip_whitespace();
             if self.current_char_is(|c| c.is_uppercase()) {
-                self.read_keyword()?;
+                self.read_uppercase_str()?;
                 continue
             }
             if self.current_char_is(|c| c == '"') {
@@ -45,10 +45,10 @@ impl Tokenizer {
         self.consume_chars_while(|c| c.is_whitespace());
     }
 
-    fn read_keyword(&mut self) -> Result<(), String> {
+    fn read_uppercase_str(&mut self) -> Result<(), String> {
         let buffer = self.consume_chars_while(|c| c.is_uppercase());
 
-        match Self::token_from_keyword(&buffer) {
+        match Self::token_from_uppercase_str(&buffer) {
             Some(token) => {
                 self.result.push(token);
                 Ok(())
@@ -78,7 +78,11 @@ impl Tokenizer {
         self.consume_char();
     }
 
-    pub fn token_from_keyword(name: &String) -> Option<Token> {
+    pub fn token_from_uppercase_str(name: &String) -> Option<Token> {
+        if name.len() == 1 {
+            return Some(Token::var(name.chars().next().unwrap()));
+        }
+
         match name.as_str() {
             "PRINT" => { Some(Token::print()) }
             "IF" => { Some(Token::iff()) }

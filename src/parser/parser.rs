@@ -52,7 +52,7 @@ impl Parser {
         Ok(IfNode::new(
             Self::number_node_from(&left),
             Self::number_node_from(&right),
-            relop.value.chars().nth(0).unwrap(),
+            relop.value.chars().next().unwrap(),
             statement))
     }
 
