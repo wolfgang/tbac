@@ -1,14 +1,10 @@
-use tbac::code_generator::CodeGenerator;
-use tbac::parser::parser::Parser;
-use tbac::tokenizer::Tokenizer;
+use tbac::compiler::compile;
 
 fn main() {
     let tb_code = r#"IF 2 > 1 THEN PRINT "YES"
                     PRINT "THE END""#;
 
-    let tokens = Tokenizer::new(tb_code).tokenize().unwrap();
-    let root = Parser::new(&tokens).parse().unwrap();
-    let js_code = CodeGenerator {}.generate(&root);
+    let js_code = compile(tb_code);
 
     println!("{}", js_code);
 }

@@ -1,26 +1,12 @@
-IF 2 > 1 THEN PRINT "YES"
+Things left to do:
 
-1. Tokenizer
+Error handling at high-level (compiler)
 
+Newlines?
 
-enum TokenType {
-x    IF,
-x    PRINT,
-x    THEN
-x    GT
-x    NUM
-x    STRING
-}
+Support expressions
 
-struct Token {
-    type: TokenType
-    value: String
-}
+Support variables
 
-Tokens:
-IF
-Expression (number for now)
-GT
-THEN
-PRINT
-String Literal
+Support goto/gosub (?) -> break statement
+
