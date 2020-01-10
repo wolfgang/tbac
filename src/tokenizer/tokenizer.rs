@@ -87,6 +87,7 @@ impl Tokenizer {
             "PRINT" => { Some(Token::print()) }
             "IF" => { Some(Token::iff()) }
             "THEN" => { Some(Token::then()) }
+            "LET" => { Some(Token::lett()) }
             _ => { None }
         }
     }
