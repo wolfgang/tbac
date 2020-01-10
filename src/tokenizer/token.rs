@@ -6,6 +6,7 @@ pub enum TokenType {
     PRINT,
     IF,
     THEN,
+    LET,
     RELOP,
     NUMBER,
     STRING,
@@ -23,6 +24,7 @@ impl Token {
     pub fn print() -> Self { Self::with_empty_value(PRINT) }
     pub fn iff() -> Self { Self::with_empty_value(IF) }
     pub fn then() -> Self { Self::with_empty_value(THEN) }
+    pub fn lett() -> Self { Self::with_empty_value(LET) }
     pub fn relop(op: char) -> Self { Self::with(RELOP, op) }
     pub fn number(value: i32) -> Self { Self::with(NUMBER, value) }
     pub fn string(value: &str) -> Self { Self::with(STRING, value) }
