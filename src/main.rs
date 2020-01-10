@@ -2,6 +2,7 @@ use tbac::compiler::compile;
 
 fn main() {
     let tb_code = r#"IF 2 > 1 THEN PRINT "YES"
+                    LET A = 10
                     PRINT "THE END""#;
 
     match compile(tb_code) {

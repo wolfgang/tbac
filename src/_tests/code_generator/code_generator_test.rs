@@ -34,7 +34,7 @@ fn generate_let_statement() {
     root.add(LetNode::new('A', NumberNode::new(1234)));
 
     assert_eq!(generate_code(&root),
-               "let A = 1234;\n");
+               "A = 1234;\n");
 }
 
 #[test]

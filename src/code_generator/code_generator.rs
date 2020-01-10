@@ -32,6 +32,6 @@ impl NodeEvaluator for CodeGenerator {
     }
 
     fn eval_let(&self, node: &LetNode) -> String {
-        format!("let {} = {};\n", node.var, node.value.eval(self))
+        format!("{} = {};\n", node.var, node.value.eval(self))
     }
 }
