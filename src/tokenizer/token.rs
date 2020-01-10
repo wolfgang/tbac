@@ -8,7 +8,8 @@ pub enum TokenType {
     RELOP,
     NUMBER,
     STRING,
-    ANY
+    VAR,
+    ANY,
 }
 
 #[derive(PartialEq, Debug, Clone)]
@@ -40,6 +41,10 @@ impl Token {
 
     pub fn string(value: &str) -> Self {
         Self { ttype: STRING, value: String::from(value) }
+    }
+
+    pub fn var(name: char) -> Self {
+        Self { ttype: VAR, value: format!("{}", name) }
     }
 
     fn with_empty_value(ttype: TokenType) -> Self {

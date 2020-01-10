@@ -1,8 +1,19 @@
+Next:
+
+Tokenize variable name
+Tokenize LET
+
+Parse LET
+Parse variable in additon to number in if expressions
+
+
+
+
 Things left to do:
 
 X Error handling at high-level (compiler)
 
-Newlines?
+X Newlines?
 
 Support expressions
 

@@ -8,6 +8,7 @@ fn can_construct_tokens() {
     let relop_gt_token = Token::relop('>');
     let number_token = Token::number("1234");
     let string_token = Token::string("abcd");
+    let var_token = Token::var('A');
 
     assert_eq!(PRINT, print_token.ttype);
     assert_eq!(IF, if_token.ttype);
@@ -21,5 +22,8 @@ fn can_construct_tokens() {
 
     assert_eq!(STRING, string_token.ttype);
     assert_eq!(string_token.value, "abcd");
+
+    assert_eq!(VAR, var_token.ttype);
+    assert_eq!(var_token.value, "A");
 
 }
