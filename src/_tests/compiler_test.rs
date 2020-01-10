@@ -5,9 +5,11 @@ fn compiles_if_statement() {
     let tb_code = r#"IF 2 > 1 THEN PRINT "YES""#;
     let expected_js_code = "if (2 > 1) { console.log('YES'); }\n";
 
-    let js_code = compile(tb_code);
+    let result = compile(tb_code);
 
-    assert_eq!(js_code, expected_js_code);
-
+    assert_eq!(result, Ok(expected_js_code.to_string()));
+}
+#[test]
+fn returns_error_if_tokenizing_goes_wrong() {
 
 }

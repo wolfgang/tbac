@@ -4,7 +4,7 @@ fn main() {
     let tb_code = r#"IF 2 > 1 THEN PRINT "YES"
                     PRINT "THE END""#;
 
-    let js_code = compile(tb_code);
+    let js_code = compile(tb_code).unwrap();
 
     println!("{}", js_code);
 }
