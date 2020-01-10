@@ -23,7 +23,7 @@ impl NodeEvaluator for CodeGenerator {
     }
 
     fn eval_if(&self, node: &IfNode) -> String {
-        format!("if ({} {} {}) {{ {} }}",
+        format!("if ({} {} {}) {{ {} }}\n",
                 node.left.eval(self),
                 node.relop,
                 node.right.eval(self),

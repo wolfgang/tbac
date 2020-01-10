@@ -12,7 +12,7 @@ fn compile(code: &str) -> String {
 #[test]
 fn compiles_if_statement() {
     let tb_code = r#"IF 2 > 1 THEN PRINT "YES""#;
-    let expected_js_code = r#"if (2 > 1) { console.log("YES"); }"#;
+    let expected_js_code = "if (2 > 1) { console.log(\"YES\"); }\n";
 
     let js_code = compile(tb_code);
 

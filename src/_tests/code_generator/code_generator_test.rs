@@ -24,7 +24,7 @@ fn generate_if_statement() {
             PrintNode::new("hello")));
 
     assert_eq!(generate_code(&root),
-               r#"if (10 < 20) { console.log("hello"); }"#);
+               "if (10 < 20) { console.log(\"hello\"); }\n");
 }
 
 #[test]
