@@ -1,12 +1,10 @@
 Next:
 
-Tokenize variable name
-Tokenize LET
+[X] Tokenize variable name
+[X] Tokenize LET
+[X] Parse LET
 
-Parse LET
 Parse variable in additon to number in if expressions
-
-
 
 
 Things left to do:
