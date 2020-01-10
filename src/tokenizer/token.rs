@@ -1,7 +1,7 @@
 use TokenType::*;
 use std::fmt::Display;
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum TokenType {
     PRINT,
     IF,

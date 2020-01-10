@@ -114,16 +114,42 @@ fn parse_let_node() {
     assert_number_node(&let_node.value, 1234);
 }
 
-
 #[test]
-fn return_error_if_if_token_not_followed_by_number() {
+fn parse_if_statement_with_vars() {
     let tokens = vec![
         Token::iff(),
-        Token::string("abcd"),
+        Token::var('A'),
+        Token::relop('>'),
+        Token::var('B'),
+        Token::then(),
+        Token::print(),
+        Token::string("hello")
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected NUMBER but got STRING");
+    assert_eq!(result.as_ref().err(), None);
+
+    let node = result.unwrap();
+    assert_eq!(node.children.len(), 1);
+
+    let if_node = as_node::<IfNode>(&node.children[0]);
+    assert_var_node(&if_node.left, 'A');
+    assert_var_node(&if_node.right, 'B');
+    assert_eq!(if_node.relop, '>');
+    assert_print_node(&if_node.then, "hello");
+}
+
+
+
+#[test]
+fn return_error_if_if_token_not_followed_by_expression() {
+    let tokens = vec![
+        Token::iff(),
+        Token::print(),
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Expected VAR but got PRINT");
 }
 
 #[test]
@@ -186,6 +212,18 @@ fn return_error_if_let_not_followed_by_equal_sign() {
     let result = parse(&tokens);
     assert_parse_error(result, "Expected = but got <");
 }
+
+#[test]
+fn return_error_if_if_has_not_enough_parts() {
+    let tokens = vec![
+        Token::iff()
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Premature end of token stream");
+
+}
+
 
 fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()

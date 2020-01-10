@@ -2,6 +2,7 @@ use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
 use std::any::Any;
 
+#[derive(PartialEq, Debug)]
 pub struct VarNode {
     pub var_name: char
 }

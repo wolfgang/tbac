@@ -3,7 +3,6 @@ use std::any::Any;
 use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
 
-
 pub struct SequenceNode {
     pub children: Vec<Box<dyn Node>>
 }

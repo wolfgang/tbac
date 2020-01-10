@@ -7,6 +7,7 @@ use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
 use crate::parser::let_node::LetNode;
+use crate::parser::var_node::VarNode;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -46,14 +47,14 @@ impl Parser {
     }
 
     fn parse_if(&mut self) -> Result<Box<dyn Node>, String> {
-        let left = self.consume_token(NUMBER)?;
+        let left = self.parse_expression()?;
         let relop = self.consume_token(RELOP)?;
-        let right = self.consume_token(NUMBER)?;
+        let right = self.parse_expression()?;
         self.consume_token(THEN)?;
         let statement = self.parse_statement()?;
         Ok(IfNode::new(
-            Self::number_node_from(&left),
-            Self::number_node_from(&right),
+            left,
+            right,
             relop.value.chars().next().unwrap(),
             statement))
     }
@@ -63,6 +64,16 @@ impl Parser {
         self.consume_relop("=")?;
         let value = self.consume_token(NUMBER)?;
         Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
+    }
+
+    fn parse_expression(&mut self) -> Result<Box<dyn Node>, String>  {
+        if self.peek_token()? == NUMBER {
+            let token = self.consume_token(NUMBER)?;
+            return Ok(Self::number_node_from(&token));
+        }
+
+        let token = self.consume_token(VAR)?;
+        Ok(Self::var_node_from(&token))
     }
 
     fn consume_relop(&mut self, expected: &str) -> Result<Token, String> {
@@ -86,7 +97,18 @@ impl Parser {
         Ok(token)
     }
 
+    fn peek_token(&self) -> Result<TokenType, String> {
+        if self.position == self.tokens.len() {
+            return Err("Premature end of token stream".to_string());
+        }
+        Ok(self.tokens[self.position].ttype)
+    }
+
     fn number_node_from(token: &Token) -> Box<NumberNode> {
         NumberNode::new(token.value.parse::<i32>().unwrap())
+    }
+
+    fn var_node_from(token: &Token) -> Box<VarNode> {
+        VarNode::new(token.value.chars().next().unwrap())
     }
 }
