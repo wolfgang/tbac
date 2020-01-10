@@ -184,7 +184,7 @@ fn return_error_if_let_not_followed_by_equal_sign() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected = after LET but got <");
+    assert_parse_error(result, "Expected = but got <");
 }
 
 fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {

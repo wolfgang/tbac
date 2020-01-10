@@ -60,12 +60,17 @@ impl Parser {
 
     fn parse_let(&mut self) -> Result<Box<dyn Node>, String> {
         let var = self.consume_token(VAR)?;
-        let relop = self.consume_token(RELOP)?;
-        if relop.value.as_str() != "=" {
-            return Err(format!("Expected = after LET but got {}", relop.value));
-        }
+        self.consume_relop("=")?;
         let value = self.consume_token(NUMBER)?;
         Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
+    }
+
+    fn consume_relop(&mut self, expected: &str) -> Result<Token, String> {
+        let relop = self.consume_token(RELOP)?;
+        if relop.value.as_str() != expected {
+            return Err(format!("Expected {} but got {}", expected, relop.value));
+        }
+        Ok(relop)
     }
 
     fn consume_token(&mut self, expected: TokenType) -> Result<Token, String> {
