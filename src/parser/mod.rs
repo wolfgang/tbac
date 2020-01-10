@@ -6,3 +6,4 @@ pub mod number_node;
 pub mod ifnode;
 pub mod sequence_node;
 pub mod let_node;
+pub mod var_node;

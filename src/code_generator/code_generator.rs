@@ -5,6 +5,7 @@ use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::node::Node;
 use crate::parser::let_node::LetNode;
+use crate::parser::var_node::VarNode;
 
 pub struct CodeGenerator {}
 
@@ -33,5 +34,9 @@ impl NodeEvaluator for CodeGenerator {
 
     fn eval_let(&self, node: &LetNode) -> String {
         format!("{} = {};\n", node.var, node.value.eval(self))
+    }
+
+    fn eval_var(&self, _node: &VarNode) -> String {
+        "".to_string()
     }
 }
