@@ -36,7 +36,7 @@ impl NodeEvaluator for CodeGenerator {
         format!("{} = {};\n", node.var, node.value.eval(self))
     }
 
-    fn eval_var(&self, _node: &VarNode) -> String {
-        "".to_string()
+    fn eval_var(&self, node: &VarNode) -> String {
+        node.var_name.to_string()
     }
 }

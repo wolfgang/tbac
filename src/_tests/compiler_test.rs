@@ -18,8 +18,19 @@ fn compiles_let_statement() {
     let result = compile(tb_code);
 
     assert_eq!(result, Ok(expected_js_code.to_string()));
-
 }
+
+#[test]
+fn compiles_if_statement_with_variable() {
+    let tb_code = r#"LET A = 10
+                     IF A > 20 THEN PRINT "YES""#;
+    let expected_js_code = "A = 10;\nif (A > 20) {\n  console.log('YES');\n}\n";
+
+    let result = compile(tb_code);
+
+    assert_eq!(result, Ok(expected_js_code.to_string()));
+}
+
 
 #[test]
 fn returns_error_if_tokenizing_goes_wrong() {
