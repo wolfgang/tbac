@@ -2,12 +2,15 @@ use crate::parser::ifnode::IfNode;
 use crate::parser::node_evaluator::NodeEvaluator;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
+use crate::parser::sequence_node::SequenceNode;
+use crate::parser::node::Node;
 
-#[derive(Default)]
 pub struct CodeGenerator {}
 
 impl CodeGenerator {
-
+    pub fn generate(&self, root: &SequenceNode) -> String {
+        root.eval(self)
+    }
 }
 
 impl NodeEvaluator for CodeGenerator {
