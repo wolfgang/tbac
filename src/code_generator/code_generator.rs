@@ -1,11 +1,9 @@
-use crate::parser::node_evaluator::NodeEvaluator;
-use crate::parser::print_node::PrintNode;
-use crate::parser::number_node::NumberNode;
 use crate::parser::ifnode::IfNode;
+use crate::parser::node_evaluator::NodeEvaluator;
+use crate::parser::number_node::NumberNode;
+use crate::parser::print_node::PrintNode;
 
-pub struct CodeGenerator {
-
-}
+pub struct CodeGenerator {}
 
 impl CodeGenerator {
     pub fn new() -> Self {
@@ -18,11 +16,15 @@ impl NodeEvaluator for CodeGenerator {
         format!("console.log(\"{}\")", node.string_param)
     }
 
-    fn eval_number(&mut self, _node: &NumberNode) -> String {
-        "".to_string()
+    fn eval_number(&mut self, node: &NumberNode) -> String {
+        node.value.to_string()
     }
 
-    fn eval_if(&mut self, _node: &IfNode) -> String {
-        "".to_string()
+    fn eval_if(&mut self, node: &IfNode) -> String {
+        format!("if ({} {} {}) {{ {} }}",
+                node.left.eval(self),
+                node.relop,
+                node.right.eval(self),
+                node.then.eval(self))
     }
 }
