@@ -37,7 +37,7 @@ fn tokenizes_numbers() {
     assert_eq!(tokenize("PRINT 12345"),
                Ok(vec![
                    Token::print(),
-                   Token::number("12345")
+                   Token::number(12345)
                ]))
 }
 
@@ -45,9 +45,9 @@ fn tokenizes_numbers() {
 fn tokenize_gt() {
     assert_eq!(tokenize("12 > 10"),
                Ok(vec![
-                   Token::number("12"),
+                   Token::number(12),
                    Token::relop('>'),
-                   Token::number("10")
+                   Token::number(10)
                ])
     )
 }
@@ -70,7 +70,7 @@ fn tokenize_vars() {
                    Token::var('A'),
                    Token::print(),
                    Token::var('B'),
-                   Token::number("1234")
+                   Token::number(1234)
                ]))
 }
 

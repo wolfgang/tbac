@@ -21,9 +21,9 @@ fn parse_print_node() {
 fn parse_if_statement() {
     let tokens = vec![
         Token::iff(),
-        Token::number("1111"),
+        Token::number(1111),
         Token::relop('>'),
-        Token::number("2222"),
+        Token::number(2222),
         Token::then(),
         Token::print(),
         Token::string("hello")
@@ -63,14 +63,14 @@ fn parse_two_statements() {
 fn parse_if_statement_with_if_statement_in_then() {
     let tokens = vec![
         Token::iff(),
-        Token::number("1111"),
+        Token::number(1111),
         Token::relop('>'),
-        Token::number("2222"),
+        Token::number(2222),
         Token::then(),
         Token::iff(),
-        Token::number("3333"),
+        Token::number(3333),
         Token::relop('<'),
-        Token::number("4444"),
+        Token::number(4444),
         Token::then(),
         Token::print(),
         Token::string("hello"),
@@ -142,9 +142,9 @@ fn return_error_if_print_has_no_argument() {
 fn return_error_if_then_branch_is_not_a_command() {
     let tokens = vec![
         Token::iff(),
-        Token::number("1111"),
+        Token::number(1111),
         Token::relop('>'),
-        Token::number("2222"),
+        Token::number(2222),
         Token::then(),
         Token::string("hello")
     ];

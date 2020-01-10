@@ -70,7 +70,7 @@ impl Tokenizer {
 
     fn read_number(&mut self) {
         let buffer = self.consume_chars_while(|c| c.is_digit(10));
-        self.result.push(Token::number(buffer.as_str()))
+        self.result.push(Token::number(buffer.parse().unwrap()))
     }
 
     fn read_relop(&mut self) {
