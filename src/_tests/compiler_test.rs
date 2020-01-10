@@ -11,6 +11,17 @@ fn compiles_if_statement() {
 }
 
 #[test]
+fn compiles_let_statement() {
+    let tb_code = "LET A = 1234";
+    let expected_js_code = "let A = 1234;\n";
+
+    let result = compile(tb_code);
+
+    assert_eq!(result, Ok(expected_js_code.to_string()));
+
+}
+
+#[test]
 fn returns_error_if_tokenizing_goes_wrong() {
     verify_error("what",
                  "Unrecognized character 'w'");
