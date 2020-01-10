@@ -19,35 +19,23 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn from_keyword(name: &String) -> Option<Token> {
-        match name.as_str() {
-            "PRINT" => { Some(Token::print()) }
-            "IF" => { Some(Token::iff()) }
-            "THEN" => { Some(Token::then()) }
-            _ => { None }
-        }
-    }
-
     pub fn print() -> Self { Self::with_empty_value(PRINT) }
     pub fn iff() -> Self { Self::with_empty_value(IF) }
     pub fn then() -> Self { Self::with_empty_value(THEN) }
-
-    pub fn relop(op: char) -> Self {
-        Self { ttype: RELOP, value: format!("{}", op) }
-    }
-    pub fn number(value: &str) -> Self {
-        Self { ttype: NUMBER, value: String::from(value) }
-    }
-
-    pub fn string(value: &str) -> Self {
-        Self { ttype: STRING, value: String::from(value) }
-    }
-
-    pub fn var(name: char) -> Self {
-        Self { ttype: VAR, value: format!("{}", name) }
-    }
+    pub fn relop(op: char) -> Self { Self::with_char(RELOP, op) }
+    pub fn number(value: &str) -> Self { Self::with_str(NUMBER, value) }
+    pub fn string(value: &str) -> Self { Self::with_str(STRING, value) }
+    pub fn var(name: char) -> Self { Self::with_char(VAR, name) }
 
     fn with_empty_value(ttype: TokenType) -> Self {
-        Self { ttype, value: String::from("") }
+        Self::with_str(ttype, "")
+    }
+
+    fn with_str(ttype: TokenType, value: &str) -> Self {
+        Self { ttype, value: value.to_string() }
+    }
+
+    fn with_char(ttype: TokenType, value: char) -> Self {
+        Self { ttype, value: format!("{}", value) }
     }
 }
