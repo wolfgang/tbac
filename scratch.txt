@@ -6,6 +6,7 @@ Next:
 [X] Parse variable in additon to number in if expressions
 [ ] Enable 'expression' as PRINT arg (number of var)
 [ ] Handle real expressions like 1+2, a+c 1*b
+[ ] Implement GOTO
 
 LiteralNode instead of NumberNode + VarNode?
 

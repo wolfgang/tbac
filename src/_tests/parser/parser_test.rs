@@ -6,7 +6,7 @@ use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
 
 #[test]
-fn parse_print_node() {
+fn parse_print_statement() {
     let tokens = vec![
         Token::print(),
         Token::string("hello")
@@ -96,7 +96,7 @@ fn parse_if_statement_with_if_statement_in_then() {
 }
 
 #[test]
-fn parse_let_node() {
+fn parse_let_statement() {
     let tokens = vec![
         Token::lett(),
         Token::var('A'),
