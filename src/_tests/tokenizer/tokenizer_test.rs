@@ -47,19 +47,19 @@ fn tokenize_gt() {
     assert_eq!(tokenize("12 > 10"),
                Ok(vec![
                    Token::number(12),
-                   Token::bin_op('>'),
+                   Token::relop('>'),
                    Token::number(10)
                ])
     )
 }
 
 #[test]
-fn tokenize_binops() {
+fn tokenize_relops() {
     assert_eq!(tokenize("> < ="),
                Ok(vec![
-                   Token::bin_op('>'),
-                   Token::bin_op('<'),
-                   Token::bin_op('='),
+                   Token::relop('>'),
+                   Token::relop('<'),
+                   Token::relop('='),
                ])
     )
 }
@@ -93,7 +93,7 @@ fn handles_surrounding_whitespace() {
                Ok(vec![
                    Token::var('A'),
                    Token::var('B'),
-                   Token::bin_op('<'),
+                   Token::relop('<'),
                ])
     )
 }

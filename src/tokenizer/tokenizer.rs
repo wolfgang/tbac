@@ -32,8 +32,8 @@ impl Tokenizer {
                 self.read_number();
                 continue;
             }
-            if self.current_char_is_binop() {
-                self.read_binop();
+            if self.current_char_is_relop() {
+                self.read_relop();
                 continue;
             }
             if self.current_char_is_char(',') {
@@ -81,12 +81,12 @@ impl Tokenizer {
         self.result.push(Token::number(buffer.parse().unwrap()))
     }
 
-    fn current_char_is_binop(&self) -> bool {
+    fn current_char_is_relop(&self) -> bool {
         self.current_char_is(|c| c == '>' || c == '<' || c == '=')
     }
 
-    fn read_binop(&mut self) {
-        self.result.push(Token::bin_op(self.current_char()));
+    fn read_relop(&mut self) {
+        self.result.push(Token::relop(self.current_char()));
         self.consume_char();
     }
 
