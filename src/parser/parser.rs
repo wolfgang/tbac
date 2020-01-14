@@ -51,7 +51,7 @@ impl Parser {
             let token = self.consume_token(ANY)?;
             match token.ttype {
                 STRING => {
-                    print_node.add_param(StringNode::new(token.value.as_str()))
+                    print_node.add_param(Self::string_node_from(&token))
                 }
                 NUMBER => {
                     print_node.add_param(Self::number_node_from(&token))
@@ -127,6 +127,10 @@ impl Parser {
 
     fn number_node_from(token: &Token) -> Box<NumberNode> {
         NumberNode::new(token.value.parse::<i32>().unwrap())
+    }
+
+    fn string_node_from(token: &Token) -> Box<StringNode> {
+        StringNode::new(token.value.as_str())
     }
 
     fn var_node_from(token: &Token) -> Box<VarNode> {
