@@ -45,13 +45,13 @@ impl Parser {
     }
 
     fn parse_print(&mut self) -> NodeResult {
-        if self.peek_token()? == STRING {
-            let param_token = self.consume_token(STRING)?;
+        let token_type = self.peek_token()?;
+        if token_type == STRING || token_type == NUMBER {
+            let param_token = self.consume_token(ANY)?;
             Ok(PrintNode::new(param_token.value.as_str()))
         }
         else {
-            let param_token = self.consume_token(NUMBER)?;
-            Ok(PrintNode::new(param_token.value.as_str()))
+            Err("Expected STRING or NUMBER but got THEN".to_string())
         }
     }
 
