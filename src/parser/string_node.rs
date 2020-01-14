@@ -9,8 +9,8 @@ pub struct StringNode {
 }
 
 impl StringNode {
-    pub fn new(value: String) -> Box<Self> {
-        Box::new(Self { value })
+    pub fn new(value: &str) -> Box<Self> {
+        Box::new(Self { value: value.to_string() })
     }
 }
 

@@ -68,6 +68,10 @@ pub fn assert_number_node(node: &Box<dyn Node>, number: i32) {
     assert_eq!(as_node::<NumberNode>(node), &*NumberNode::new(number));
 }
 
+pub fn assert_string_node(node: &Box<dyn Node>, value: &str) {
+    assert_eq!(as_node::<StringNode>(node), &*StringNode::new(value));
+}
+
 pub fn assert_print_node(node: &Box<dyn Node>, param: &str) {
     assert_is_node::<PrintNode>(node);
     assert_eq!(as_node::<PrintNode>(node).string_param, param);

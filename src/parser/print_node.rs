@@ -1,6 +1,7 @@
 use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
 use std::any::Any;
+use crate::parser::string_node::StringNode;
 
 pub struct PrintNode {
     pub string_param: String,
@@ -9,9 +10,11 @@ pub struct PrintNode {
 
 impl PrintNode {
     pub fn new(param: &str) -> Box<Self> {
+        let mut params : Vec<Box<dyn Node>> = Vec::with_capacity(8);
+        params.push(StringNode::new(param));
         Box::new(Self {
             string_param: param.to_string(),
-            params: Vec::with_capacity(8)
+            params
         })
     }
 
