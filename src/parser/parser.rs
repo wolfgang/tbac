@@ -65,20 +65,20 @@ impl Parser {
 
     fn parse_if(&mut self) -> NodeResult {
         let left = self.parse_expression()?;
-        let relop = self.consume_token(RELOP)?;
+        let binop = self.consume_token(BinOp)?;
         let right = self.parse_expression()?;
         self.consume_token(THEN)?;
         let statement = self.parse_statement()?;
         Ok(IfNode::new(
             left,
             right,
-            Self::first_char_of(&relop.value),
+            Self::first_char_of(&binop.value),
             statement))
     }
 
     fn parse_let(&mut self) -> NodeResult {
         let var_token = self.consume_token(VAR)?;
-        self.consume_relop("=")?;
+        self.consume_binop("=")?;
         let right_side = self.parse_expression()?;
         Ok(LetNode::new(Self::first_char_of(&var_token.value), right_side))
     }
@@ -93,12 +93,12 @@ impl Parser {
         Ok(Self::var_node_from(&token))
     }
 
-    fn consume_relop(&mut self, expected: &str) -> TokenResult {
-        let relop = self.consume_token(RELOP)?;
-        if relop.value.as_str() != expected {
-            return Err(format!("Expected {} but got {}", expected, relop.value));
+    fn consume_binop(&mut self, expected: &str) -> TokenResult {
+        let binop = self.consume_token(BinOp)?;
+        if binop.value.as_str() != expected {
+            return Err(format!("Expected {} but got {}", expected, binop.value));
         }
-        Ok(relop)
+        Ok(binop)
     }
 
     fn consume_token(&mut self, expected: TokenType) -> TokenResult {

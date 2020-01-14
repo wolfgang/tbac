@@ -7,7 +7,7 @@ fn can_construct_tokens() {
     assert_token(Token::then(), THEN, "");
     assert_token(Token::lett(), LET, "");
 
-    assert_token(Token::relop('>'), RELOP, ">");
+    assert_token(Token::bin_op('>'), BinOp, ">");
 
     assert_token(Token::number(1234), NUMBER, "1234");
     assert_token(Token::string("abcd"), STRING, "abcd");

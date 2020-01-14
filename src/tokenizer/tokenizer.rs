@@ -33,7 +33,7 @@ impl Tokenizer {
                 continue;
             }
             if self.current_char_is(|c| c == '>' || c == '<' || c == '=') {
-                self.read_relop();
+                self.read_binop();
                 continue;
             }
             if self.current_char_is_char(',') {
@@ -81,8 +81,8 @@ impl Tokenizer {
         self.result.push(Token::number(buffer.parse().unwrap()))
     }
 
-    fn read_relop(&mut self) {
-        self.result.push(Token::relop(self.current_char()));
+    fn read_binop(&mut self) {
+        self.result.push(Token::bin_op(self.current_char()));
         self.consume_char();
     }
 

@@ -7,7 +7,7 @@ fn parse_let_statement() {
     let tokens = vec![
         Token::lett(),
         Token::var('A'),
-        Token::relop('='),
+        Token::bin_op('='),
         Token::number(1234)
     ];
     let result = parse(&tokens);
@@ -26,7 +26,7 @@ fn parse_let_with_var_on_the_right() {
     let tokens = vec![
         Token::lett(),
         Token::var('A'),
-        Token::relop('='),
+        Token::bin_op('='),
         Token::var('B')
     ];
     let node = parse(&tokens).unwrap();

@@ -6,30 +6,15 @@ Next:
 [X] Parse variable in additon to number in if expressions
 [X] PRINT 10, 20, "HELLO"
 [X] PRINT A, 10, B
-[ ] LET A = B
+[X] LET A = B
 [ ] Handle real expressions like 1+2, a+c 1*b
 [ ] Implement GOTO
 
-Add type alias for Box<dyn Node>
+
+
+-------
 
 Could use the is_node and as_node functionality to get rid of Node::eval; code gen becomes
 a case statement over node type + downcast (like in the DAS screencast)
 
 LiteralNode instead of NumberNode + VarNode?
-
-
-
-
-
-Things left to do:
-
-X Error handling at high-level (compiler)
-
-X Newlines?
-
-Support expressions
-
-Support variables
-
-Support goto/gosub (?) -> break statement
-
