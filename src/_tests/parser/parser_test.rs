@@ -1,7 +1,5 @@
 use crate::tokenizer::Token;
-use crate::parser::parser::Parser;
 use crate::_tests::helpers::*;
-use crate::parser::sequence_node::SequenceNode;
 use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
 use crate::_tests::parser::helpers::{parse, assert_parse_error};
