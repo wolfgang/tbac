@@ -54,10 +54,7 @@ impl Parser {
                     let token = self.consume_token(STRING)?;
                     print_node.add_param(Self::string_node_from(&token))
                 }
-                _ => {
-                    let expression_node = self.parse_expression()?;
-                    print_node.add_param(expression_node)
-                }
+                _ => { print_node.add_param(self.parse_expression()?) }
             }
 
             if self.peek_token() != COMMA { break; }
@@ -75,15 +72,15 @@ impl Parser {
         Ok(IfNode::new(
             left,
             right,
-            relop.value.chars().next().unwrap(),
+            Self::first_char_of(&relop.value),
             statement))
     }
 
     fn parse_let(&mut self) -> NodeResult {
-        let var = self.consume_token(VAR)?;
+        let var_token = self.consume_token(VAR)?;
         self.consume_relop("=")?;
-        let value = self.consume_token(NUMBER)?;
-        Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
+        let right_side = self.parse_expression()?;
+        Ok(LetNode::new(Self::first_char_of(&var_token.value), right_side))
     }
 
     fn parse_expression(&mut self) -> NodeResult {
@@ -133,6 +130,10 @@ impl Parser {
     }
 
     fn var_node_from(token: &Token) -> Box<VarNode> {
-        VarNode::new(token.value.chars().next().unwrap())
+        VarNode::new(Self::first_char_of(&token.value))
+    }
+
+    fn first_char_of(s: &String) -> char {
+        s.chars().next().unwrap()
     }
 }

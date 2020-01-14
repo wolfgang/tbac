@@ -12,8 +12,9 @@ fn compiles_if_statement() {
 
 #[test]
 fn compiles_let_statement() {
-    let tb_code = "LET A = 1234";
-    let expected_js_code = "A = 1234;\n";
+    let tb_code = r#"LET A = 1234
+                     LET B = A"#;
+    let expected_js_code = "A = 1234;\nB = A;\n";
 
     let result = compile(tb_code);
 
