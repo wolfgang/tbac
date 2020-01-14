@@ -11,6 +11,7 @@ pub enum TokenType {
     NUMBER,
     STRING,
     VAR,
+    COMMA,
     ANY,
 }
 
@@ -29,6 +30,7 @@ impl Token {
     pub fn number(value: i32) -> Self { Self::with(NUMBER, value) }
     pub fn string(value: &str) -> Self { Self::with(STRING, value) }
     pub fn var(name: char) -> Self { Self::with(VAR, name) }
+    pub fn comma() -> Self { Self::with_empty_value(COMMA)}
 
     fn with_empty_value(ttype: TokenType) -> Self {
         Self::with(ttype, "")

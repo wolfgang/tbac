@@ -4,10 +4,14 @@ Next:
 [X] Tokenize LET
 [X] Parse LET
 [X] Parse variable in additon to number in if expressions
-[ ] Enable 'expression' as PRINT arg (number of var)
+[ ] Enable PRINT 10, 20, "HELLO", A
 [ ] Handle real expressions like 1+2, a+c 1*b
 [ ] Implement GOTO
 
+
+LET with variable on the right side:
+LET A = 1234
+LET B = A
 
 PRINT 1234 should be console.log(1234) (i.e. without quotes)
 

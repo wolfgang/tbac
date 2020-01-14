@@ -13,6 +13,8 @@ fn can_construct_tokens() {
     assert_token(Token::string("abcd"), STRING, "abcd");
 
     assert_token(Token::var('A'), VAR, "A");
+
+    assert_token(Token::comma(), COMMA, "");
 }
 
 fn assert_token(token: Token, ttype: TokenType, value: &str) {

@@ -76,6 +76,6 @@ pub fn as_node<T>(node: &Box<dyn Node>) -> &T where T: Node {
     node.as_any().downcast_ref::<T>().unwrap()
 }
 
-fn assert_is_node<T>(node: &Box<dyn Node>)  where T: Node {
+pub(crate) fn assert_is_node<T>(node: &Box<dyn Node>)  where T: Node {
     assert!(node.as_any().downcast_ref::<T>().is_some())
 }
