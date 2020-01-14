@@ -9,10 +9,14 @@ pub struct PrintNode {
 }
 
 impl PrintNode {
-    pub fn new(param: &str) -> Box<Self> {
+    pub fn with_string_param(param: &str) -> Box<Self> {
         let mut params: Vec<Box<dyn Node>> = Vec::with_capacity(8);
         params.push(StringNode::new(param));
         Box::new(Self { params })
+    }
+
+    pub fn new() -> Box<Self> {
+        Box::new(Self { params: Vec::with_capacity(8)})
     }
 
     pub fn add_param(&mut self, param: Box<dyn Node>) {

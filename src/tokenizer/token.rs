@@ -13,6 +13,7 @@ pub enum TokenType {
     VAR,
     COMMA,
     ANY,
+    EndOfStream
 }
 
 #[derive(PartialEq, Debug, Clone)]

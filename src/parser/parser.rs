@@ -1,13 +1,14 @@
 use crate::parser::ifnode::IfNode;
+use crate::parser::let_node::LetNode;
 use crate::parser::node::Node;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
+use crate::parser::string_node::StringNode;
+use crate::parser::var_node::VarNode;
 use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
-use crate::parser::let_node::LetNode;
-use crate::parser::var_node::VarNode;
 
 type NodeResult = Result<Box<dyn Node>, String>;
 type TokenResult = Result<Token, String>;
@@ -45,14 +46,25 @@ impl Parser {
     }
 
     fn parse_print(&mut self) -> NodeResult {
-        let token_type = self.peek_token()?;
-        if token_type == STRING || token_type == NUMBER {
-            let param_token = self.consume_token(ANY)?;
-            Ok(PrintNode::new(param_token.value.as_str()))
+        let mut print_node = PrintNode::new();
+        loop {
+            let token = self.consume_token(ANY)?;
+            match token.ttype {
+                STRING => {
+                    print_node.add_param(StringNode::new(token.value.as_str()))
+                }
+                NUMBER => {
+                    print_node.add_param(Self::number_node_from(&token))
+                }
+                _ => {
+                    return Err("Expected STRING or NUMBER but got THEN".to_string())
+                }
+            }
+
+            if self.peek_token() != COMMA { break; }
+            self.consume_token(COMMA)?;
         }
-        else {
-            Err("Expected STRING or NUMBER but got THEN".to_string())
-        }
+        Ok(print_node)
     }
 
     fn parse_if(&mut self) -> NodeResult {
@@ -75,8 +87,8 @@ impl Parser {
         Ok(LetNode::new(var.value.chars().next().unwrap(), Self::number_node_from(&value)))
     }
 
-    fn parse_expression(&mut self) -> NodeResult  {
-        if self.peek_token()? == NUMBER {
+    fn parse_expression(&mut self) -> NodeResult {
+        if self.peek_token() == NUMBER {
             let token = self.consume_token(NUMBER)?;
             return Ok(Self::number_node_from(&token));
         }
@@ -106,11 +118,11 @@ impl Parser {
         Ok(token)
     }
 
-    fn peek_token(&self) -> Result<TokenType, String> {
+    fn peek_token(&self) -> TokenType {
         if self.position == self.tokens.len() {
-            return Err("Premature end of token stream".to_string());
+            return EndOfStream;
         }
-        Ok(self.tokens[self.position].ttype)
+        self.tokens[self.position].ttype
     }
 
     fn number_node_from(token: &Token) -> Box<NumberNode> {

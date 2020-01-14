@@ -7,7 +7,7 @@ use crate::_tests::parser::helpers::*;
 fn construct_and_eval() {
     let mut node = SequenceNode::new();
     node.add(NumberNode::new(1111));
-    node.add(PrintNode::new("hello"));
+    node.add(PrintNode::with_string_param("hello"));
 
     assert_eq!(node.children.len(), 2);
     assert_number_node(&node.children[0], 1111);

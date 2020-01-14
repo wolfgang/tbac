@@ -9,7 +9,7 @@ fn eval() {
         NumberNode::new(1111),
         NumberNode::new(2222),
         '>',
-        PrintNode::new("impossible"));
+        PrintNode::with_string_param("impossible"));
 
     assert_number_node(&node.left, 1111);
     assert_number_node(&node.right, 2222);

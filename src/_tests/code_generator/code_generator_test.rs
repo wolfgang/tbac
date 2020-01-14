@@ -8,7 +8,7 @@ use crate::parser::sequence_node::SequenceNode;
 #[test]
 fn generate_print_statement() {
     let mut root = SequenceNode::new();
-    root.add(PrintNode::new("hello world"));
+    root.add(PrintNode::with_string_param("hello world"));
 
     assert_eq!(generate_code(&root),
                "console.log('hello world');\n")
@@ -22,7 +22,7 @@ fn generate_if_statement() {
             NumberNode::new(10),
             NumberNode::new(20),
             '<',
-            PrintNode::new("hello")));
+            PrintNode::with_string_param("hello")));
 
     assert_eq!(generate_code(&root),
                "if (10 < 20) {\n  console.log('hello');\n}\n");
@@ -40,8 +40,8 @@ fn generate_let_statement() {
 #[test]
 fn generate_multiple_statements() {
     let mut root = SequenceNode::new();
-    root.add(PrintNode::new("hello"));
-    root.add(PrintNode::new("world"));
+    root.add(PrintNode::with_string_param("hello"));
+    root.add(PrintNode::with_string_param("world"));
 
     assert_eq!(generate_code(&root),
                "console.log('hello');\nconsole.log('world');\n");

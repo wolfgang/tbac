@@ -25,24 +25,27 @@ fn parses_with_single_number_expression() {
     assert_eq!(node.children.len(), 1);
     let print_node = assert_is_node::<PrintNode>(&node.children[0]);
     assert_eq!(print_node.params.len(), 1);
-    assert_string_node(&print_node.params[0], "1234")
+    assert_number_node(&print_node.params[0], 1234)
 
 }
 
-#[ignore]
 #[test]
-fn parses_with_multiple_strings() {
+fn parses_with_multiple_params() {
     let tokens = vec![
         Token::print(),
         Token::string("hello"),
         Token::comma(),
         Token::string("world"),
         Token::comma(),
-        Token::string("the end")
+        Token::number(1234)
     ];
     let node = parse(&tokens).unwrap();
     assert_eq!(node.children.len(), 1);
-    assert_is_node::<PrintNode>(&node.children[0]);
+    let print_node = assert_is_node::<PrintNode>(&node.children[0]);
+    assert_eq!(print_node.params.len(), 3);
+    assert_string_node(&print_node.params[0], "hello");
+    assert_string_node(&print_node.params[1], "world");
+    assert_number_node(&print_node.params[2], 1234);
 
 }
 
@@ -64,6 +67,6 @@ fn return_error_if_print_has_no_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Premature end of token stream");
+    assert_parse_error(result, "Expected ANY but reached the end");
 
 }

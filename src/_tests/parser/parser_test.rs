@@ -184,7 +184,7 @@ fn return_error_if_if_has_not_enough_parts() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Premature end of token stream");
+    assert_parse_error(result, "Expected VAR but reached the end");
 
 }
 
