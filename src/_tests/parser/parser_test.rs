@@ -156,7 +156,7 @@ fn return_error_if_print_has_non_string_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected STRING but got THEN");
+    assert_parse_error(result, "Expected NUMBER but got THEN");
 }
 
 #[test]
@@ -166,7 +166,7 @@ fn return_error_if_print_has_no_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected STRING but reached the end");
+    assert_parse_error(result, "Premature end of token stream");
 
 }
 

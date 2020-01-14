@@ -72,7 +72,7 @@ pub fn assert_var_node(node: &Box<dyn Node>, var_name: char) {
 }
 
 pub fn as_node<T>(node: &Box<dyn Node>) -> &T where T: Node {
-    assert_is_node::<T>(node, );
+    assert_is_node::<T>(node);
     node.as_any().downcast_ref::<T>().unwrap()
 }
 

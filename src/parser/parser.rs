@@ -45,8 +45,14 @@ impl Parser {
     }
 
     fn parse_print(&mut self) -> NodeResult {
-        let param_token = self.consume_token(STRING)?;
-        Ok(PrintNode::new(param_token.value.as_str()))
+        if self.peek_token()? == STRING {
+            let param_token = self.consume_token(STRING)?;
+            Ok(PrintNode::new(param_token.value.as_str()))
+        }
+        else {
+            let param_token = self.consume_token(NUMBER)?;
+            Ok(PrintNode::new(param_token.value.as_str()))
+        }
     }
 
     fn parse_if(&mut self) -> NodeResult {
