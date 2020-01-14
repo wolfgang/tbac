@@ -1,6 +1,6 @@
 use crate::tokenizer::Token;
 use crate::_tests::parser::helpers::*;
-//use crate::parser::print_node::PrintNode;
+use crate::parser::print_node::PrintNode;
 
 #[test]
 fn parses_with_single_string_parameter() {
@@ -27,21 +27,22 @@ fn parses_with_single_number_expression() {
 
 }
 
-//#[test]
-//fn parses_with_multiple_strings() {
-//    let tokens = vec![
-//        Token::print(),
-//        Token::string("hello"),
-//        Token::comma(),
-//        Token::string("world"),
-//        Token::comma(),
-//        Token::string("the end")
-//    ];
-//    let node = parse(&tokens).unwrap();
-//    assert_eq!(node.children.len(), 1);
-//    assert_is_node::<PrintNode>(&node.children[0]);
-//
-//}
+#[ignore]
+#[test]
+fn parses_with_multiple_strings() {
+    let tokens = vec![
+        Token::print(),
+        Token::string("hello"),
+        Token::comma(),
+        Token::string("world"),
+        Token::comma(),
+        Token::string("the end")
+    ];
+    let node = parse(&tokens).unwrap();
+    assert_eq!(node.children.len(), 1);
+    assert_is_node::<PrintNode>(&node.children[0]);
+
+}
 
 #[test]
 fn return_error_if_print_has_non_string_argument() {
