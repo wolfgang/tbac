@@ -1,5 +1,5 @@
 use crate::parser::var_node::VarNode;
-use crate::_tests::parser::test_node_evaluator::test_eval;
+use crate::_tests::parser::fake_node_evaluator::test_eval;
 
 #[test]
 fn construct_and_eval() {

@@ -7,15 +7,15 @@ use crate::parser::let_node::LetNode;
 use crate::parser::var_node::VarNode;
 
 pub fn test_eval(node: &dyn Node) -> String {
-    let mut evaluator = TestNodeEvaluator::new();
+    let mut evaluator = FakeNodeEvaluator::new();
     node.eval(&mut evaluator)
 }
 
-pub struct TestNodeEvaluator {
+pub struct FakeNodeEvaluator {
     pub(crate) code: Vec<String>
 }
 
-impl TestNodeEvaluator {
+impl FakeNodeEvaluator {
     pub fn new() -> Self {
         Self { code: Vec::with_capacity(32) }
     }
@@ -25,7 +25,7 @@ impl TestNodeEvaluator {
     }
 }
 
-impl NodeEvaluator for TestNodeEvaluator {
+impl NodeEvaluator for FakeNodeEvaluator {
     fn eval_print(&self, _: &PrintNode) -> String {
         "eval_print".to_string()
     }
@@ -46,5 +46,3 @@ impl NodeEvaluator for TestNodeEvaluator {
         "eval_var".to_string()
     }
 }
-
-

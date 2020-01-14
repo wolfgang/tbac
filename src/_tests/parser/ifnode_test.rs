@@ -1,4 +1,4 @@
-use crate::_tests::parser::test_node_evaluator::test_eval;
+use crate::_tests::parser::fake_node_evaluator::test_eval;
 use crate::parser::ifnode::IfNode;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;

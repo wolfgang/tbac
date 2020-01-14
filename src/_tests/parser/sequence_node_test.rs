@@ -1,7 +1,7 @@
 use crate::parser::number_node::NumberNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::print_node::PrintNode;
-use crate::_tests::parser::test_node_evaluator::test_eval;
+use crate::_tests::parser::fake_node_evaluator::test_eval;
 use crate::_tests::helpers::*;
 
 #[test]
