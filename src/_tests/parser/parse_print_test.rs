@@ -1,6 +1,5 @@
-use crate::_tests::helpers::assert_print_node;
 use crate::tokenizer::Token;
-use crate::_tests::parser::helpers::parse;
+use crate::_tests::parser::helpers::*;
 
 #[test]
 fn parse_print_statement() {

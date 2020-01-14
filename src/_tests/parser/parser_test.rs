@@ -1,8 +1,7 @@
 use crate::tokenizer::Token;
-use crate::_tests::helpers::*;
 use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
-use crate::_tests::parser::helpers::{parse, assert_parse_error};
+use crate::_tests::parser::helpers::*;
 
 #[test]
 fn parse_if_statement() {

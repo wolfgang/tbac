@@ -1,8 +1,7 @@
 use crate::parser::number_node::NumberNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::print_node::PrintNode;
-use crate::_tests::parser::helpers::test_eval;
-use crate::_tests::helpers::*;
+use crate::_tests::parser::helpers::*;
 
 #[test]
 fn construct_and_eval() {
