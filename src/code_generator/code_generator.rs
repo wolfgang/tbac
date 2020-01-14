@@ -20,7 +20,7 @@ impl NodeEvaluator for CodeGenerator {
     fn eval_print(&self, node: &PrintNode) -> String {
         let mut result = String::with_capacity(256);
         for param in &node.params {
-            result.push_str(&format!("console.log('{}');", param.eval(self)));
+            result.push_str(&format!("console.log({});", param.eval(self)));
         }
         result.push('\n');
         result
@@ -47,6 +47,6 @@ impl NodeEvaluator for CodeGenerator {
     }
 
     fn eval_string(&self, node: &StringNode) -> String {
-        node.value.clone()
+        format!("'{}'", node.value.clone())
     }
 }

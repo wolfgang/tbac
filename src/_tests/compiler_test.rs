@@ -32,20 +32,9 @@ fn compiles_if_statement_with_variable() {
 }
 
 #[test]
-fn compiles_print_statement_with_number_arg() {
-    let tb_code = "PRINT 1234";
-    let expected_js_code = "console.log('1234');\n";
-
-    let result = compile(tb_code);
-
-    assert_eq!(result, Ok(expected_js_code.to_string()));
-}
-
-
-#[test]
 fn compiles_print_statement_with_multiple_args() {
     let tb_code = "PRINT 1234,\"hello\", 52";
-    let expected_js_code = "console.log('1234');console.log('hello');console.log('52');\n";
+    let expected_js_code = "console.log(1234);console.log('hello');console.log(52);\n";
 
     let result = compile(tb_code);
 

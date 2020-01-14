@@ -58,7 +58,7 @@ fn generate_print_statement_with_multiple_params() {
     root.add(print_node);
 
     assert_eq!(generate_code(&root),
-               "console.log('hello');console.log('1234');\n")
+               "console.log('hello');console.log(1234);\n")
 }
 
 
