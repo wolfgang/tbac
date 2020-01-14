@@ -148,27 +148,6 @@ fn return_error_if_first_token_is_not_command() {
 
 }
 
-#[test]
-fn return_error_if_print_has_non_string_argument() {
-    let tokens = vec![
-        Token::print(),
-        Token::then()
-    ];
-
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected NUMBER but got THEN");
-}
-
-#[test]
-fn return_error_if_print_has_no_argument() {
-    let tokens = vec![
-        Token::print()
-    ];
-
-    let result = parse(&tokens);
-    assert_parse_error(result, "Premature end of token stream");
-
-}
 
 #[test]
 fn return_error_if_then_branch_is_not_a_command() {

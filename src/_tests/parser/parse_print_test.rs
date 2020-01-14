@@ -25,3 +25,25 @@ fn parses_with_single_number_expression() {
     assert_print_node(&node.children[0], "1234");
 
 }
+
+#[test]
+fn return_error_if_print_has_non_string_argument() {
+    let tokens = vec![
+        Token::print(),
+        Token::then()
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Expected NUMBER but got THEN");
+}
+
+#[test]
+fn return_error_if_print_has_no_argument() {
+    let tokens = vec![
+        Token::print()
+    ];
+
+    let result = parse(&tokens);
+    assert_parse_error(result, "Premature end of token stream");
+
+}

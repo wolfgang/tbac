@@ -8,7 +8,14 @@ Next:
 [ ] Handle real expressions like 1+2, a+c 1*b
 [ ] Implement GOTO
 
+
+PRINT 1234 should be console.log(1234) (i.e. without quotes)
+
 LiteralNode instead of NumberNode + VarNode?
+
+
+
+
 
 Things left to do:
 
