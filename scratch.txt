@@ -8,12 +8,16 @@ Next:
 [ ] Handle real expressions like 1+2, a+c 1*b
 [ ] Implement GOTO
 
+Add type alias for Box<dyn Node>
 
 LET with variable on the right side:
 LET A = 1234
 LET B = A
 
 PRINT 1234 should be console.log(1234) (i.e. without quotes)
+
+Could use the is_node and as_node functionality to get rid of Node::eval; code gen becomes
+a case statement over node type + downcast (like in the DAS screencast)
 
 LiteralNode instead of NumberNode + VarNode?
 

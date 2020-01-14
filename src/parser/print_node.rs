@@ -2,14 +2,21 @@ use crate::parser::node::Node;
 use crate::parser::node_evaluator::NodeEvaluator;
 use std::any::Any;
 
-#[derive(PartialEq, Debug)]
 pub struct PrintNode {
-    pub string_param: String
+    pub string_param: String,
+    pub params: Vec<Box<dyn Node>>
 }
 
 impl PrintNode {
     pub fn new(param: &str) -> Box<Self> {
-        Box::new(Self { string_param: param.to_string() })
+        Box::new(Self {
+            string_param: param.to_string(),
+            params: Vec::with_capacity(8)
+        })
+    }
+
+    pub fn add_param(&mut self, param: Box<dyn Node>) {
+        self.params.push(param)
     }
 }
 

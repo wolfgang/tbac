@@ -64,7 +64,8 @@ pub fn assert_number_node(node: &Box<dyn Node>, number: i32) {
 }
 
 pub fn assert_print_node(node: &Box<dyn Node>, param: &str) {
-    assert_eq!(as_node::<PrintNode>(node), &*PrintNode::new(param));
+    assert_is_node::<PrintNode>(node);
+    assert_eq!(as_node::<PrintNode>(node).string_param, param);
 }
 
 pub fn assert_var_node(node: &Box<dyn Node>, var_name: char) {
