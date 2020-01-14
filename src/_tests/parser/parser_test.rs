@@ -114,7 +114,7 @@ fn return_error_if_if_token_not_followed_by_expression() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected VAR but got PRINT");
+    assert_parse_error(result, "Expected Var but got Print");
 }
 
 #[test]
@@ -124,7 +124,7 @@ fn return_error_if_first_token_is_not_command() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected command token but got STRING");
+    assert_parse_error(result, "Expected command token but got StringLiteral");
 
 }
 
@@ -141,7 +141,7 @@ fn return_error_if_then_branch_is_not_a_command() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected command token but got STRING");
+    assert_parse_error(result, "Expected command token but got StringLiteral");
 }
 
 #[test]
@@ -164,7 +164,7 @@ fn return_error_if_if_has_not_enough_parts() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected VAR but reached the end");
+    assert_parse_error(result, "Expected Var but reached the end");
 
 }
 

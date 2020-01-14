@@ -52,7 +52,7 @@ fn returns_error_if_tokenizing_goes_wrong() {
 #[test]
 fn returns_error_if_parsing_goes_wrong() {
     verify_error("THEN IF",
-                 "Expected command token but got THEN");
+                 "Expected command token but got Then");
 }
 
 fn verify_error(code: &str, expected_error: &str) {

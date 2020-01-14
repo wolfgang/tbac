@@ -35,12 +35,12 @@ impl Parser {
     }
 
     fn parse_statement(&mut self) -> NodeResult {
-        let token = self.consume_token(ANY)?;
+        let token = self.consume_token(Any)?;
 
         match token.ttype {
-            PRINT => { self.parse_print() }
-            IF => { self.parse_if() }
-            LET => { self.parse_let() }
+            Print => { self.parse_print() }
+            If => { self.parse_if() }
+            Let => { self.parse_let() }
             _ => Err(format!("Expected command token but got {:?}", token.ttype))
         }
     }
@@ -50,15 +50,15 @@ impl Parser {
         loop {
             let token_type = self.peek_token();
             match token_type {
-                STRING => {
-                    let token = self.consume_token(STRING)?;
+                StringLiteral => {
+                    let token = self.consume_token(StringLiteral)?;
                     print_node.add_param(Self::string_node_from(&token))
                 }
                 _ => { print_node.add_param(self.parse_expression()?) }
             }
 
-            if self.peek_token() != COMMA { break; }
-            self.consume_token(COMMA)?;
+            if self.peek_token() != Comma { break; }
+            self.consume_token(Comma)?;
         }
         Ok(print_node)
     }
@@ -67,7 +67,7 @@ impl Parser {
         let left = self.parse_expression()?;
         let binop = self.consume_token(BinOp)?;
         let right = self.parse_expression()?;
-        self.consume_token(THEN)?;
+        self.consume_token(Then)?;
         let statement = self.parse_statement()?;
         Ok(IfNode::new(
             left,
@@ -77,19 +77,19 @@ impl Parser {
     }
 
     fn parse_let(&mut self) -> NodeResult {
-        let var_token = self.consume_token(VAR)?;
+        let var_token = self.consume_token(Var)?;
         self.consume_binop("=")?;
         let right_side = self.parse_expression()?;
         Ok(LetNode::new(Self::first_char_of(&var_token.value), right_side))
     }
 
     fn parse_expression(&mut self) -> NodeResult {
-        if self.peek_token() == NUMBER {
-            let token = self.consume_token(NUMBER)?;
+        if self.peek_token() == Number {
+            let token = self.consume_token(Number)?;
             return Ok(Self::number_node_from(&token));
         }
 
-        let token = self.consume_token(VAR)?;
+        let token = self.consume_token(Var)?;
         Ok(Self::var_node_from(&token))
     }
 
@@ -107,7 +107,7 @@ impl Parser {
         }
 
         let token = self.tokens[self.position].clone();
-        if expected != ANY && token.ttype != expected {
+        if expected != Any && token.ttype != expected {
             return Err(format!("Expected {:?} but got {:?}", expected, token.ttype));
         }
         self.position += 1;

@@ -73,7 +73,7 @@ fn return_error_if_print_has_non_string_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected VAR but got THEN");
+    assert_parse_error(result, "Expected Var but got Then");
 }
 
 #[test]
@@ -83,6 +83,6 @@ fn return_error_if_print_has_no_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected VAR but reached the end");
+    assert_parse_error(result, "Expected Var but reached the end");
 
 }
