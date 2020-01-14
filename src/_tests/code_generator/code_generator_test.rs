@@ -4,6 +4,7 @@ use crate::parser::let_node::LetNode;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
+use crate::parser::string_node::StringNode;
 
 #[test]
 fn generate_print_statement() {
@@ -46,6 +47,20 @@ fn generate_multiple_statements() {
     assert_eq!(generate_code(&root),
                "console.log('hello');\nconsole.log('world');\n");
 }
+
+#[test]
+fn generate_print_statement_with_multiple_params() {
+    let mut root = SequenceNode::new();
+    let mut print_node = PrintNode::new();
+    print_node.add_param(StringNode::new("hello"));
+    print_node.add_param(NumberNode::new(1234));
+
+    root.add(print_node);
+
+    assert_eq!(generate_code(&root),
+               "console.log('hello');console.log('1234');\n")
+}
+
 
 fn generate_code(root: &SequenceNode) -> String {
     CodeGenerator {}.generate(&root)

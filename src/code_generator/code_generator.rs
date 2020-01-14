@@ -18,7 +18,12 @@ impl CodeGenerator {
 
 impl NodeEvaluator for CodeGenerator {
     fn eval_print(&self, node: &PrintNode) -> String {
-        format!("console.log('{}');\n", node.params[0].eval(self))
+        let mut result = String::with_capacity(256);
+        for param in &node.params {
+            result.push_str(&format!("console.log('{}');", param.eval(self)));
+        }
+        result.push('\n');
+        result
     }
 
     fn eval_number(&self, node: &NumberNode) -> String {
