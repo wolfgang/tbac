@@ -4,6 +4,7 @@ use crate::_tests::helpers::*;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
+use crate::_tests::parser::helpers::{parse, assert_parse_error};
 
 #[test]
 fn parse_if_statement() {
@@ -211,12 +212,3 @@ fn return_error_if_if_has_not_enough_parts() {
 
 }
 
-
-fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
-    Parser::new(tokens).parse()
-}
-
-fn assert_parse_error(result: Result<SequenceNode, String>, error: &str) {
-    assert!(result.is_err());
-    assert_eq!(result.err(), Some(error.to_string()))
-}
