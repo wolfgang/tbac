@@ -6,19 +6,6 @@ use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
 
 #[test]
-fn parse_print_statement() {
-    let tokens = vec![
-        Token::print(),
-        Token::string("hello")
-    ];
-    let node = parse(&tokens).unwrap();
-
-    assert_eq!(node.children.len(), 1);
-    assert_print_node(&node.children[0], "hello");
-}
-
-
-#[test]
 fn parse_if_statement() {
     let tokens = vec![
         Token::iff(),
