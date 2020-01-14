@@ -32,7 +32,7 @@ impl Tokenizer {
                 self.read_number();
                 continue;
             }
-            if self.current_char_is(|c| c == '>' || c == '<' || c == '=') {
+            if self.current_char_is_binop() {
                 self.read_binop();
                 continue;
             }
@@ -79,6 +79,10 @@ impl Tokenizer {
     fn read_number(&mut self) {
         let buffer = self.consume_chars_while(|c| c.is_digit(10));
         self.result.push(Token::number(buffer.parse().unwrap()))
+    }
+
+    fn current_char_is_binop(&self) -> bool {
+        self.current_char_is(|c| c == '>' || c == '<' || c == '=')
     }
 
     fn read_binop(&mut self) {
