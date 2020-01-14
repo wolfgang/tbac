@@ -76,6 +76,18 @@ fn tokenize_vars() {
 }
 
 #[test]
+fn tokenize_commas() {
+    assert_eq!(tokenize("A,B,C"),
+               Ok(vec![
+                   Token::var('A'),
+                   Token::comma(),
+                   Token::var('B'),
+                   Token::comma(),
+                   Token::var('C'),
+               ]))
+}
+
+#[test]
 fn handles_surrounding_whitespace() {
     assert_eq!(tokenize("   \n A B <  \n  "),
                Ok(vec![

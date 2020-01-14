@@ -24,7 +24,7 @@ impl Tokenizer {
                 self.read_uppercase_str()?;
                 continue;
             }
-            if self.current_char_is(|c| c == '"') {
+            if self.current_char_is_char('"') {
                 self.read_string()?;
                 continue;
             }
@@ -36,6 +36,12 @@ impl Tokenizer {
                 self.read_relop();
                 continue;
             }
+            if self.current_char_is_char(',') {
+                self.consume_char();
+                self.result.push(Token::comma());
+                continue;
+            }
+
             if self.has_input() {
                 return Err(format!("Unrecognized character '{}'", self.current_char()));
             }
@@ -102,6 +108,10 @@ impl Tokenizer {
         }
 
         buffer
+    }
+
+    fn current_char_is_char(&self, expected: char) -> bool {
+        self.current_char_is(|c| c == expected)
     }
 
     fn current_char_is<F>(&self, pred: F) -> bool where F: Fn(char) -> bool {
