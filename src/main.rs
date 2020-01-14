@@ -6,6 +6,7 @@ fn main() {
                     IF A < 100 THEN IF A < 50 THEN PRINT "A is < 100 and < 50"
                     IF A < 5 THEN PRINT "NOBODY WILL SE THIS"
                     PRINT "THE END"
+                    PRINT "HELLO", 1234, "WORLD", 121223
                    "#;
 
     match compile(tb_code) {
