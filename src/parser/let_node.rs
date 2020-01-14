@@ -1,14 +1,14 @@
-use crate::parser::node::Node;
+use crate::parser::node::{Node, NodeBox};
 use crate::parser::node_evaluator::NodeEvaluator;
 use std::any::Any;
 
 pub struct LetNode {
     pub var: char,
-    pub value: Box<dyn Node>
+    pub value: NodeBox
 }
 
 impl LetNode {
-    pub fn new(var: char, value: Box<dyn Node>) -> Box<Self> {
+    pub fn new(var: char, value: NodeBox) -> Box<Self> {
         Box::new(Self {var, value})
     }
 }

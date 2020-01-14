@@ -1,17 +1,17 @@
 use std::any::Any;
 
-use crate::parser::node::Node;
+use crate::parser::node::{NodeBox, Node};
 use crate::parser::node_evaluator::NodeEvaluator;
 
 pub struct IfNode {
-    pub left: Box<dyn Node>,
-    pub right: Box<dyn Node>,
+    pub left: NodeBox,
+    pub right: NodeBox,
     pub relop: char,
-    pub then: Box<dyn Node>,
+    pub then: NodeBox,
 }
 
 impl IfNode {
-    pub fn new(left: Box<dyn Node>, right: Box<dyn Node>, relop: char, then: Box<dyn Node>) -> Box<Self> {
+    pub fn new(left: NodeBox, right: NodeBox, relop: char, then: NodeBox) -> Box<Self> {
         Box::new(Self { left, right, relop, then })
     }
 }

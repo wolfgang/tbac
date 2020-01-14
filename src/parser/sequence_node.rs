@@ -1,10 +1,10 @@
 use std::any::Any;
 
-use crate::parser::node::Node;
+use crate::parser::node::{Node, NodeBox};
 use crate::parser::node_evaluator::NodeEvaluator;
 
 pub struct SequenceNode {
-    pub children: Vec<Box<dyn Node>>
+    pub children: Vec<NodeBox>
 }
 
 impl SequenceNode {
@@ -12,7 +12,7 @@ impl SequenceNode {
         Self { children: Vec::with_capacity(16) }
     }
 
-    pub fn add(&mut self, node: Box<dyn Node>)  {
+    pub fn add(&mut self, node: NodeBox)  {
         self.children.push(node)
     }
 

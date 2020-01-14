@@ -1,6 +1,6 @@
 use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
-use crate::parser::node::Node;
+use crate::parser::node::NodeBox;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
@@ -10,7 +10,7 @@ use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
 
-type NodeResult = Result<Box<dyn Node>, String>;
+type NodeResult = Result<NodeBox, String>;
 type TokenResult = Result<Token, String>;
 
 pub struct Parser {

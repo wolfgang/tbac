@@ -1,7 +1,7 @@
 use crate::tokenizer::Token;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::parser::Parser;
-use crate::parser::node::Node;
+use crate::parser::node::{Node, NodeBox};
 use crate::parser::node_evaluator::NodeEvaluator;
 use crate::parser::print_node::PrintNode;
 use crate::parser::number_node::NumberNode;
@@ -64,30 +64,30 @@ impl NodeEvaluator for FakeNodeEvaluator {
     }
 }
 
-pub fn assert_number_node(node: &Box<dyn Node>, number: i32) {
+pub fn assert_number_node(node: &NodeBox, number: i32) {
     assert_eq!(as_node::<NumberNode>(node), &*NumberNode::new(number));
 }
 
-pub fn assert_string_node(node: &Box<dyn Node>, value: &str) {
+pub fn assert_string_node(node: &NodeBox, value: &str) {
     assert_eq!(as_node::<StringNode>(node), &*StringNode::new(value));
 }
 
-pub fn assert_print_node(node: &Box<dyn Node>, param: &str) {
+pub fn assert_print_node(node: &NodeBox, param: &str) {
     assert_is_node::<PrintNode>(node);
     let print_node = as_node::<PrintNode>(node);
     assert_eq!(as_node::<StringNode>(&print_node.params[0]).value, param);
 }
 
-pub fn assert_var_node(node: &Box<dyn Node>, var_name: char) {
+pub fn assert_var_node(node: &NodeBox, var_name: char) {
     assert_eq!(as_node::<VarNode>(node), &*VarNode::new(var_name));
 }
 
-pub fn as_node<T>(node: &Box<dyn Node>) -> &T where T: Node {
+pub fn as_node<T>(node: &NodeBox) -> &T where T: Node {
     assert_is_node::<T>(node);
     node.as_any().downcast_ref::<T>().unwrap()
 }
 
-pub(crate) fn assert_is_node<T>(node: &Box<dyn Node>)  -> &T where T: Node {
+pub(crate) fn assert_is_node<T>(node: &NodeBox)  -> &T where T: Node {
     let down_cast = node.as_any().downcast_ref::<T>();
     assert!(down_cast.is_some());
     down_cast.unwrap()
