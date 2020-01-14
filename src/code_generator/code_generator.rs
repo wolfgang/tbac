@@ -18,7 +18,7 @@ impl CodeGenerator {
 
 impl NodeEvaluator for CodeGenerator {
     fn eval_print(&self, node: &PrintNode) -> String {
-        format!("console.log('{}');\n", node.string_param)
+        format!("console.log('{}');\n", node.params[0].eval(self))
     }
 
     fn eval_number(&self, node: &NumberNode) -> String {
@@ -41,7 +41,7 @@ impl NodeEvaluator for CodeGenerator {
         node.var_name.to_string()
     }
 
-    fn eval_string(&self, _node: &StringNode) -> String {
-        "string not implemented yet".to_string()
+    fn eval_string(&self, node: &StringNode) -> String {
+        node.value.clone()
     }
 }
