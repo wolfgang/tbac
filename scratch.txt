@@ -4,7 +4,8 @@ Next:
 [X] Tokenize LET
 [X] Parse LET
 [X] Parse variable in additon to number in if expressions
-[X] Enable PRINT 10, 20, "HELLO", A
+[X] Enable PRINT 10, 20, "HELLO"
+[ ] Eanble PRINT A, 10, B
 [ ] Handle real expressions like 1+2, a+c 1*b
 [ ] Implement GOTO
 

@@ -57,7 +57,7 @@ impl Parser {
                     print_node.add_param(Self::number_node_from(&token))
                 }
                 _ => {
-                    return Err("Expected STRING or NUMBER but got THEN".to_string())
+                    return Err(format!("Expected STRING or NUMBER but got {:?}", token.ttype))
                 }
             }
 
