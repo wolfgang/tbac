@@ -50,6 +50,22 @@ fn parses_with_multiple_params() {
 }
 
 #[test]
+fn parses_print_with_vars() {
+    let tokens = vec![
+        Token::print(),
+        Token::string("hello"),
+        Token::comma(),
+        Token::var('A'),
+    ];
+    let node = parse(&tokens).unwrap();
+    assert_eq!(node.children.len(), 1);
+    let print_node = assert_is_node::<PrintNode>(&node.children[0]);
+    assert_eq!(print_node.params.len(), 2);
+    assert_string_node(&print_node.params[0], "hello");
+    assert_var_node(&print_node.params[1], 'A');
+}
+
+#[test]
 fn return_error_if_print_has_non_string_argument() {
     let tokens = vec![
         Token::print(),
@@ -57,7 +73,7 @@ fn return_error_if_print_has_non_string_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected STRING or NUMBER but got THEN");
+    assert_parse_error(result, "Expected VAR but got THEN");
 }
 
 #[test]
@@ -67,6 +83,6 @@ fn return_error_if_print_has_no_argument() {
     ];
 
     let result = parse(&tokens);
-    assert_parse_error(result, "Expected ANY but reached the end");
+    assert_parse_error(result, "Expected VAR but reached the end");
 
 }

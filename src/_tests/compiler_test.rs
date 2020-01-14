@@ -33,8 +33,8 @@ fn compiles_if_statement_with_variable() {
 
 #[test]
 fn compiles_print_statement_with_multiple_args() {
-    let tb_code = "PRINT 1234,\"hello\", 52";
-    let expected_js_code = "console.log(1234);console.log('hello');console.log(52);\n";
+    let tb_code = r#"PRINT 1234,"hello", A"#;
+    let expected_js_code = "console.log(1234);console.log('hello');console.log(A);\n";
 
     let result = compile(tb_code);
 

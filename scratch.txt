@@ -4,17 +4,13 @@ Next:
 [X] Tokenize LET
 [X] Parse LET
 [X] Parse variable in additon to number in if expressions
-[X] Enable PRINT 10, 20, "HELLO"
-[ ] Eanble PRINT A, 10, B
+[X] PRINT 10, 20, "HELLO"
+[X] PRINT A, 10, B
+[ ] LET A = B
 [ ] Handle real expressions like 1+2, a+c 1*b
 [ ] Implement GOTO
 
 Add type alias for Box<dyn Node>
-
-LET with variable on the right side:
-LET A = 1234
-LET B = A
-
 
 Could use the is_node and as_node functionality to get rid of Node::eval; code gen becomes
 a case statement over node type + downcast (like in the DAS screencast)

@@ -48,16 +48,15 @@ impl Parser {
     fn parse_print(&mut self) -> NodeResult {
         let mut print_node = PrintNode::new();
         loop {
-            let token = self.consume_token(ANY)?;
-            match token.ttype {
+            let token_type = self.peek_token();
+            match token_type {
                 STRING => {
+                    let token = self.consume_token(STRING)?;
                     print_node.add_param(Self::string_node_from(&token))
                 }
-                NUMBER => {
-                    print_node.add_param(Self::number_node_from(&token))
-                }
                 _ => {
-                    return Err(format!("Expected STRING or NUMBER but got {:?}", token.ttype))
+                    let expression_node = self.parse_expression()?;
+                    print_node.add_param(expression_node)
                 }
             }
 
