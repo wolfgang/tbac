@@ -23,7 +23,9 @@ fn parses_with_single_number_expression() {
     ];
     let node = parse(&tokens).unwrap();
     assert_eq!(node.children.len(), 1);
-    assert_print_node(&node.children[0], "1234");
+    let print_node = assert_is_node::<PrintNode>(&node.children[0]);
+    assert_eq!(print_node.params.len(), 1);
+    assert_string_node(&print_node.params[0], "1234")
 
 }
 

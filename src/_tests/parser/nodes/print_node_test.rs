@@ -7,8 +7,6 @@ use crate::parser::string_node::StringNode;
 #[test]
 fn eval() {
     let node = PrintNode::new("hello");
-    assert_eq!(node.string_param, "hello");
-
     assert_eq!(node.params.len(), 1);
     assert_string_node(&node.params[0], "hello");
     assert_eq!(test_eval(&*node), "eval_print");
