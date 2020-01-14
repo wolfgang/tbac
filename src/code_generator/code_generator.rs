@@ -6,6 +6,7 @@ use crate::parser::sequence_node::SequenceNode;
 use crate::parser::node::Node;
 use crate::parser::let_node::LetNode;
 use crate::parser::var_node::VarNode;
+use crate::parser::string_node::StringNode;
 
 pub struct CodeGenerator {}
 
@@ -38,5 +39,9 @@ impl NodeEvaluator for CodeGenerator {
 
     fn eval_var(&self, node: &VarNode) -> String {
         node.var_name.to_string()
+    }
+
+    fn eval_string(&self, _node: &StringNode) -> String {
+        "string not implemented yet".to_string()
     }
 }

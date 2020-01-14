@@ -8,6 +8,7 @@ use crate::parser::number_node::NumberNode;
 use crate::parser::ifnode::IfNode;
 use crate::parser::let_node::LetNode;
 use crate::parser::var_node::VarNode;
+use crate::parser::string_node::StringNode;
 
 pub fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()
@@ -56,6 +57,10 @@ impl NodeEvaluator for FakeNodeEvaluator {
 
     fn eval_var(&self, _node: &VarNode) -> String {
         "eval_var".to_string()
+    }
+
+    fn eval_string(&self, _node: &StringNode) -> String {
+        "eval_string".to_string()
     }
 }
 

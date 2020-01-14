@@ -7,3 +7,4 @@ pub mod ifnode;
 pub mod sequence_node;
 pub mod let_node;
 pub mod var_node;
+pub mod string_node;
