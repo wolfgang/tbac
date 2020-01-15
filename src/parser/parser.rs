@@ -102,7 +102,7 @@ impl Parser {
         let left = self.parse_factor()?;
         if self.peek_token() == FactOp {
             let op_token = self.consume_token(FactOp)?;
-            let right = self.parse_expression()?;
+            let right = self.parse_term()?;
             return Ok(ExpressionNode::new(
                 Self::first_char_of(&op_token.value),
                 left,
