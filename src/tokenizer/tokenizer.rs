@@ -1,5 +1,5 @@
 use crate::tokenizer::token::{Token, TokenType};
-use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma, FactOp};
+use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma, FactOp, OpenBracket, CloseBracket};
 
 pub fn tokenize(input: &str) -> TokenizerResult {
     Tokenizer::new(input).tokenize()
@@ -41,6 +41,7 @@ impl Tokenizer {
                 self.consume_char_as(RelOp);
                 continue;
             }
+
             if self.current_char_is_char(',') {
                 self.consume_char_as(Comma);
                 continue;
@@ -53,6 +54,16 @@ impl Tokenizer {
 
             if self.current_char_is_factop() {
                 self.consume_char_as(FactOp);
+                continue;
+            }
+
+            if self.current_char_is_char('(') {
+                self.consume_char_as(OpenBracket);
+                continue;
+            }
+
+            if self.current_char_is_char(')') {
+                self.consume_char_as(CloseBracket);
                 continue;
             }
 

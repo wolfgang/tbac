@@ -90,6 +90,14 @@ fn tokeinize_factops() {
                    Token::factop('/')]))
 }
 
+#[test]
+fn tokeinize_brackets() {
+    assert_eq!(tokenize("( )"),
+               Ok(vec![
+                   Token::openbracket(),
+                   Token::closebracket()]))
+}
+
 
 #[test]
 fn handles_surrounding_whitespace() {
