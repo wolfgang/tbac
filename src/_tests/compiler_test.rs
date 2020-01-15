@@ -1,21 +1,11 @@
 use crate::compiler::compile;
 
 #[test]
-fn compiles_if_statement() {
-    let tb_code = r#"IF 2 > 1 THEN PRINT "YES""#;
-    let expected_js_code = "if (2 > 1) {\n  console.log('YES');\n}\n";
-
-    let result = compile(tb_code);
-
-    assert_eq!(result, Ok(expected_js_code.to_string()));
-}
-
-#[test]
-fn compiles_if_statement_with_expression() {
+fn compiles_if_statement_with_expressions() {
     let tb_code = r#"LET A = 10
-                     LET B = A + 10
-                     IF B > A THEN PRINT "YES""#;
-    let expected_js_code = "A = 10;\nB = A + 10;\nif (B > A) {\n  console.log('YES');\n}\n";
+                     LET B = 20
+                     IF A + B > A - B THEN PRINT "YES""#;
+    let expected_js_code = "A = 10;\nB = 20;\nif (A + B > A - B) {\n  console.log('YES');\n}\n";
 
     let result = compile(tb_code);
 
