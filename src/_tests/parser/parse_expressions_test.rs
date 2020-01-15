@@ -1,4 +1,3 @@
-use crate::tokenizer::Token;
 use crate::_tests::parser::helpers::*;
 use crate::parser::expression_node::ExpressionNode;
 use crate::parser::let_node::LetNode;
@@ -7,21 +6,10 @@ use crate::tokenizer::tokenize;
 
 #[test]
 fn parses_binary_expressions_with_numbers_in_let() {
-    let tokens = vec![
-        Token::lett(),
-        Token::var('A'),
-        Token::relop('='),
-        Token::number(10),
-        Token::termop('+'),
-        Token::number(20)
-    ];
+    let tokens = tokenize("LET A = 10 + 20").unwrap();
+    let root = parse_as_single_node(&tokens);
+    let expression_node = get_let_expression(&root);
 
-    let root = parse(&tokens).unwrap();
-    assert_eq!(root.children.len(), 1);
-
-    let let_node = as_node::<LetNode>(&root.children[0]);
-    assert_eq!(let_node.var, 'A');
-    let expression_node = as_node::<ExpressionNode>(&let_node.value);
     assert_eq!(expression_node.op, '+');
     assert_number_node(&expression_node.left, 10);
     assert_number_node(&expression_node.right, 20);
@@ -30,15 +18,7 @@ fn parses_binary_expressions_with_numbers_in_let() {
 
 #[test]
 fn parses_binary_expressions_with_left_var_in_let() {
-    let tokens = vec![
-        Token::lett(),
-        Token::var('A'),
-        Token::relop('='),
-        Token::var('B'),
-        Token::termop('+'),
-        Token::number(10)
-    ];
-
+    let tokens = tokenize("LET A = B + 10").unwrap();
     let root = parse_as_single_node(&tokens);
     let expression_node = get_let_expression(&root);
 
@@ -49,15 +29,7 @@ fn parses_binary_expressions_with_left_var_in_let() {
 
 #[test]
 fn parses_binary_expressions_with_right_var_in_let() {
-    let tokens = vec![
-        Token::lett(),
-        Token::var('A'),
-        Token::relop('='),
-        Token::number(10),
-        Token::termop('-'),
-        Token::var('B')
-    ];
-
+    let tokens = tokenize("LET A = 10 - B").unwrap();
     let root = parse_as_single_node(&tokens);
     let expression_node = get_let_expression(&root);
 
@@ -69,7 +41,6 @@ fn parses_binary_expressions_with_right_var_in_let() {
 #[test]
 fn parses_expression_with_factor() {
     let tokens = tokenize("LET A = 10*20+30").unwrap();
-
     let root = parse_as_single_node(&tokens);
     let expression_node = get_let_expression(&root);
 
@@ -118,14 +89,7 @@ fn parses_expression_with_brackets() {
 
 #[test]
 fn return_error_if_expression_is_incomplete() {
-    let tokens = vec![
-        Token::lett(),
-        Token::var('A'),
-        Token::relop('='),
-        Token::number(10),
-        Token::termop('-')
-    ];
-
+    let tokens = tokenize("LET A = 10 -").unwrap();
     assert_parse_error(parse(&tokens), "Expected Var but reached the end");
 }
 

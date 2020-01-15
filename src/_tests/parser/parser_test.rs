@@ -1,19 +1,10 @@
-use crate::tokenizer::Token;
+use crate::tokenizer::tokenize;
 use crate::parser::ifnode::IfNode;
 use crate::_tests::parser::helpers::*;
 
 #[test]
 fn parse_if_statement() {
-    let tokens = vec![
-        Token::iff(),
-        Token::number(1111),
-        Token::relop('>'),
-        Token::number(2222),
-        Token::then(),
-        Token::print(),
-        Token::string("hello")
-    ];
-
+    let tokens = tokenize(r#"IF 1111 > 2222 THEN PRINT "hello""#).unwrap();
     let root = parse_as_single_node(&tokens);
 
     let if_node = as_node::<IfNode>(&root.children[0]);
@@ -25,13 +16,7 @@ fn parse_if_statement() {
 
 #[test]
 fn parse_two_statements() {
-    let tokens = vec![
-        Token::print(),
-        Token::string("hello"),
-        Token::print(),
-        Token::string("world")
-    ];
-
+    let tokens = tokenize(r#"PRINT "hello" PRINT "world""#).unwrap();
     let node = parse(&tokens).unwrap();
     assert_eq!(node.children.len(), 2);
 
@@ -41,21 +26,7 @@ fn parse_two_statements() {
 
 #[test]
 fn parse_if_statement_with_if_statement_in_then() {
-    let tokens = vec![
-        Token::iff(),
-        Token::number(1111),
-        Token::relop('>'),
-        Token::number(2222),
-        Token::then(),
-        Token::iff(),
-        Token::number(3333),
-        Token::relop('<'),
-        Token::number(4444),
-        Token::then(),
-        Token::print(),
-        Token::string("hello"),
-    ];
-
+    let tokens = tokenize(r#"IF 1111 > 2222 THEN IF 3333 < 4444 THEN PRINT "hello""#).unwrap();
     let root = parse_as_single_node(&tokens);
 
     let if_node = as_node::<IfNode>(&root.children[0]);
@@ -73,16 +44,7 @@ fn parse_if_statement_with_if_statement_in_then() {
 
 #[test]
 fn parse_if_statement_with_vars() {
-    let tokens = vec![
-        Token::iff(),
-        Token::var('A'),
-        Token::relop('>'),
-        Token::var('B'),
-        Token::then(),
-        Token::print(),
-        Token::string("hello")
-    ];
-
+    let tokens = tokenize(r#"IF A > B THEN PRINT "hello""#).unwrap();
     let root = parse_as_single_node(&tokens);
 
     let if_node = as_node::<IfNode>(&root.children[0]);
@@ -96,20 +58,14 @@ fn parse_if_statement_with_vars() {
 
 #[test]
 fn return_error_if_if_token_not_followed_by_expression() {
-    let tokens = vec![
-        Token::iff(),
-        Token::print(),
-    ];
+    let tokens = tokenize("IF PRINT").unwrap();
 
     assert_parse_error(parse(&tokens), "Expected Var but got Print");
 }
 
 #[test]
 fn return_error_if_first_token_is_not_command() {
-    let tokens = vec![
-        Token::string("hello")
-    ];
-
+    let tokens = tokenize(r#""hello""#).unwrap();
     assert_parse_error(parse(&tokens), "Expected command token but got StringLiteral");
 
 }
@@ -117,36 +73,19 @@ fn return_error_if_first_token_is_not_command() {
 
 #[test]
 fn return_error_if_then_branch_is_not_a_command() {
-    let tokens = vec![
-        Token::iff(),
-        Token::number(1111),
-        Token::relop('>'),
-        Token::number(2222),
-        Token::then(),
-        Token::string("hello")
-    ];
-
+    let tokens = tokenize(r#"IF A > B THEN "hello""#).unwrap();
     assert_parse_error(parse(&tokens), "Expected command token but got StringLiteral");
 }
 
 #[test]
 fn return_error_if_let_not_followed_by_equal_sign() {
-    let tokens = vec![
-        Token::lett(),
-        Token::var('A'),
-        Token::relop('<'),
-        Token::number(1234)
-    ];
-
+    let tokens = tokenize(r#"LET A < 1234"#).unwrap();
     assert_parse_error(parse(&tokens), "Expected = but got <");
 }
 
 #[test]
 fn return_error_if_if_has_not_enough_parts() {
-    let tokens = vec![
-        Token::iff()
-    ];
-
+    let tokens = tokenize(r#"IF A >"#).unwrap();
     assert_parse_error(parse(&tokens), "Expected Var but reached the end");
 }
 
