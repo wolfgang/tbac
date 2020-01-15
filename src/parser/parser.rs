@@ -89,11 +89,7 @@ impl Parser {
         if self.peek_token() == TermOp {
             let op_token = self.consume_token(TermOp)?;
             let right = self.parse_expression(false)?;
-            return Ok(ExpressionNode::new(
-                Self::first_char_of(&op_token.value),
-                in_brackets,
-                left,
-                right));
+            return Ok(Self::expression_node_from(&op_token, left, right, in_brackets));
         }
         Ok(left)
     }
@@ -103,12 +99,7 @@ impl Parser {
         if self.peek_token() == FactOp {
             let op_token = self.consume_token(FactOp)?;
             let right = self.parse_term()?;
-            return Ok(ExpressionNode::new(
-                Self::first_char_of(&op_token.value),
-                false,
-                left,
-                right,
-            ));
+            return Ok(Self::expression_node_from(&op_token, left, right, false));
         }
 
         Ok(left)
@@ -169,6 +160,18 @@ impl Parser {
 
     fn var_node_from(token: &Token) -> Box<VarNode> {
         VarNode::new(Self::first_char_of(&token.value))
+    }
+
+    fn expression_node_from(token: &Token,
+                            left: NodeBox,
+                            right: NodeBox,
+                            in_brackets: bool) -> Box<ExpressionNode> {
+        ExpressionNode::new(
+            Self::first_char_of(&token.value),
+            in_brackets,
+            left,
+            right,
+        )
     }
 
     fn first_char_of(s: &String) -> char {
