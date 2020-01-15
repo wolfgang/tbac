@@ -42,6 +42,12 @@ impl Tokenizer {
                 continue;
             }
 
+            if self.current_char_is_termop() {
+                self.result.push(Token::termop(self.current_char()));
+                self.consume_char();
+                continue;
+            }
+
             if self.has_input() {
                 return Err(format!("Unrecognized character '{}'", self.current_char()));
             }
@@ -84,6 +90,12 @@ impl Tokenizer {
     fn current_char_is_relop(&self) -> bool {
         self.current_char_is(|c| c == '>' || c == '<' || c == '=')
     }
+
+    fn current_char_is_termop(&self) -> bool {
+        self.current_char_is(|c| c == '+' || c == '-')
+    }
+
+
 
     fn read_relop(&mut self) {
         self.result.push(Token::relop(self.current_char()));

@@ -18,8 +18,7 @@ fn tokenizes_all_keywords() {
                    Token::print(),
                    Token::iff(),
                    Token::then(),
-                   Token::lett()
-               ]))
+                   Token::lett()]))
 }
 
 #[test]
@@ -29,8 +28,7 @@ fn tokenizes_string_literals() {
                    Token::print(),
                    Token::string("hello"),
                    Token::print(),
-                   Token::string("world"),
-               ]))
+                   Token::string("world")]))
 }
 
 #[test]
@@ -38,8 +36,7 @@ fn tokenizes_numbers() {
     assert_eq!(tokenize("PRINT 12345"),
                Ok(vec![
                    Token::print(),
-                   Token::number(12345)
-               ]))
+                   Token::number(12345)]))
 }
 
 #[test]
@@ -48,9 +45,7 @@ fn tokenize_gt() {
                Ok(vec![
                    Token::number(12),
                    Token::relop('>'),
-                   Token::number(10)
-               ])
-    )
+                   Token::number(10)]))
 }
 
 #[test]
@@ -59,9 +54,7 @@ fn tokenize_relops() {
                Ok(vec![
                    Token::relop('>'),
                    Token::relop('<'),
-                   Token::relop('='),
-               ])
-    )
+                   Token::relop('=')]))
 }
 
 #[test]
@@ -71,8 +64,7 @@ fn tokenize_vars() {
                    Token::var('A'),
                    Token::print(),
                    Token::var('B'),
-                   Token::number(1234)
-               ]))
+                   Token::number(1234)]))
 }
 
 #[test]
@@ -83,8 +75,15 @@ fn tokenize_commas() {
                    Token::comma(),
                    Token::var('B'),
                    Token::comma(),
-                   Token::var('C'),
-               ]))
+                   Token::var('C')]))
+}
+
+#[test]
+fn tokeinize_termops() {
+    assert_eq!(tokenize("+ -"),
+               Ok(vec![
+                   Token::termop('+'),
+                   Token::termop('-')]))
 }
 
 #[test]
