@@ -1,5 +1,5 @@
 use crate::tokenizer::token::{Token, TokenType};
-use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma};
+use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma, FactOp};
 
 pub type TokenizerResult = Result<Vec<Token>, String>;
 
@@ -44,6 +44,11 @@ impl Tokenizer {
 
             if self.current_char_is_termop() {
                 self.consume_char_as(TermOp);
+                continue;
+            }
+
+            if self.current_char_is_factop() {
+                self.consume_char_as(FactOp);
                 continue;
             }
 
@@ -94,6 +99,9 @@ impl Tokenizer {
         self.current_char_is(|c| c == '+' || c == '-')
     }
 
+    fn current_char_is_factop(&self) -> bool {
+        self.current_char_is(|c| c == '*' || c == '/')
+    }
 
     fn consume_char_as(&mut self, ttype: TokenType) {
         self.result.push(Token::with(ttype, self.current_char()));

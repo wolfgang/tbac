@@ -87,6 +87,15 @@ fn tokeinize_termops() {
 }
 
 #[test]
+fn tokeinize_factops() {
+    assert_eq!(tokenize("* /"),
+               Ok(vec![
+                   Token::factop('*'),
+                   Token::factop('/')]))
+}
+
+
+#[test]
 fn handles_surrounding_whitespace() {
     assert_eq!(tokenize("   \n A B <  \n  "),
                Ok(vec![
