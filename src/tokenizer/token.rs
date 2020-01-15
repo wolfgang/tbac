@@ -45,6 +45,19 @@ impl Token {
         Self { ttype, value: value.to_string() }
     }
 
+    pub fn value_as_char(&self) -> char {
+        self.value.chars().next().unwrap()
+    }
+
+    pub fn value_as_int(&self) -> i32 {
+        self.value.parse::<i32>().unwrap()
+    }
+
+    pub fn value_as_str(&self) -> &str {
+        self.value.as_str()
+
+    }
+
     fn with_empty_value(ttype: TokenType) -> Self {
         Self::with(ttype, "")
     }

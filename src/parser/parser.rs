@@ -27,11 +27,10 @@ impl Parser {
     pub fn parse(&mut self) -> Result<SequenceNode, String> {
         let mut root = SequenceNode::new();
 
-        while self.position < self.tokens.len() {
+        while self.peek_token() != EndOfStream {
             let statement = self.parse_statement()?;
             root.add(statement);
         }
-
         Ok(root)
     }
 
@@ -49,13 +48,14 @@ impl Parser {
     fn parse_print(&mut self) -> NodeResult {
         let mut print_node = PrintNode::new();
         loop {
-            let token_type = self.peek_token();
-            match token_type {
+            match self.peek_token() {
                 StringLiteral => {
                     let token = self.consume_token(StringLiteral)?;
-                    print_node.add_param(Self::string_node_from(&token))
+                    print_node.add_param(StringNode::new(token.value_as_str()))
                 }
-                _ => { print_node.add_param(self.parse_expression(false)?) }
+                _ => {
+                    print_node.add_param(self.parse_expression(false)?)
+                }
             }
 
             if self.peek_token() != Comma { break; }
@@ -70,18 +70,14 @@ impl Parser {
         let right = self.parse_expression(false)?;
         self.consume_token(Then)?;
         let statement = self.parse_statement()?;
-        Ok(IfNode::new(
-            left,
-            right,
-            Self::first_char_of(&relop.value),
-            statement))
+        Ok(IfNode::new(left, right, relop.value_as_char(), statement))
     }
 
     fn parse_let(&mut self) -> NodeResult {
-        let var_token = self.consume_token(Var)?;
-        self.consume_relop("=")?;
-        let right_side = self.parse_expression(false)?;
-        Ok(LetNode::new(Self::first_char_of(&var_token.value), right_side))
+        let token = self.consume_token(Var)?;
+        self.consume_equal_sign()?;
+        let right = self.parse_expression(false)?;
+        Ok(LetNode::new(token.value_as_char(), right))
     }
 
     fn parse_expression(&mut self, in_brackets: bool) -> NodeResult {
@@ -89,7 +85,7 @@ impl Parser {
         if self.peek_token() == TermOp {
             let op_token = self.consume_token(TermOp)?;
             let right = self.parse_expression(false)?;
-            return Ok(Self::expression_node_from(&op_token, left, right, in_brackets));
+            return Ok(ExpressionNode::new(op_token.value_as_char(), in_brackets, left, right));
         }
         Ok(left)
     }
@@ -99,7 +95,7 @@ impl Parser {
         if self.peek_token() == FactOp {
             let op_token = self.consume_token(FactOp)?;
             let right = self.parse_term()?;
-            return Ok(Self::expression_node_from(&op_token, left, right, false));
+            return Ok(ExpressionNode::new(op_token.value_as_char(), false, left, right));
         }
 
         Ok(left)
@@ -113,24 +109,22 @@ impl Parser {
                 self.consume_token(CloseBracket)?;
                 result
             }
-
             Number => {
-                let number_token = self.consume_token(Number)?;
-                Ok(Self::number_node_from(&number_token))
+                let token = self.consume_token(Number)?;
+                Ok(NumberNode::new(token.value_as_int()))
             }
 
             _ => {
                 let token = self.consume_token(Var)?;
-                Ok(Self::var_node_from(&token))
+                Ok(VarNode::new(token.value_as_char()))
             }
         }
     }
 
-
-    fn consume_relop(&mut self, expected: &str) -> TokenResult {
+    fn consume_equal_sign(&mut self) -> TokenResult {
         let relop = self.consume_token(RelOp)?;
-        if relop.value.as_str() != expected {
-            return Err(format!("Expected {} but got {}", expected, relop.value));
+        if relop.value.as_str() != "=" {
+            return Err(format!("Expected = but got {}", relop.value));
         }
         Ok(relop)
     }
@@ -153,33 +147,5 @@ impl Parser {
             return EndOfStream;
         }
         self.tokens[self.position].ttype
-    }
-
-    fn number_node_from(token: &Token) -> Box<NumberNode> {
-        NumberNode::new(token.value.parse::<i32>().unwrap())
-    }
-
-    fn string_node_from(token: &Token) -> Box<StringNode> {
-        StringNode::new(token.value.as_str())
-    }
-
-    fn var_node_from(token: &Token) -> Box<VarNode> {
-        VarNode::new(Self::first_char_of(&token.value))
-    }
-
-    fn expression_node_from(token: &Token,
-                            left: NodeBox,
-                            right: NodeBox,
-                            in_brackets: bool) -> Box<ExpressionNode> {
-        ExpressionNode::new(
-            Self::first_char_of(&token.value),
-            in_brackets,
-            left,
-            right,
-        )
-    }
-
-    fn first_char_of(s: &String) -> char {
-        s.chars().next().unwrap()
     }
 }
