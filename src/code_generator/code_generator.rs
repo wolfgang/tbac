@@ -7,6 +7,7 @@ use crate::parser::node::Node;
 use crate::parser::let_node::LetNode;
 use crate::parser::var_node::VarNode;
 use crate::parser::string_node::StringNode;
+use crate::parser::expression_node::ExpressionNode;
 
 pub struct CodeGenerator {}
 
@@ -48,5 +49,9 @@ impl NodeEvaluator for CodeGenerator {
 
     fn eval_string(&self, node: &StringNode) -> String {
         format!("'{}'", node.value.clone())
+    }
+
+    fn eval_expression(&self, _node: &ExpressionNode) -> String {
+        unimplemented!()
     }
 }
