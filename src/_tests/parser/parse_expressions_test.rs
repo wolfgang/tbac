@@ -1,5 +1,5 @@
 use crate::tokenizer::Token;
-use crate::_tests::parser::helpers::{parse, as_node, assert_number_node, assert_var_node};
+use crate::_tests::parser::helpers::{parse, as_node, assert_number_node, assert_var_node, parse_single_node};
 use crate::parser::expression_node::ExpressionNode;
 use crate::parser::let_node::LetNode;
 use crate::parser::sequence_node::SequenceNode;
@@ -63,12 +63,6 @@ fn parses_binary_expressions_with_right_var_in_let() {
     assert_eq!(expression_node.op, '-');
     assert_number_node(&expression_node.left, 10);
     assert_var_node(&expression_node.right, 'B');
-}
-
-fn parse_single_node(tokens: &Vec<Token>) -> SequenceNode {
-    let root = parse(&tokens).unwrap();
-    assert_eq!(root.children.len(), 1);
-    root
 }
 
 fn get_let_expression(root: &SequenceNode) -> &ExpressionNode {

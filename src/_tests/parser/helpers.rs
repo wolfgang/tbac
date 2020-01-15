@@ -11,6 +11,14 @@ use crate::parser::var_node::VarNode;
 use crate::parser::string_node::StringNode;
 use crate::parser::expression_node::ExpressionNode;
 
+
+pub fn parse_single_node(tokens: &Vec<Token>) -> SequenceNode {
+    let root = parse(&tokens).unwrap();
+    assert_eq!(root.children.len(), 1);
+    root
+}
+
+
 pub fn parse(tokens: &Vec<Token>) -> Result<SequenceNode, String> {
     Parser::new(tokens).parse()
 }
