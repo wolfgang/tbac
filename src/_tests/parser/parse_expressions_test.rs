@@ -1,5 +1,5 @@
 use crate::tokenizer::Token;
-use crate::_tests::parser::helpers::{parse, as_node, assert_number_node, assert_var_node, parse_as_single_node};
+use crate::_tests::parser::helpers::{parse, as_node, assert_number_node, assert_var_node, parse_as_single_node, assert_parse_error};
 use crate::parser::expression_node::ExpressionNode;
 use crate::parser::let_node::LetNode;
 use crate::parser::sequence_node::SequenceNode;
@@ -63,6 +63,19 @@ fn parses_binary_expressions_with_right_var_in_let() {
     assert_eq!(expression_node.op, '-');
     assert_number_node(&expression_node.left, 10);
     assert_var_node(&expression_node.right, 'B');
+}
+
+#[test]
+fn return_error_if_expression_is_incomplete() {
+    let tokens = vec![
+        Token::lett(),
+        Token::var('A'),
+        Token::relop('='),
+        Token::number(10),
+        Token::termop('-')
+    ];
+
+    assert_parse_error(parse(&tokens), "Expected Var but reached the end");
 }
 
 fn get_let_expression(root: &SequenceNode) -> &ExpressionNode {
