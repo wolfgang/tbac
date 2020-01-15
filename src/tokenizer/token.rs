@@ -14,6 +14,8 @@ pub enum TokenType {
     Comma,
     TermOp,
     FactOp,
+    OpenBracket,
+    CloseBracket,
     Any,
     EndOfStream
 }
@@ -36,6 +38,8 @@ impl Token {
     pub fn comma() -> Self { Self::with(Comma, ',')}
     pub fn termop(op: char) -> Self {Self::with(TermOp, op)}
     pub fn factop(op: char) -> Self {Self::with(FactOp, op)}
+    pub fn openbracket() -> Self { Self::with(OpenBracket, '(')}
+    pub fn closebracket() -> Self { Self::with(CloseBracket, ')')}
 
     pub fn with<T>(ttype: TokenType, value: T) -> Self where T: Display {
         Self { ttype, value: value.to_string() }

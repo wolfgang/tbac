@@ -18,6 +18,9 @@ fn can_construct_tokens() {
 
     assert_token(Token::termop('+'), TermOp, "+");
     assert_token(Token::factop('*'), FactOp, "*");
+
+    assert_token(Token::openbracket(), OpenBracket, "(");
+    assert_token(Token::closebracket(), CloseBracket, ")");
 }
 
 fn assert_token(token: Token, ttype: TokenType, value: &str) {
