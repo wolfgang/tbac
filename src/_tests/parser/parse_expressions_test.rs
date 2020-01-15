@@ -98,6 +98,23 @@ fn parses_expression_with_multiple_factors() {
     assert_number_node(&left_expression.right, 30);
 }
 
+#[test]
+fn parses_expression_with_brackets() {
+    let tokens = tokenize("LET A = 10 * (20 + 30)").unwrap();
+
+    let root = parse_as_single_node(&tokens);
+    let expression_node = get_let_expression(&root);
+
+    assert_eq!(expression_node.op, '*');
+    assert_number_node(&expression_node.left, 10);
+
+    let left_expression = as_node::<ExpressionNode>(&expression_node.right);
+    assert_eq!(left_expression.op, '+');
+    assert_number_node(&left_expression.left, 20);
+    assert_number_node(&left_expression.right, 30);
+}
+
+
 
 #[test]
 fn return_error_if_expression_is_incomplete() {
