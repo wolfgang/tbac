@@ -5,6 +5,8 @@ use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
 use crate::parser::sequence_node::SequenceNode;
 use crate::parser::string_node::StringNode;
+use crate::parser::expression_node::ExpressionNode;
+use crate::parser::var_node::VarNode;
 
 #[test]
 fn generate_print_statement() {
@@ -37,6 +39,22 @@ fn generate_let_statement() {
     assert_eq!(generate_code(&root),
                "A = 1234;\n");
 }
+
+#[test]
+fn generate_let_statement_with_expression() {
+    let mut root = SequenceNode::new();
+    root.add(
+        LetNode::new(
+            'A',
+            ExpressionNode::new(
+                '-',
+                NumberNode::new(1234),
+                VarNode::new('B'))));
+
+    assert_eq!(generate_code(&root),
+               "A = 1234 - B;\n");
+}
+
 
 #[test]
 fn generate_multiple_statements() {

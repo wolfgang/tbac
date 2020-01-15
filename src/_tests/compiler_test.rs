@@ -11,21 +11,11 @@ fn compiles_if_statement() {
 }
 
 #[test]
-fn compiles_let_statement() {
-    let tb_code = r#"LET A = 1234
-                     LET B = A"#;
-    let expected_js_code = "A = 1234;\nB = A;\n";
-
-    let result = compile(tb_code);
-
-    assert_eq!(result, Ok(expected_js_code.to_string()));
-}
-
-#[test]
-fn compiles_if_statement_with_variable() {
+fn compiles_if_statement_with_expression() {
     let tb_code = r#"LET A = 10
-                     IF A > 20 THEN PRINT "YES""#;
-    let expected_js_code = "A = 10;\nif (A > 20) {\n  console.log('YES');\n}\n";
+                     LET B = A + 10
+                     IF B > A THEN PRINT "YES""#;
+    let expected_js_code = "A = 10;\nB = A + 10;\nif (B > A) {\n  console.log('YES');\n}\n";
 
     let result = compile(tb_code);
 

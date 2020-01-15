@@ -51,7 +51,7 @@ impl NodeEvaluator for CodeGenerator {
         format!("'{}'", node.value.clone())
     }
 
-    fn eval_expression(&self, _node: &ExpressionNode) -> String {
-        unimplemented!()
+    fn eval_expression(&self, node: &ExpressionNode) -> String {
+        format!("{} {} {}", node.left.eval(self), node.op, node.right.eval(self))
     }
 }
