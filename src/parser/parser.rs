@@ -106,19 +106,24 @@ impl Parser {
     }
 
     fn parse_factor(&mut self) -> NodeResult {
-        if self.peek_token() == OpenBracket {
-            self.consume_token(OpenBracket)?;
-            let result = self.parse_expression(true);
-            self.consume_token(CloseBracket)?;
-            return result;
-        }
-        if self.peek_token() == Number {
-            let number_token = self.consume_token(Number)?;
-            return Ok(Self::number_node_from(&number_token));
-        }
+        match self.peek_token() {
+            OpenBracket => {
+                self.consume_token(OpenBracket)?;
+                let result = self.parse_expression(true);
+                self.consume_token(CloseBracket)?;
+                result
+            }
 
-        let token = self.consume_token(Var)?;
-        Ok(Self::var_node_from(&token))
+            Number => {
+                let number_token = self.consume_token(Number)?;
+                Ok(Self::number_node_from(&number_token))
+            }
+
+            _ => {
+                let token = self.consume_token(Var)?;
+                Ok(Self::var_node_from(&token))
+            }
+        }
     }
 
 
