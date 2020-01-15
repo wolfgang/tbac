@@ -99,6 +99,22 @@ impl Parser {
     }
 
     fn parse_term(&mut self) -> NodeResult {
+        let left = self.parse_factor()?;
+        if self.peek_token() == FactOp {
+            let op_token = self.consume_token(FactOp)?;
+            let right = self.parse_expression()?;
+            return Ok(ExpressionNode::new(
+                Self::first_char_of(&op_token.value),
+                left,
+                right,
+            ));
+
+        }
+
+        Ok(left)
+    }
+
+    fn parse_factor(&mut self) -> NodeResult {
         if self.peek_token() == Number {
             let number_token = self.consume_token(Number)?;
             return Ok(Self::number_node_from(&number_token));
@@ -107,6 +123,7 @@ impl Parser {
         let token = self.consume_token(Var)?;
         Ok(Self::var_node_from(&token))
     }
+
 
     fn consume_relop(&mut self, expected: &str) -> TokenResult {
         let relop = self.consume_token(RelOp)?;

@@ -66,6 +66,32 @@ fn parses_binary_expressions_with_right_var_in_let() {
 }
 
 #[test]
+fn parses_expression_with_factor() {
+    let tokens = vec![
+        Token::lett(),
+        Token::var('A'),
+        Token::relop('='),
+        Token::number(10),
+        Token::factop('*'),
+        Token::number(20),
+        Token::factop('+'),
+        Token::number(30)
+    ];
+
+    let root = parse_as_single_node(&tokens);
+    let expression_node = get_let_expression(&root);
+
+    assert_eq!(expression_node.op, '*');
+    assert_number_node(&expression_node.left, 10);
+
+    let left_expression = as_node::<ExpressionNode>(&expression_node.right);
+    assert_eq!(left_expression.op, '+');
+    assert_number_node(&left_expression.left, 20);
+    assert_number_node(&left_expression.right, 30);
+}
+
+
+#[test]
 fn return_error_if_expression_is_incomplete() {
     let tokens = vec![
         Token::lett(),
