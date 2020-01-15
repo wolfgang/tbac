@@ -9,8 +9,8 @@ pub struct ExpressionNode {
 }
 
 impl ExpressionNode {
-    pub fn new(op: char, left: NodeBox, right: NodeBox) -> Self {
-        Self { op, left, right }
+    pub fn new(op: char, left: NodeBox, right: NodeBox) -> Box<Self> {
+        Box::new(Self { op, left, right })
     }
 }
 

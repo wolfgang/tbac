@@ -9,6 +9,7 @@ use crate::parser::var_node::VarNode;
 use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
+use crate::parser::expression_node::ExpressionNode;
 
 type NodeResult = Result<NodeBox, String>;
 type TokenResult = Result<Token, String>;
@@ -85,8 +86,21 @@ impl Parser {
 
     fn parse_expression(&mut self) -> NodeResult {
         if self.peek_token() == Number {
-            let token = self.consume_token(Number)?;
-            return Ok(Self::number_node_from(&token));
+            let number_token = self.consume_token(Number)?;
+
+            if self.peek_token() == TermOp {
+                let op_token = self.consume_token(TermOp)?;
+                let right = self.parse_expression()?;
+                return Ok(ExpressionNode::new(
+                    Self::first_char_of(&op_token.value),
+                    Self::number_node_from(&number_token),
+                    right
+                ));
+
+
+            }
+
+            return Ok(Self::number_node_from(&number_token));
         }
 
         let token = self.consume_token(Var)?;

@@ -13,5 +13,5 @@ fn construct_and_eval() {
     assert_number_node(&node.left, 1234);
     assert_number_node(&node.right, 5678);
 
-    assert_eq!(test_eval(&node), "eval_expression");
+    assert_eq!(test_eval(&*node), "eval_expression");
 }
