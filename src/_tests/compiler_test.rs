@@ -5,7 +5,14 @@ fn compiles_if_statement_with_expressions() {
     let tb_code = r#"LET A = 10
                      LET B = 20
                      IF A + B > A - B THEN PRINT "YES""#;
-    let expected_js_code = "A = 10;\nB = 20;\nif (A + B > A - B) {\n  console.log('YES');\n}\n";
+    let expected_js_code = vec![
+        "A = 10;",
+        "B = 20;",
+        "if (A + B > A - B) {",
+        "  console.log('YES');",
+        "}",
+        ""
+    ].join("\n");
 
     let result = compile(tb_code);
 
