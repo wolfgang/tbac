@@ -29,6 +29,17 @@ fn compiles_print_statement_with_multiple_args() {
     assert_eq!(result, Ok(expected_js_code.to_string()));
 }
 
+#[test]
+fn compiles_print_statement_with_expressions() {
+    let tb_code = r#"PRINT 1234 + A, B+23"#;
+    let expected_js_code = "console.log(1234 + A);console.log(B + 23);\n";
+
+    let result = compile(tb_code);
+
+    assert_eq!(result, Ok(expected_js_code.to_string()));
+
+}
+
 
 #[test]
 fn returns_error_if_tokenizing_goes_wrong() {
