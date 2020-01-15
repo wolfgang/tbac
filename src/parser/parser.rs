@@ -55,7 +55,7 @@ impl Parser {
                     let token = self.consume_token(StringLiteral)?;
                     print_node.add_param(Self::string_node_from(&token))
                 }
-                _ => { print_node.add_param(self.parse_expression()?) }
+                _ => { print_node.add_param(self.parse_expression(false)?) }
             }
 
             if self.peek_token() != Comma { break; }
@@ -65,9 +65,9 @@ impl Parser {
     }
 
     fn parse_if(&mut self) -> NodeResult {
-        let left = self.parse_expression()?;
+        let left = self.parse_expression(false)?;
         let relop = self.consume_token(RelOp)?;
-        let right = self.parse_expression()?;
+        let right = self.parse_expression(false)?;
         self.consume_token(Then)?;
         let statement = self.parse_statement()?;
         Ok(IfNode::new(
@@ -80,20 +80,20 @@ impl Parser {
     fn parse_let(&mut self) -> NodeResult {
         let var_token = self.consume_token(Var)?;
         self.consume_relop("=")?;
-        let right_side = self.parse_expression()?;
+        let right_side = self.parse_expression(false)?;
         Ok(LetNode::new(Self::first_char_of(&var_token.value), right_side))
     }
 
-    fn parse_expression(&mut self) -> NodeResult {
+    fn parse_expression(&mut self, in_brackets: bool) -> NodeResult {
         let left = self.parse_term()?;
         if self.peek_token() == TermOp {
             let op_token = self.consume_token(TermOp)?;
-            let right = self.parse_expression()?;
+            let right = self.parse_expression(false)?;
             return Ok(ExpressionNode::new(
                 Self::first_char_of(&op_token.value),
+                in_brackets,
                 left,
-                right,
-            ));
+                right));
         }
         Ok(left)
     }
@@ -105,10 +105,10 @@ impl Parser {
             let right = self.parse_term()?;
             return Ok(ExpressionNode::new(
                 Self::first_char_of(&op_token.value),
+                false,
                 left,
                 right,
             ));
-
         }
 
         Ok(left)
@@ -117,10 +117,9 @@ impl Parser {
     fn parse_factor(&mut self) -> NodeResult {
         if self.peek_token() == OpenBracket {
             self.consume_token(OpenBracket)?;
-            let result = self.parse_expression();
+            let result = self.parse_expression(true);
             self.consume_token(CloseBracket)?;
             return result;
-
         }
         if self.peek_token() == Number {
             let number_token = self.consume_token(Number)?;

@@ -48,6 +48,7 @@ fn generate_let_statement_with_expression() {
             'A',
             ExpressionNode::new(
                 '-',
+                false,
                 NumberNode::new(1234),
                 VarNode::new('B'))));
 

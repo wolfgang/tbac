@@ -6,10 +6,12 @@ use crate::parser::number_node::NumberNode;
 fn construct_and_eval() {
     let node = ExpressionNode::new(
         '+',
+        true,
         NumberNode::new(1234),
         NumberNode::new(5678));
 
     assert_eq!(node.op, '+');
+    assert_eq!(node.in_brackets, true);
     assert_number_node(&node.left, 1234);
     assert_number_node(&node.right, 5678);
 

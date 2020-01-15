@@ -52,6 +52,12 @@ impl NodeEvaluator for CodeGenerator {
     }
 
     fn eval_expression(&self, node: &ExpressionNode) -> String {
-        format!("{} {} {}", node.left.eval(self), node.op, node.right.eval(self))
+        let brackets = if node.in_brackets { ("(", ")") } else { ("", "")};
+        format!("{}{} {} {}{}",
+                brackets.0,
+                node.left.eval(self),
+                node.op,
+                node.right.eval(self),
+                brackets.1)
     }
 }
