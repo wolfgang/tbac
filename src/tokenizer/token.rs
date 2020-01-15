@@ -12,6 +12,8 @@ pub enum TokenType {
     StringLiteral,
     Var,
     Comma,
+    TermOp,
+    FactOp,
     Any,
     EndOfStream
 }
@@ -32,6 +34,8 @@ impl Token {
     pub fn string(value: &str) -> Self { Self::with(StringLiteral, value) }
     pub fn var(name: char) -> Self { Self::with(Var, name) }
     pub fn comma() -> Self { Self::with_empty_value(Comma)}
+    pub fn termop(op: char) -> Self {Self::with(TermOp, op)}
+    pub fn factop(op: char) -> Self {Self::with(FactOp, op)}
 
     fn with_empty_value(ttype: TokenType) -> Self {
         Self::with(ttype, "")

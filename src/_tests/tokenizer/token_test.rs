@@ -15,6 +15,9 @@ fn can_construct_tokens() {
     assert_token(Token::var('A'), Var, "A");
 
     assert_token(Token::comma(), Comma, "");
+
+    assert_token(Token::termop('+'), TermOp, "+");
+    assert_token(Token::factop('*'), FactOp, "*");
 }
 
 fn assert_token(token: Token, ttype: TokenType, value: &str) {
