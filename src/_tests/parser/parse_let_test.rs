@@ -1,5 +1,5 @@
 use crate::tokenizer::Token;
-use crate::_tests::parser::helpers::{as_node, assert_number_node, parse, assert_var_node};
+use crate::_tests::parser::helpers::*;
 use crate::parser::let_node::LetNode;
 
 #[test]
@@ -10,11 +10,7 @@ fn parse_let_statement() {
         Token::relop('='),
         Token::number(1234)
     ];
-    let result = parse(&tokens);
-    assert!(result.is_ok());
-
-    let node = result.unwrap();
-    assert_eq!(node.children.len(), 1);
+    let node = parse_as_single_node(&tokens);
 
     let let_node = as_node::<LetNode>(&node.children[0]);
     assert_eq!(let_node.var, 'A');
@@ -29,10 +25,9 @@ fn parse_let_with_var_on_the_right() {
         Token::relop('='),
         Token::var('B')
     ];
-    let node = parse(&tokens).unwrap();
-    assert_eq!(node.children.len(), 1);
+    let root = parse_as_single_node(&tokens);
 
-    let let_node = as_node::<LetNode>(&node.children[0]);
+    let let_node = as_node::<LetNode>(&root.children[0]);
     assert_eq!(let_node.var, 'A');
     assert_var_node(&let_node.value, 'B');
 

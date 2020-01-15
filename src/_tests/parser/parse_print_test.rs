@@ -8,9 +8,7 @@ fn parses_with_single_string_parameter() {
         Token::print(),
         Token::string("hello")
     ];
-    let node = parse(&tokens).unwrap();
-
-    assert_eq!(node.children.len(), 1);
+    let node = parse_as_single_node(&tokens);
     assert_print_node(&node.children[0], "hello");
 }
 
@@ -21,8 +19,7 @@ fn parses_with_single_number_expression() {
         Token::print(),
         Token::number(1234)
     ];
-    let node = parse(&tokens).unwrap();
-    assert_eq!(node.children.len(), 1);
+    let node = parse_as_single_node(&tokens);
     let print_node = assert_is_node::<PrintNode>(&node.children[0]);
     assert_eq!(print_node.params.len(), 1);
     assert_number_node(&print_node.params[0], 1234)
@@ -39,8 +36,7 @@ fn parses_with_multiple_params() {
         Token::comma(),
         Token::number(1234)
     ];
-    let node = parse(&tokens).unwrap();
-    assert_eq!(node.children.len(), 1);
+    let node = parse_as_single_node(&tokens);
     let print_node = assert_is_node::<PrintNode>(&node.children[0]);
     assert_eq!(print_node.params.len(), 3);
     assert_string_node(&print_node.params[0], "hello");
@@ -57,8 +53,7 @@ fn parses_print_with_vars() {
         Token::comma(),
         Token::var('A'),
     ];
-    let node = parse(&tokens).unwrap();
-    assert_eq!(node.children.len(), 1);
+    let node = parse_as_single_node(&tokens);
     let print_node = assert_is_node::<PrintNode>(&node.children[0]);
     assert_eq!(print_node.params.len(), 2);
     assert_string_node(&print_node.params[0], "hello");
@@ -72,8 +67,7 @@ fn return_error_if_print_has_non_string_argument() {
         Token::then()
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected Var but got Then");
+    assert_parse_error(parse(&tokens), "Expected Var but got Then");
 }
 
 #[test]
@@ -82,7 +76,6 @@ fn return_error_if_print_has_no_argument() {
         Token::print()
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected Var but reached the end");
+    assert_parse_error(parse(&tokens), "Expected Var but reached the end");
 
 }

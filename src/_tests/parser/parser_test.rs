@@ -14,12 +14,9 @@ fn parse_if_statement() {
         Token::string("hello")
     ];
 
-    let result = parse(&tokens);
-    assert!(result.is_ok());
-    let node = result.unwrap();
-    assert_eq!(node.children.len(), 1);
+    let root = parse_as_single_node(&tokens);
 
-    let if_node = as_node::<IfNode>(&node.children[0]);
+    let if_node = as_node::<IfNode>(&root.children[0]);
     assert_number_node(&if_node.left, 1111);
     assert_number_node(&if_node.right, 2222);
     assert_eq!(if_node.relop, '>');
@@ -35,9 +32,7 @@ fn parse_two_statements() {
         Token::string("world")
     ];
 
-    let result = parse(&tokens);
-    assert!(result.is_ok());
-    let node = result.unwrap();
+    let node = parse(&tokens).unwrap();
     assert_eq!(node.children.len(), 2);
 
     assert_print_node(&node.children[0], "hello");
@@ -61,12 +56,9 @@ fn parse_if_statement_with_if_statement_in_then() {
         Token::string("hello"),
     ];
 
-    let result = parse(&tokens);
-    assert!(result.is_ok());
-    let node = result.unwrap();
-    assert_eq!(node.children.len(), 1);
+    let root = parse_as_single_node(&tokens);
 
-    let if_node = as_node::<IfNode>(&node.children[0]);
+    let if_node = as_node::<IfNode>(&root.children[0]);
     assert_number_node(&if_node.left, 1111);
     assert_number_node(&if_node.right, 2222);
     assert_eq!(if_node.relop, '>');
@@ -91,13 +83,9 @@ fn parse_if_statement_with_vars() {
         Token::string("hello")
     ];
 
-    let result = parse(&tokens);
-    assert_eq!(result.as_ref().err(), None);
+    let root = parse_as_single_node(&tokens);
 
-    let node = result.unwrap();
-    assert_eq!(node.children.len(), 1);
-
-    let if_node = as_node::<IfNode>(&node.children[0]);
+    let if_node = as_node::<IfNode>(&root.children[0]);
     assert_var_node(&if_node.left, 'A');
     assert_var_node(&if_node.right, 'B');
     assert_eq!(if_node.relop, '>');
@@ -113,8 +101,7 @@ fn return_error_if_if_token_not_followed_by_expression() {
         Token::print(),
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected Var but got Print");
+    assert_parse_error(parse(&tokens), "Expected Var but got Print");
 }
 
 #[test]
@@ -123,8 +110,7 @@ fn return_error_if_first_token_is_not_command() {
         Token::string("hello")
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected command token but got StringLiteral");
+    assert_parse_error(parse(&tokens), "Expected command token but got StringLiteral");
 
 }
 
@@ -140,8 +126,7 @@ fn return_error_if_then_branch_is_not_a_command() {
         Token::string("hello")
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected command token but got StringLiteral");
+    assert_parse_error(parse(&tokens), "Expected command token but got StringLiteral");
 }
 
 #[test]
@@ -153,8 +138,7 @@ fn return_error_if_let_not_followed_by_equal_sign() {
         Token::number(1234)
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected = but got <");
+    assert_parse_error(parse(&tokens), "Expected = but got <");
 }
 
 #[test]
@@ -163,8 +147,6 @@ fn return_error_if_if_has_not_enough_parts() {
         Token::iff()
     ];
 
-    let result = parse(&tokens);
-    assert_parse_error(result, "Expected Var but reached the end");
-
+    assert_parse_error(parse(&tokens), "Expected Var but reached the end");
 }
 
