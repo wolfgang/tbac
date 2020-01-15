@@ -96,8 +96,6 @@ impl Parser {
                     Self::number_node_from(&number_token),
                     right
                 ));
-
-
             }
 
             return Ok(Self::number_node_from(&number_token));
