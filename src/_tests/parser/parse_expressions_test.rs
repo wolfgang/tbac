@@ -1,8 +1,9 @@
 use crate::tokenizer::Token;
-use crate::_tests::parser::helpers::{parse, as_node, assert_number_node, assert_var_node, parse_as_single_node, assert_parse_error};
+use crate::_tests::parser::helpers::*;
 use crate::parser::expression_node::ExpressionNode;
 use crate::parser::let_node::LetNode;
 use crate::parser::sequence_node::SequenceNode;
+use crate::tokenizer::tokenize;
 
 #[test]
 fn parses_binary_expressions_with_numbers_in_let() {
@@ -67,16 +68,7 @@ fn parses_binary_expressions_with_right_var_in_let() {
 
 #[test]
 fn parses_expression_with_factor() {
-    let tokens = vec![
-        Token::lett(),
-        Token::var('A'),
-        Token::relop('='),
-        Token::number(10),
-        Token::factop('*'),
-        Token::number(20),
-        Token::factop('+'),
-        Token::number(30)
-    ];
+    let tokens = tokenize("LET A = 10*20+30").unwrap();
 
     let root = parse_as_single_node(&tokens);
     let expression_node = get_let_expression(&root);

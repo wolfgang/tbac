@@ -11,7 +11,6 @@ use crate::parser::var_node::VarNode;
 use crate::parser::string_node::StringNode;
 use crate::parser::expression_node::ExpressionNode;
 
-
 pub fn parse_as_single_node(tokens: &Vec<Token>) -> SequenceNode {
     let root = parse(&tokens).unwrap();
     assert_eq!(root.children.len(), 1);

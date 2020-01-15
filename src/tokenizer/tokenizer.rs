@@ -1,6 +1,10 @@
 use crate::tokenizer::token::{Token, TokenType};
 use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma, FactOp};
 
+pub fn tokenize(input: &str) -> TokenizerResult {
+    Tokenizer::new(input).tokenize()
+}
+
 pub type TokenizerResult = Result<Vec<Token>, String>;
 
 pub struct Tokenizer {

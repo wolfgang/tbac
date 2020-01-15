@@ -1,9 +1,5 @@
-use crate::tokenizer::{Tokenizer, TokenizerResult};
 use crate::tokenizer::Token;
-
-fn tokenize(input: &str) -> TokenizerResult {
-    Tokenizer::new(input).tokenize()
-}
+use crate::tokenizer::tokenize;
 
 #[test]
 fn tokenizes_print_statement_without_parameters() {
