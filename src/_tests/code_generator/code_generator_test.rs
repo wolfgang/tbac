@@ -1,86 +1,63 @@
-use crate::code_generator::CodeGenerator;
-use crate::parser::ifnode::IfNode;
-use crate::parser::let_node::LetNode;
-use crate::parser::number_node::NumberNode;
-use crate::parser::print_node::PrintNode;
-use crate::parser::sequence_node::SequenceNode;
-use crate::parser::string_node::StringNode;
-use crate::parser::expression_node::ExpressionNode;
-use crate::parser::var_node::VarNode;
+use crate::compiler::compile;
 
 #[test]
-fn generate_print_statement() {
-    let mut root = SequenceNode::new();
-    root.add(PrintNode::with_string_param("hello world"));
-
-    assert_eq!(generate_code(&root),
-               "console.log('hello world');\n")
+fn compiles_if_statement_with_expressions() {
+    verify_compilation(
+        r#"LET A = 10
+           LET B = 20
+           IF A + B > A - B THEN PRINT "YES""#,
+        &vec![
+            "A = 10;",
+            "B = 20;",
+            "if (A + B > A - B) {",
+            "  console.log('YES');",
+            "}",
+            ""
+        ].join("\n"));
 }
 
 #[test]
-fn generate_if_statement() {
-    let mut root = SequenceNode::new();
-    root.add(
-        IfNode::new(
-            NumberNode::new(10),
-            NumberNode::new(20),
-            '<',
-            PrintNode::with_string_param("hello")));
-
-    assert_eq!(generate_code(&root),
-               "if (10 < 20) {\n  console.log('hello');\n}\n");
+fn compiles_print_statement_with_multiple_args() {
+    verify_compilation(r#"PRINT 1234,"hello", A"#,
+                       "console.log(1234);console.log('hello');console.log(A);\n");
 }
 
 #[test]
-fn generate_let_statement() {
-    let mut root = SequenceNode::new();
-    root.add(LetNode::new('A', NumberNode::new(1234)));
-
-    assert_eq!(generate_code(&root),
-               "A = 1234;\n");
+fn compiles_print_statement_with_expressions() {
+    verify_compilation(r#"PRINT 1234 + A, B+23"#,
+                       "console.log(1234 + A);console.log(B + 23);\n");
 }
 
 #[test]
-fn generate_let_statement_with_expression() {
-    let mut root = SequenceNode::new();
-    root.add(
-        LetNode::new(
-            'A',
-            ExpressionNode::new(
-                '-',
-                false,
-                NumberNode::new(1234),
-                VarNode::new('B'))));
+fn compiles_let_with_complex_expressions() {
+    verify_compilation("LET A = 1 + 2 - 3 + B + 4",
+                       "A = 1 + 2 - 3 + B + 4;\n");
+}
 
-    assert_eq!(generate_code(&root),
-               "A = 1234 - B;\n");
+#[test]
+fn compiles_brackets() {
+    verify_compilation("LET A = 1 * (2 + 3 * (4 + 5))",
+                       "A = 1 * (2 + 3 * (4 + 5));\n");
 }
 
 
 #[test]
-fn generate_multiple_statements() {
-    let mut root = SequenceNode::new();
-    root.add(PrintNode::with_string_param("hello"));
-    root.add(PrintNode::with_string_param("world"));
-
-    assert_eq!(generate_code(&root),
-               "console.log('hello');\nconsole.log('world');\n");
+fn returns_error_if_tokenizing_goes_wrong() {
+    verify_error("what",
+                 "Unrecognized character 'w'");
 }
 
 #[test]
-fn generate_print_statement_with_multiple_params() {
-    let mut root = SequenceNode::new();
-    let mut print_node = PrintNode::new();
-    print_node.add_param(StringNode::new("hello"));
-    print_node.add_param(NumberNode::new(1234));
-
-    root.add(print_node);
-
-    assert_eq!(generate_code(&root),
-               "console.log('hello');console.log(1234);\n")
+fn returns_error_if_parsing_goes_wrong() {
+    verify_error("THEN IF",
+                 "Expected command token but got Then");
 }
 
+fn verify_compilation(tb_code: &str, expected_js_code: &str) {
+    let result = compile(tb_code);
+    assert_eq!(result, Ok(expected_js_code.to_string()));
+}
 
-fn generate_code(root: &SequenceNode) -> String {
-    CodeGenerator {}.generate(&root)
+fn verify_error(code: &str, expected_error: &str) {
+    assert_eq!(compile(code), Err(expected_error.to_string()));
 }
