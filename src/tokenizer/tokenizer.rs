@@ -1,4 +1,5 @@
-use crate::tokenizer::token::Token;
+use crate::tokenizer::token::{Token, TokenType};
+use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma};
 
 pub type TokenizerResult = Result<Vec<Token>, String>;
 
@@ -33,18 +34,16 @@ impl Tokenizer {
                 continue;
             }
             if self.current_char_is_relop() {
-                self.read_relop();
+                self.consume_char_as(RelOp);
                 continue;
             }
             if self.current_char_is_char(',') {
-                self.consume_char();
-                self.result.push(Token::comma());
+                self.consume_char_as(Comma);
                 continue;
             }
 
             if self.current_char_is_termop() {
-                self.result.push(Token::termop(self.current_char()));
-                self.consume_char();
+                self.consume_char_as(TermOp);
                 continue;
             }
 
@@ -96,9 +95,8 @@ impl Tokenizer {
     }
 
 
-
-    fn read_relop(&mut self) {
-        self.result.push(Token::relop(self.current_char()));
+    fn consume_char_as(&mut self, ttype: TokenType) {
+        self.result.push(Token::with(ttype, self.current_char()));
         self.consume_char();
     }
 

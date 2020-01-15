@@ -33,16 +33,16 @@ impl Token {
     pub fn number(value: i32) -> Self { Self::with(Number, value) }
     pub fn string(value: &str) -> Self { Self::with(StringLiteral, value) }
     pub fn var(name: char) -> Self { Self::with(Var, name) }
-    pub fn comma() -> Self { Self::with_empty_value(Comma)}
+    pub fn comma() -> Self { Self::with(Comma, ',')}
     pub fn termop(op: char) -> Self {Self::with(TermOp, op)}
     pub fn factop(op: char) -> Self {Self::with(FactOp, op)}
 
-    fn with_empty_value(ttype: TokenType) -> Self {
-        Self::with(ttype, "")
+    pub fn with<T>(ttype: TokenType, value: T) -> Self where T: Display {
+        Self { ttype, value: value.to_string() }
     }
 
-    fn with<T>(ttype: TokenType, value: T) -> Self where T: Display {
-        Self { ttype, value: value.to_string() }
+    fn with_empty_value(ttype: TokenType) -> Self {
+        Self::with(ttype, "")
     }
 
 
