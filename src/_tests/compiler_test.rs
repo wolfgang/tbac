@@ -37,7 +37,15 @@ fn compiles_print_statement_with_expressions() {
     let result = compile(tb_code);
 
     assert_eq!(result, Ok(expected_js_code.to_string()));
+}
 
+#[test]
+fn compiles_let_with_complex_expressions() {
+    let tb_code = "LET A = 1 + 2 - 3 + B + 4";
+    let expected_js_code = "A = 1 + 2 - 3 + B + 4;\n";
+
+    let result = compile(tb_code);
+    assert_eq!(result, Ok(expected_js_code.to_string()));
 }
 
 
