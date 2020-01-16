@@ -1,7 +1,8 @@
+use regex::Regex;
+
+use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
-use regex::Regex;
-use crate::tokenizer::Token;
 
 pub type TokenizerResult = Result<Vec<Token>, String>;
 
@@ -11,7 +12,7 @@ pub fn tokenize(input: &str) -> TokenizerResult {
 
 pub struct Tokenizer<'a> {
     input: &'a str,
-    index: usize,
+    position: usize,
     token_matchers: Vec<(Regex, TokenType)>,
 }
 
@@ -19,7 +20,7 @@ impl<'a> Tokenizer<'a> {
     pub fn new(input: &'a str) -> Self {
         Self {
             input,
-            index: 0,
+            position: 0,
             token_matchers: vec![
                 (Regex::new("^(PRINT)").unwrap(), Print),
                 (Regex::new("^(IF)").unwrap(), If),
@@ -54,22 +55,31 @@ impl<'a> Tokenizer<'a> {
 
     fn next_token(&mut self) -> Result<Token, String> {
         self.skip_whitespace();
+        if !self.has_input() { return Ok(Token::end_of_stream()); }
 
-        if self.index == self.input.len() {
-            return Ok(Token::end_of_stream());
-        }
-
-        let slice = &self.input[self.index..];
-        for matcher in &self.token_matchers {
-            let (regex, token_type) = matcher;
-            if regex.is_match(slice) {
-                let value = Self::get_token_value(regex, slice);
-                self.index += value.len();
+        let current_input = &self.input[self.position..];
+        for (regex, token_type) in &self.token_matchers {
+            if regex.is_match(current_input) {
+                let value = Self::get_token_value(regex, current_input);
+                self.position += value.len();
                 return Ok(Self::token_with(*token_type, value));
             }
         }
+        return Err(format!("Invalid token at '{}'", current_input));
+    }
 
-        return Err(format!("Invalid token at '{}'", slice));
+    fn skip_whitespace(&mut self) {
+        while self.has_input() && self.current_char_is_whitespace() {
+            self.position += 1
+        }
+    }
+
+    fn current_char_is_whitespace(&self) -> bool {
+        self.input.chars().nth(self.position).unwrap().is_whitespace()
+    }
+
+    fn has_input(&self) -> bool {
+        self.position < self.input.len()
     }
 
     fn get_token_value<'b>(regex: &Regex, slice: &'b str) -> &'b str {
@@ -80,15 +90,5 @@ impl<'a> Tokenizer<'a> {
     fn token_with(ttype: TokenType, value: &str) -> Token {
         let value = if ttype == StringLiteral { &value[1..value.len() - 1] } else { value };
         Token::with(ttype, value)
-    }
-
-    fn skip_whitespace(&mut self) {
-        while self.index < self.input.len() && self.current_char_is_whitespace() {
-            self.index += 1
-        }
-    }
-
-    fn current_char_is_whitespace(&self) -> bool {
-        self.input.chars().nth(self.index).unwrap().is_whitespace()
     }
 }
