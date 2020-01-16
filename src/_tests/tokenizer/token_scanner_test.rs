@@ -1,6 +1,6 @@
 
 use crate::tokenizer::Token;
-use crate::tokenizer::token_scanner::Tokenizer;
+use crate::tokenizer::tokenizer::Tokenizer;
 
 
 #[test]
