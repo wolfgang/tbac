@@ -14,8 +14,11 @@ fn main() {
                     PRINT "The value of A + B is: ", C
                    "#;
 
+
+    let runtime = "let c = 0; let r = true;function goto(n) { c = n } while (r) { switch (c) { %%CODE%% default: r = false; } }";
+
     match compile(tb_code) {
-        Ok(js_code) => { println!("{}", js_code) }
+        Ok(js_code) => { println!("{}", runtime.replace("%%CODE%%", js_code.as_str())) }
         Err(error) => { println!("Compiler error: {}", error) }
     }
 }
