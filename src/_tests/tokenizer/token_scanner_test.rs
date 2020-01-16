@@ -17,9 +17,11 @@ impl TokenScanner {
             index: 0,
             token_matchers: vec![
                 (Regex::new("(PRINT).*").unwrap(), Print),
+                (Regex::new("(IF).*").unwrap(), If),
                 (Regex::new("(LET).*").unwrap(), Let),
+                (Regex::new("(THEN).*").unwrap(), Then),
                 (Regex::new("([0-9]+).*").unwrap(), Number),
-                (Regex::new("(\"[a-z]+\").*").unwrap(), StringLiteral),
+                (Regex::new("(\".*\").*").unwrap(), StringLiteral),
             ],
         }
     }
@@ -49,17 +51,12 @@ impl TokenScanner {
 }
 
 #[test]
-fn returns_print_token_then_end_of_stream() {
-    let mut scanner = TokenScanner::new("PRINT");
+fn scan_uppercase_tokens() {
+    let mut scanner = TokenScanner::new("PRINT IF LET THEN");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
-    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
-}
-
-#[test]
-fn returns_first_two_tokens_then_end_of_stream() {
-    let mut scanner = TokenScanner::new("PRINT LET");
-    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::iff()));
     assert_eq!(scanner.next_token(), Ok(Token::lett()));
+    assert_eq!(scanner.next_token(), Ok(Token::then()));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
 }
 
@@ -73,28 +70,8 @@ fn scan_number_tokens() {
 
 #[test]
 fn scan_string_tokens() {
-    let mut scanner = TokenScanner::new(r#"PRINT "abcd""#);
+    let mut scanner = TokenScanner::new(r#"PRINT "abcdABCD!""#);
     assert_eq!(scanner.next_token(), Ok(Token::print()));
-    assert_eq!(scanner.next_token(), Ok(Token::string("abcd")));
+    assert_eq!(scanner.next_token(), Ok(Token::string("abcdABCD!")));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
-}
-
-
-#[test]
-fn regex() {
-    let print_regex = Regex::new("(PRINT).*").unwrap();
-    let caps = print_regex.captures("PRINT LET").unwrap();
-    assert_ne!(caps.len(), 1);
-    assert_eq!(caps.get(1).unwrap().as_str(), "PRINT")
-}
-
-#[test]
-fn string_slicing() {
-    let s = "PRINT LET";
-    assert_eq!(&s[0..5], "PRINT");
-    assert_eq!(&s[5..6], " ");
-    assert_ne!(&s[0..1], " ");
-    assert_ne!(&s[1..2], " ");
-    let s2 = "PRINT";
-    assert_ne!(&s2[0..1], " ");
 }
