@@ -51,7 +51,7 @@ impl Tokenizer {
         }
     }
 
-    pub fn next_token(&mut self) -> Result<Token, String> {
+    fn next_token(&mut self) -> Result<Token, String> {
         self.skip_whitespace();
 
         if self.index == self.input.len() {
