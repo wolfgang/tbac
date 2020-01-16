@@ -70,7 +70,7 @@ impl Parser {
         let right = self.parse_expression(false)?;
         self.consume_token(Then)?;
         let statement = self.parse_statement()?;
-        Ok(IfNode::new(left, right, relop.value_as_char(), statement))
+        Ok(IfNode::new(left, right, relop.value_as_char(), statement, 0))
     }
 
     fn parse_let(&mut self) -> NodeResult {
