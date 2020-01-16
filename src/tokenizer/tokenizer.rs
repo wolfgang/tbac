@@ -9,16 +9,16 @@ pub fn tokenize(input: &str) -> TokenizerResult {
     Tokenizer::new(input).tokenize()
 }
 
-pub struct Tokenizer {
-    input: String,
+pub struct Tokenizer<'a> {
+    input: &'a str,
     index: usize,
     token_matchers: Vec<(Regex, TokenType)>,
 }
 
-impl Tokenizer {
-    pub fn new(input: &str) -> Self {
+impl<'a> Tokenizer<'a> {
+    pub fn new(input: &'a str) -> Self {
         Self {
-            input: input.to_string(),
+            input,
             index: 0,
             token_matchers: vec![
                 (Regex::new("^(PRINT)").unwrap(), Print),
@@ -59,9 +59,9 @@ impl Tokenizer {
             return Ok(Token::end_of_stream());
         }
 
+        let slice = &self.input[self.index..];
         for matcher in &self.token_matchers {
             let (regex, token_type) = matcher;
-            let slice = &self.input[self.index..];
             if regex.is_match(slice) {
                 let value = Self::get_token_value(regex, slice);
                 self.index += value.len();
@@ -69,10 +69,10 @@ impl Tokenizer {
             }
         }
 
-        return Err(format!("Invalid token at '{}'", self.input[self.index..].to_string()));
+        return Err(format!("Invalid token at '{}'", slice));
     }
 
-    fn get_token_value<'a>(regex: &Regex, slice: &'a str) -> &'a str {
+    fn get_token_value<'b>(regex: &Regex, slice: &'b str) -> &'b str {
         let captures = regex.captures(slice).unwrap();
         captures.get(1).unwrap().as_str()
     }
