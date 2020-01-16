@@ -21,7 +21,7 @@ impl NodeEvaluator for CodeGenerator {
     fn eval_sequence(&self, node: &SequenceNode) -> String {
         node.children.iter().fold(
             String::with_capacity(512),
-            |acc, child| format!("{}case 0: {}", acc, child.eval(self)))
+            |acc, child| format!("{}case {}: {}", acc, child.line(), child.eval(self)))
     }
 
     fn eval_print(&self, node: &PrintNode) -> String {
