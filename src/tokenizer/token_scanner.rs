@@ -3,13 +3,13 @@ use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
 use regex::Regex;
 
-pub struct TokenScanner {
+pub struct Tokenizer {
     input: String,
     index: usize,
     token_matchers: Vec<(Regex, TokenType)>,
 }
 
-impl TokenScanner {
+impl Tokenizer {
     pub fn new(input: &str) -> Self {
         Self {
             input: input.to_string(),

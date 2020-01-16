@@ -1,11 +1,11 @@
 
 use crate::tokenizer::Token;
-use crate::tokenizer::token_scanner::TokenScanner;
+use crate::tokenizer::token_scanner::Tokenizer;
 
 
 #[test]
 fn scan_uppercase_tokens() {
-    let mut scanner = TokenScanner::new("PRINT IF LET THEN");
+    let mut scanner = Tokenizer::new("PRINT IF LET THEN");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::iff()));
     assert_eq!(scanner.next_token(), Ok(Token::lett()));
@@ -15,7 +15,7 @@ fn scan_uppercase_tokens() {
 
 #[test]
 fn scan_number_tokens() {
-    let mut scanner = TokenScanner::new("PRINT 1234");
+    let mut scanner = Tokenizer::new("PRINT 1234");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
@@ -23,7 +23,7 @@ fn scan_number_tokens() {
 
 #[test]
 fn scan_string_tokens() {
-    let mut scanner = TokenScanner::new(r#"PRINT "abcdABCD1234""#);
+    let mut scanner = Tokenizer::new(r#"PRINT "abcdABCD1234""#);
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::string("abcdABCD1234")));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
@@ -31,7 +31,7 @@ fn scan_string_tokens() {
 
 #[test]
 fn scan_relop_tokens() {
-    let mut scanner = TokenScanner::new("PRINT < > =");
+    let mut scanner = Tokenizer::new("PRINT < > =");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::relop('<')));
     assert_eq!(scanner.next_token(), Ok(Token::relop('>')));
@@ -41,7 +41,7 @@ fn scan_relop_tokens() {
 
 #[test]
 fn scan_termop_and_factop_tokens() {
-    let mut scanner = TokenScanner::new("PRINT + - * /");
+    let mut scanner = Tokenizer::new("PRINT + - * /");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::termop('+')));
     assert_eq!(scanner.next_token(), Ok(Token::termop('-')));
@@ -52,7 +52,7 @@ fn scan_termop_and_factop_tokens() {
 
 #[test]
 fn scan_vars() {
-    let mut scanner = TokenScanner::new("PRINT A, Z");
+    let mut scanner = Tokenizer::new("PRINT A, Z");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::var('A')));
     assert_eq!(scanner.next_token(), Ok(Token::comma()));
@@ -63,7 +63,7 @@ fn scan_vars() {
 
 #[test]
 fn scan_comma_and_friends() {
-    let mut scanner = TokenScanner::new("PRINT , ( )");
+    let mut scanner = Tokenizer::new("PRINT , ( )");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::comma()));
     assert_eq!(scanner.next_token(), Ok(Token::openbracket()));
@@ -74,7 +74,7 @@ fn scan_comma_and_friends() {
 
 #[test]
 fn handles_invalid_token_in_the_middle_of_valid_ones() {
-    let mut scanner = TokenScanner::new("PRINT x 1234");
+    let mut scanner = Tokenizer::new("PRINT x 1234");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Err("Invalid token at 'x 1234'".to_string()));
     assert_eq!(scanner.next_token(), Err("Invalid token at 'x 1234'".to_string()));
@@ -82,14 +82,14 @@ fn handles_invalid_token_in_the_middle_of_valid_ones() {
 
 #[test]
 fn handles_newlines() {
-    let mut scanner = TokenScanner::new("\n   PRINT \n\n 1234");
+    let mut scanner = Tokenizer::new("\n   PRINT \n\n 1234");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
 }
 
 #[test]
 fn handles_trailing_whitespace() {
-    let mut scanner = TokenScanner::new("PRINT 1234     \n ");
+    let mut scanner = Tokenizer::new("PRINT 1234     \n ");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
@@ -97,7 +97,7 @@ fn handles_trailing_whitespace() {
 
 #[test]
 fn scan_multiple_tokens_of_same_type() {
-    let mut scanner = TokenScanner::new(r#"PRINT "hello" PRINT "world""#);
+    let mut scanner = Tokenizer::new(r#"PRINT "hello" PRINT "world""#);
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::string("hello")));
     assert_eq!(scanner.next_token(), Ok(Token::print()));
@@ -107,7 +107,7 @@ fn scan_multiple_tokens_of_same_type() {
 
 #[test]
 fn return_error_or_invalid_uppercase_word() {
-    let mut scanner = TokenScanner::new("PRINT A NOPE");
+    let mut scanner = Tokenizer::new("PRINT A NOPE");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::var('A')));
     assert_eq!(scanner.next_token(), Err("Invalid token at 'NOPE'".to_string()));
