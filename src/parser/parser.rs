@@ -44,8 +44,8 @@ impl Parser {
 
         match token.ttype {
             Print => { self.parse_print(line) }
-            If => { self.parse_if() }
-            Let => { self.parse_let() }
+            If => { self.parse_if(line) }
+            Let => { self.parse_let(line) }
             _ => Err(format!("Expected command token but got {:?}", token.ttype))
         }
     }
@@ -69,20 +69,20 @@ impl Parser {
         Ok(print_node)
     }
 
-    fn parse_if(&mut self) -> NodeResult {
+    fn parse_if(&mut self, line: u32) -> NodeResult {
         let left = self.parse_expression(false)?;
         let relop = self.consume_token(RelOp)?;
         let right = self.parse_expression(false)?;
         self.consume_token(Then)?;
         let statement = self.parse_statement()?;
-        Ok(IfNode::new(left, right, relop.value_as_char(), statement, 0))
+        Ok(IfNode::new(left, right, relop.value_as_char(), statement, line))
     }
 
-    fn parse_let(&mut self) -> NodeResult {
+    fn parse_let(&mut self, line: u32) -> NodeResult {
         let token = self.consume_token(Var)?;
         self.consume_equal_sign()?;
         let right = self.parse_expression(false)?;
-        Ok(LetNode::new(token.value_as_char(), right, 0))
+        Ok(LetNode::new(token.value_as_char(), right, line))
     }
 
     fn parse_expression(&mut self, in_brackets: bool) -> NodeResult {
