@@ -9,12 +9,13 @@ fn tokenizes_print_statement_without_parameters() {
 
 #[test]
 fn tokenizes_all_keywords() {
-    assert_eq!(tokenize("PRINT IF THEN LET"),
+    assert_eq!(tokenize("PRINT IF THEN LET GOTO"),
                Ok(vec![
                    Token::print(),
                    Token::iff(),
                    Token::then(),
-                   Token::lett()]))
+                   Token::lett(),
+                   Token::goto()]))
 }
 
 #[test]

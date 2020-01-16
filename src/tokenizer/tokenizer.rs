@@ -24,6 +24,7 @@ impl Tokenizer {
                 (Regex::new("^(PRINT)").unwrap(), Print),
                 (Regex::new("^(IF)").unwrap(), If),
                 (Regex::new("^(LET)").unwrap(), Let),
+                (Regex::new("^(GOTO)").unwrap(), Goto),
                 (Regex::new("^(THEN)").unwrap(), Then),
                 (Regex::new("^([<>=])").unwrap(), RelOp),
                 (Regex::new("^([+-])").unwrap(), TermOp),
