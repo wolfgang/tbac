@@ -60,16 +60,25 @@ impl Tokenizer {
 
         for matcher in &self.token_matchers {
             let (regex, token_type) = matcher;
-            if regex.is_match(&self.input[self.index..]) {
-                let caps = regex.captures(&self.input[self.index..]).unwrap();
-                let captured = caps.get(1).unwrap().as_str();
-                self.index += captured.len();
-                let value = if *token_type == StringLiteral { &captured[1..captured.len() - 1] } else { captured };
-                return Ok(Token::with(*token_type, value));
+            let slice = &self.input[self.index..];
+            if regex.is_match(slice) {
+                let value = Self::get_token_value(regex, slice);
+                self.index += value.len();
+                return Ok(Self::token_with(*token_type, value));
             }
         }
 
         return Err(format!("Invalid token at '{}'", self.input[self.index..].to_string()));
+    }
+
+    fn get_token_value<'a>(regex: &Regex, slice: &'a str) -> &'a str {
+        let captures = regex.captures(slice).unwrap();
+        captures.get(1).unwrap().as_str()
+    }
+
+    fn token_with(ttype: TokenType, value: &str) -> Token {
+        let value = if ttype == StringLiteral { &value[1..value.len() - 1] } else { value };
+        Token::with(ttype, value)
     }
 
     fn skip_whitespace(&mut self) {
