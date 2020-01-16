@@ -12,15 +12,19 @@ impl PrintNode {
     pub fn with_string_param(param: &str) -> Box<Self> {
         let mut params: Vec<NodeBox> = Vec::with_capacity(8);
         params.push(StringNode::new(param));
-        Box::new(Self { params })
+        Self::with_params(params)
     }
 
     pub fn new() -> Box<Self> {
-        Box::new(Self { params: Vec::with_capacity(8)})
+        Self::with_params(Vec::with_capacity(8))
     }
 
     pub fn add_param(&mut self, param: NodeBox) {
         self.params.push(param)
+    }
+
+    fn with_params(params: Vec<NodeBox>) -> Box<Self> {
+        Box::new(Self { params })
     }
 }
 
