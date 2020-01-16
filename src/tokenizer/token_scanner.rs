@@ -1,4 +1,4 @@
-use crate::tokenizer::Token;
+use crate::tokenizer::{Token, TokenizerResult};
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
 use regex::Regex;
@@ -29,6 +29,19 @@ impl Tokenizer {
                 (Regex::new("^(\\()").unwrap(), OpenBracket),
                 (Regex::new("^(\\))").unwrap(), CloseBracket),
             ],
+        }
+    }
+
+    pub fn tokenize(&mut self) -> TokenizerResult {
+        let mut result = Vec::with_capacity(128);
+        loop {
+            match self.next_token() {
+                Err(e) => { return Err(e); }
+                Ok(token) => {
+                    if token.ttype == EndOfStream { return Ok(result); }
+                    result.push(token);
+                }
+            }
         }
     }
 

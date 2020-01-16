@@ -5,15 +5,5 @@ use crate::tokenizer::token_scanner::Tokenizer;
 pub type TokenizerResult = Result<Vec<Token>, String>;
 
 pub fn tokenize(input: &str) -> TokenizerResult {
-    let mut scanner = Tokenizer::new(input);
-    let mut result = Vec::with_capacity(128);
-    loop {
-        match scanner.next_token() {
-            Err(e) => { return Err(e); }
-            Ok(token) => {
-                if token.ttype == EndOfStream { return Ok(result); }
-                result.push(token);
-            }
-        }
-    }
+    Tokenizer::new(input).tokenize()
 }
