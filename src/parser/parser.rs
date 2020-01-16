@@ -77,7 +77,7 @@ impl Parser {
         let token = self.consume_token(Var)?;
         self.consume_equal_sign()?;
         let right = self.parse_expression(false)?;
-        Ok(LetNode::new(token.value_as_char(), right))
+        Ok(LetNode::new(token.value_as_char(), right, 0))
     }
 
     fn parse_expression(&mut self, in_brackets: bool) -> NodeResult {
