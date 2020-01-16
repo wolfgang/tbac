@@ -2,9 +2,11 @@ use tbac::compiler::compile;
 
 fn main() {
     let tb_code = r#"LET C = 1
+                     LET I = 1
                     20 PRINT "HELLO ", C
-                    LET C = C + 1
-                    IF C > 10 THEN GOTO 60
+                    LET I = I + 1
+                    LET C = C * (I + 2)
+                    IF I > 10 THEN GOTO 60
                     GOTO 20
                     60 PRINT "END"
                    "#;
