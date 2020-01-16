@@ -9,14 +9,14 @@ pub struct GotoNode {
 }
 
 impl GotoNode {
-    pub fn new(destination: NodeBox, line: u32) -> Self {
-        Self { destination, line }
+    pub fn new(destination: NodeBox, line: u32) -> Box<Self> {
+        Box::new(Self { destination, line })
     }
 }
 
 impl Node for GotoNode {
-    fn eval(&self, _evaluator: &dyn NodeEvaluator) -> String {
-        unimplemented!()
+    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String {
+        evaluator.eval_goto(self)
     }
     fn as_any(&self) -> &dyn Any { self }
     fn line(&self) -> u32 { self.line }

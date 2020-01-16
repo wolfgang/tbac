@@ -10,6 +10,7 @@ use crate::parser::let_node::LetNode;
 use crate::parser::var_node::VarNode;
 use crate::parser::string_node::StringNode;
 use crate::parser::expression_node::ExpressionNode;
+use crate::parser::goto_node::GotoNode;
 
 pub fn parse_as_single_node(tokens: &Vec<Token>) -> SequenceNode {
     let root = parse(&tokens).unwrap();
@@ -64,6 +65,10 @@ impl NodeEvaluator for FakeNodeEvaluator {
 
     fn eval_let(&self, _: &LetNode) -> String {
         "eval_let".to_string()
+    }
+
+    fn eval_goto(&self, _: &GotoNode) -> String {
+        "eval_goto".to_string()
     }
 
     fn eval_var(&self, _node: &VarNode) -> String {

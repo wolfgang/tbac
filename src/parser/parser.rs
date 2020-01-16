@@ -10,6 +10,7 @@ use crate::parser::var_node::VarNode;
 use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
+use crate::parser::goto_node::GotoNode;
 
 type NodeResult = Result<NodeBox, String>;
 type TokenResult = Result<Token, String>;
@@ -46,6 +47,7 @@ impl Parser {
             Print => { self.parse_print(line) }
             If => { self.parse_if(line) }
             Let => { self.parse_let(line) }
+            Goto => { self.parse_goto(line) }
             _ => Err(format!("Expected command token but got {:?}", token.ttype))
         }
     }
@@ -83,6 +85,11 @@ impl Parser {
         self.consume_equal_sign()?;
         let right = self.parse_expression(false)?;
         Ok(LetNode::new(token.value_as_char(), right, line))
+    }
+
+    fn parse_goto(&mut self, line: u32) -> NodeResult {
+        let destination = self.parse_expression(false)?;
+        Ok(GotoNode::new(destination, line))
     }
 
     fn parse_expression(&mut self, in_brackets: bool) -> NodeResult {

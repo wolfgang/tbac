@@ -58,6 +58,19 @@ fn compiles_brackets() {
                           "case 0: A = 1 * (2 + 3 * (4 + 5));\n");
 }
 
+#[test]
+fn compiles_goto() {
+    verify_generated_code(
+        r#"10 PRINT "HELLO"
+           20 GOTO 10
+        "#,
+        &vec![
+            "case 10: console.log('HELLO');",
+            "case 20: goto(10); break;",
+            ""
+        ].join("\n"));
+}
+
 
 #[test]
 fn returns_error_if_tokenizing_goes_wrong() {
