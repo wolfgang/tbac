@@ -22,16 +22,18 @@ impl TokenScanner {
             self.index += 1
         }
 
-        let print_regex = Regex::new("PRINT.*").unwrap();
-        let let_regex = Regex::new("LET.*").unwrap();
+        let print_regex = Regex::new("(PRINT).*").unwrap();
+        let let_regex = Regex::new("(LET).*").unwrap();
 
         if print_regex.is_match(&self.input[self.index..]) {
-            self.index += 5;
+            let caps = print_regex.captures(&self.input[self.index..]).unwrap();
+            self.index += caps.get(1).unwrap().as_str().len();
             return Ok(Token::print());
         }
 
         if let_regex.is_match(&self.input[self.index..]) {
-            self.index += 3;
+            let caps = let_regex.captures(&self.input[self.index..]).unwrap();
+            self.index += caps.get(1).unwrap().as_str().len();
             return Ok(Token::lett());
         }
 
@@ -52,6 +54,14 @@ fn returns_first_two_tokens_then_end_of_stream() {
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::lett()));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn regex() {
+    let print_regex = Regex::new("(PRINT).*").unwrap();
+    let caps = print_regex.captures("PRINT LET").unwrap();
+    assert_ne!(caps.len(), 1);
+    assert_eq!(caps.get(1).unwrap().as_str(), "PRINT")
 }
 
 #[test]
