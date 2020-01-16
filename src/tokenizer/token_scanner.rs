@@ -1,7 +1,13 @@
-use crate::tokenizer::{Token, TokenizerResult};
 use crate::tokenizer::token::TokenType::*;
 use crate::tokenizer::token::TokenType;
 use regex::Regex;
+use crate::tokenizer::Token;
+
+pub type TokenizerResult = Result<Vec<Token>, String>;
+
+pub fn tokenize(input: &str) -> TokenizerResult {
+    Tokenizer::new(input).tokenize()
+}
 
 pub struct Tokenizer {
     input: String,
