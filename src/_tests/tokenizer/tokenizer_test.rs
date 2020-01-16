@@ -105,9 +105,23 @@ fn handles_surrounding_whitespace() {
                Ok(vec![
                    Token::var('A'),
                    Token::var('B'),
-                   Token::relop('<'),
-               ])
-    )
+                   Token::relop('<'), ]))
+}
+
+#[test]
+fn handles_blanks_inside_string_literals() {
+    assert_eq!(tokenize(r#"PRINT " hello world   lol ""#),
+               Ok(vec![
+                   Token::print(),
+                   Token::string(" hello world   lol ")]))
+}
+
+#[test]
+fn handles_some_special_chars_inside_strings() {
+    assert_eq!(tokenize(r#"PRINT "> < = : + -""#),
+               Ok(vec![
+                   Token::print(),
+                   Token::string("> < = : + -")]))
 }
 
 
