@@ -9,3 +9,4 @@ pub mod let_node;
 pub mod var_node;
 pub mod string_node;
 pub mod expression_node;
+pub mod goto_node;
