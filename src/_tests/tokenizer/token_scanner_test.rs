@@ -1,8 +1,7 @@
 use regex::Regex;
 
-use crate::tokenizer::{Token, TokenizerResult};
+use crate::tokenizer::Token;
 use crate::tokenizer::token::TokenType::*;
-use std::collections::HashMap;
 use crate::tokenizer::token::TokenType;
 
 struct TokenScanner {
@@ -17,7 +16,8 @@ impl TokenScanner {
             input: input.to_string(),
             index: 0,
             token_matchers: vec![
-                (Regex::new("(PRINT).*").unwrap(), Print)
+                (Regex::new("(PRINT).*").unwrap(), Print),
+                (Regex::new("(LET).*").unwrap(), Let),
             ],
         }
     }
@@ -31,19 +31,14 @@ impl TokenScanner {
             self.index += 1
         }
 
-        let print_regex = Regex::new("(PRINT).*").unwrap();
-        let let_regex = Regex::new("(LET).*").unwrap();
-
-        if print_regex.is_match(&self.input[self.index..]) {
-            let caps = print_regex.captures(&self.input[self.index..]).unwrap();
-            self.index += caps.get(1).unwrap().as_str().len();
-            return Ok(Token::print());
-        }
-
-        if let_regex.is_match(&self.input[self.index..]) {
-            let caps = let_regex.captures(&self.input[self.index..]).unwrap();
-            self.index += caps.get(1).unwrap().as_str().len();
-            return Ok(Token::lett());
+        for matcher in &self.token_matchers {
+            let (regex, token_type) = matcher;
+            if regex.is_match(&self.input[self.index..]) {
+                let caps = regex.captures(&self.input[self.index..]).unwrap();
+                let captured = caps.get(1).unwrap().as_str();
+                self.index += captured.len();
+                return Ok(Token::with(*token_type, captured.to_string()));
+            }
         }
 
         return Err("Invalid token".to_string());
