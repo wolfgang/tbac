@@ -16,30 +16,28 @@ impl TokenScanner {
             input: input.to_string(),
             index: 0,
             token_matchers: vec![
-                (Regex::new("(PRINT).*").unwrap(), Print),
-                (Regex::new("(IF).*").unwrap(), If),
-                (Regex::new("(LET).*").unwrap(), Let),
-                (Regex::new("(THEN).*").unwrap(), Then),
-                (Regex::new("([<>=]).*").unwrap(), RelOp),
-                (Regex::new("([+-]).*").unwrap(), TermOp),
-                (Regex::new("([*/]).*").unwrap(), FactOp),
-                (Regex::new("([0-9]+).*").unwrap(), Number),
-                (Regex::new("(\".*\").*").unwrap(), StringLiteral),
-                (Regex::new("([A-Z]).*").unwrap(), Var),
-                (Regex::new("(,).*").unwrap(), Comma),
-                (Regex::new("(\\().*").unwrap(), OpenBracket),
-                (Regex::new("(\\)).*").unwrap(), CloseBracket),
+                (Regex::new("^(PRINT)").unwrap(), Print),
+                (Regex::new("^(IF)").unwrap(), If),
+                (Regex::new("^(LET)").unwrap(), Let),
+                (Regex::new("^(THEN)").unwrap(), Then),
+                (Regex::new("^([<>=])").unwrap(), RelOp),
+                (Regex::new("^([+-])").unwrap(), TermOp),
+                (Regex::new("^([*/])").unwrap(), FactOp),
+                (Regex::new("^(^[0-9]+)").unwrap(), Number),
+                (Regex::new("^(\".*\")").unwrap(), StringLiteral),
+                (Regex::new("^([A-Z])").unwrap(), Var),
+                (Regex::new("^(,)").unwrap(), Comma),
+                (Regex::new("^(\\()").unwrap(), OpenBracket),
+                (Regex::new("^(\\))").unwrap(), CloseBracket),
             ],
         }
     }
 
     pub fn next_token(&mut self) -> Result<Token, String> {
+        self.skip_whitespace();
+
         if self.index == self.input.len() {
             return Ok(Token::end_of_stream());
-        }
-
-        while &self.input[self.index..self.index + 1] == " " {
-            self.index += 1
         }
 
         for matcher in &self.token_matchers {
@@ -54,6 +52,16 @@ impl TokenScanner {
         }
 
         return Err("Invalid token".to_string());
+    }
+
+    fn skip_whitespace(&mut self) {
+        while self.index < self.input.len() && self.current_char_is_whitespace().is_whitespace() {
+            self.index += 1
+        }
+    }
+
+    fn current_char_is_whitespace(&mut self) -> char {
+        self.input.chars().nth(self.index).unwrap()
     }
 }
 
@@ -122,5 +130,28 @@ fn scan_comma_and_friends() {
     assert_eq!(scanner.next_token(), Ok(Token::openbracket()));
     assert_eq!(scanner.next_token(), Ok(Token::closebracket()));
 
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn handles_invalid_token_in_the_middle_of_valid_ones() {
+    let mut scanner = TokenScanner::new("PRINT x 1234");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Err("Invalid token".to_string()));
+    assert_eq!(scanner.next_token(), Err("Invalid token".to_string()));
+}
+
+#[test]
+fn handles_newlines() {
+    let mut scanner = TokenScanner::new("\n   PRINT \n\n 1234");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
+}
+
+#[test]
+fn handles_trailing_whitespace() {
+    let mut scanner = TokenScanner::new("PRINT 1234     \n ");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
 }
