@@ -46,7 +46,7 @@ impl Parser {
     }
 
     fn parse_print(&mut self) -> NodeResult {
-        let mut print_node = PrintNode::new();
+        let mut print_node = PrintNode::new(0);
         loop {
             match self.peek_token() {
                 StringLiteral => {

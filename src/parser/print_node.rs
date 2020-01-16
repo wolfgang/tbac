@@ -5,26 +5,27 @@ use crate::parser::node_evaluator::NodeEvaluator;
 use crate::parser::string_node::StringNode;
 
 pub struct PrintNode {
-    pub params: Vec<NodeBox>
+    pub params: Vec<NodeBox>,
+    pub line: u32,
 }
 
 impl PrintNode {
     pub fn with_string_param(param: &str) -> Box<Self> {
         let mut params: Vec<NodeBox> = Vec::with_capacity(8);
         params.push(StringNode::new(param));
-        Self::with_params(params)
+        Self::with_params(params, 0)
     }
 
-    pub fn new() -> Box<Self> {
-        Self::with_params(Vec::with_capacity(8))
+    pub fn new(line: u32) -> Box<Self> {
+        Self::with_params(Vec::with_capacity(8), line)
     }
 
     pub fn add_param(&mut self, param: NodeBox) {
         self.params.push(param)
     }
 
-    fn with_params(params: Vec<NodeBox>) -> Box<Self> {
-        Box::new(Self { params })
+    fn with_params(params: Vec<NodeBox>, line: u32) -> Box<Self> {
+        Box::new(Self { params, line })
     }
 }
 
