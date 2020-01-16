@@ -55,6 +55,18 @@ fn parse_if_statement_with_vars() {
 }
 
 
+#[test]
+fn parsing_statements_with_line_numbers_produces_nodes_with_line_numbers() {
+    let tokens = tokenize(r#"10 PRINT "hello" PRINT "world""#).unwrap();
+    let node = parse(&tokens).unwrap();
+    assert_eq!(node.children.len(), 2);
+
+    assert_print_node(&node.children[0], "hello");
+    assert_eq!(node.children[0].line(), 10);
+    assert_print_node(&node.children[1], "world");
+    assert_eq!(node.children[1].line(), 0);
+}
+
 
 #[test]
 fn return_error_if_if_token_not_followed_by_expression() {

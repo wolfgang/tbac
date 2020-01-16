@@ -35,18 +35,23 @@ impl Parser {
     }
 
     fn parse_statement(&mut self) -> NodeResult {
-        let token = self.consume_token(Any)?;
+        let mut token = self.consume_token(Any)?;
+        let mut line = 0;
+        if token.ttype == Number {
+            line = token.value_as_uint();
+            token = self.consume_token(Any)?;
+        }
 
         match token.ttype {
-            Print => { self.parse_print() }
+            Print => { self.parse_print(line) }
             If => { self.parse_if() }
             Let => { self.parse_let() }
             _ => Err(format!("Expected command token but got {:?}", token.ttype))
         }
     }
 
-    fn parse_print(&mut self) -> NodeResult {
-        let mut print_node = PrintNode::new(0);
+    fn parse_print(&mut self, line: u32) -> NodeResult {
+        let mut print_node = PrintNode::new(line);
         loop {
             match self.peek_token() {
                 StringLiteral => {

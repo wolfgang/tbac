@@ -57,6 +57,11 @@ impl Token {
         self.value.parse::<i32>().unwrap()
     }
 
+    pub fn value_as_uint(&self) -> u32 {
+        self.value.parse::<u32>().unwrap()
+    }
+
+
     pub fn value_as_str(&self) -> &str {
         self.value.as_str()
     }
