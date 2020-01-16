@@ -20,8 +20,15 @@ impl TokenScanner {
                 (Regex::new("(IF).*").unwrap(), If),
                 (Regex::new("(LET).*").unwrap(), Let),
                 (Regex::new("(THEN).*").unwrap(), Then),
+                (Regex::new("([<>=]).*").unwrap(), RelOp),
+                (Regex::new("([+-]).*").unwrap(), TermOp),
+                (Regex::new("([*/]).*").unwrap(), FactOp),
                 (Regex::new("([0-9]+).*").unwrap(), Number),
                 (Regex::new("(\".*\").*").unwrap(), StringLiteral),
+                (Regex::new("([A-Z]).*").unwrap(), Var),
+                (Regex::new("(,).*").unwrap(), Comma),
+                (Regex::new("(\\().*").unwrap(), OpenBracket),
+                (Regex::new("(\\)).*").unwrap(), CloseBracket),
             ],
         }
     }
@@ -73,5 +80,47 @@ fn scan_string_tokens() {
     let mut scanner = TokenScanner::new(r#"PRINT "abcdABCD!""#);
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::string("abcdABCD!")));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn scan_relop_tokens() {
+    let mut scanner = TokenScanner::new("PRINT < > =");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::relop('<')));
+    assert_eq!(scanner.next_token(), Ok(Token::relop('>')));
+    assert_eq!(scanner.next_token(), Ok(Token::relop('=')));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn scan_termop_and_factop_tokens() {
+    let mut scanner = TokenScanner::new("PRINT + - * /");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::termop('+')));
+    assert_eq!(scanner.next_token(), Ok(Token::termop('-')));
+    assert_eq!(scanner.next_token(), Ok(Token::factop('*')));
+    assert_eq!(scanner.next_token(), Ok(Token::factop('/')));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn scan_vars() {
+    let mut scanner = TokenScanner::new("PRINT A Z");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::var('A')));
+    assert_eq!(scanner.next_token(), Ok(Token::var('Z')));
+
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn scan_comma_and_friends() {
+    let mut scanner = TokenScanner::new("PRINT , ( )");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::comma()));
+    assert_eq!(scanner.next_token(), Ok(Token::openbracket()));
+    assert_eq!(scanner.next_token(), Ok(Token::closebracket()));
+
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
 }
