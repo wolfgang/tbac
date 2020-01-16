@@ -1,7 +1,4 @@
-use crate::compiler::compile;
-use crate::tokenizer::tokenize;
-use crate::parser::parser::Parser;
-use crate::code_generator::CodeGenerator;
+use crate::code_generator::generate_code;
 
 #[test]
 fn compiles_if_statement_with_expressions() {
@@ -90,11 +87,5 @@ fn verify_generated_code(tb_code: &str, expected_js_code: &str) {
 }
 
 fn verify_error(code: &str, expected_error: &str) {
-    assert_eq!(compile(code), Err(expected_error.to_string()));
-}
-
-pub fn generate_code(code: &str) -> Result<String, String> {
-    let tokens = tokenize(code)?;
-    let root = Parser::new(&tokens).parse()?;
-    Ok(CodeGenerator {}.generate(&root))
+    assert_eq!(generate_code(code), Err(expected_error.to_string()));
 }

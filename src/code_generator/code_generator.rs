@@ -9,6 +9,15 @@ use crate::parser::var_node::VarNode;
 use crate::parser::string_node::StringNode;
 use crate::parser::expression_node::ExpressionNode;
 use crate::parser::goto_node::GotoNode;
+use crate::tokenizer::tokenize;
+use crate::parser::parser::Parser;
+
+pub fn generate_code(code: &str) -> Result<String, String> {
+    let tokens = tokenize(code)?;
+    let root = Parser::new(&tokens).parse()?;
+    Ok(CodeGenerator {}.generate(&root))
+}
+
 
 pub struct CodeGenerator {}
 
