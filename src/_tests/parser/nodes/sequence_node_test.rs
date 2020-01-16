@@ -13,5 +13,5 @@ fn construct_and_eval() {
     assert_number_node(&node.children[0], 1111);
     assert_print_node(&node.children[1], "hello");
 
-    assert_eq!(test_eval(&node), "eval_numbereval_print");
+    assert_eq!(test_eval(&node), "eval_sequence");
 }

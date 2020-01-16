@@ -18,6 +18,12 @@ impl CodeGenerator {
 }
 
 impl NodeEvaluator for CodeGenerator {
+    fn eval_sequence(&self, node: &SequenceNode) -> String {
+        node.children.iter().fold(
+            String::with_capacity(512),
+            |acc, child| format!("{}{}", acc, child.eval(self)))
+    }
+
     fn eval_print(&self, node: &PrintNode) -> String {
         let mut result = String::with_capacity(256);
         for param in &node.params {

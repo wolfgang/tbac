@@ -46,6 +46,10 @@ impl FakeNodeEvaluator {
 }
 
 impl NodeEvaluator for FakeNodeEvaluator {
+    fn eval_sequence(&self, _node: &SequenceNode) -> String {
+        "eval_sequence".to_string()
+    }
+
     fn eval_print(&self, _: &PrintNode) -> String {
         "eval_print".to_string()
     }
