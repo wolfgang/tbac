@@ -20,6 +20,21 @@ fn compiles_if_statement_with_expressions() {
 }
 
 #[test]
+fn compiles_statements_with_line_numbers() {
+    verify_generated_code(
+        r#"10 LET A = 10
+           LET B = 20
+           30 PRINT "HELLO""#,
+        &vec![
+            "case 10: A = 10;",
+            "case 0: B = 20;",
+            "case 30: console.log('HELLO');",
+            ""
+        ].join("\n"));
+}
+
+
+#[test]
 fn compiles_print_statement_with_multiple_args() {
     verify_generated_code(r#"PRINT 1234,"hello", A"#,
                           "case 0: console.log(1234);console.log('hello');console.log(A);\n");

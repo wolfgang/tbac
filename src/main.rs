@@ -6,9 +6,9 @@ fn main() {
                     IF A > 5 THEN PRINT "A is > 5"
                     IF A < 100 THEN IF A < 50 THEN PRINT "A is < 100 and < 50"
                     IF A < 5 THEN PRINT "NOBODY WILL SEE THIS"
-                    PRINT "THE END"
-                    PRINT "HELLO", 1234, "WORLD", 121223
-                    PRINT "The value of A is:", A
+                    20 PRINT "THE END"
+                    30 PRINT "HELLO", 1234, "WORLD", 121223
+                    40 PRINT "The value of A is:", A
                     PRINT "The value of B is:", B
                     LET C = A + B
                     PRINT "The value of A + B is: ", C
