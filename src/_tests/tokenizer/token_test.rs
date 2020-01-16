@@ -6,6 +6,7 @@ fn can_construct_tokens() {
     assert_token(Token::iff(), If, "IF");
     assert_token(Token::then(), Then, "THEN");
     assert_token(Token::lett(), Let, "LET");
+    assert_token(Token::goto(), Goto, "GOTO");
 
     assert_token(Token::relop('>'), RelOp, ">");
 
