@@ -1,3 +1,5 @@
+use regex::Regex;
+
 use crate::tokenizer::{Token, TokenizerResult};
 use crate::tokenizer::token::TokenType::EndOfStream;
 
@@ -15,18 +17,50 @@ impl TokenScanner {
         if self.index == self.input.len() {
             return Ok(Token::end_of_stream());
         }
-        if &self.input[self.index..5] == "PRINT" {
+
+        while &self.input[self.index..self.index + 1] == " " {
+            self.index += 1
+        }
+
+        let print_regex = Regex::new("PRINT.*").unwrap();
+        let let_regex = Regex::new("LET.*").unwrap();
+
+        if print_regex.is_match(&self.input[self.index..]) {
             self.index += 5;
             return Ok(Token::print());
         }
 
-        return Ok(Token::openbracket())
+        if let_regex.is_match(&self.input[self.index..]) {
+            self.index += 3;
+            return Ok(Token::lett());
+        }
+
+        return Err("Invalid token".to_string());
     }
 }
 
 #[test]
-fn returns_print_token_then_end_of_string() {
+fn returns_print_token_then_end_of_stream() {
     let mut scanner = TokenScanner::new("PRINT");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn returns_first_two_tokens_then_end_of_stream() {
+    let mut scanner = TokenScanner::new("PRINT LET");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::lett()));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn string_slicing() {
+    let s = "PRINT LET";
+    assert_eq!(&s[0..5], "PRINT");
+    assert_eq!(&s[5..6], " ");
+    assert_ne!(&s[0..1], " ");
+    assert_ne!(&s[1..2], " ");
+    let s2 = "PRINT";
+    assert_ne!(&s2[0..1], " ");
 }
