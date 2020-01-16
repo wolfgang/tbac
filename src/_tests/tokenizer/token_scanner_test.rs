@@ -1,16 +1,25 @@
 use regex::Regex;
 
 use crate::tokenizer::{Token, TokenizerResult};
-use crate::tokenizer::token::TokenType::EndOfStream;
+use crate::tokenizer::token::TokenType::*;
+use std::collections::HashMap;
+use crate::tokenizer::token::TokenType;
 
 struct TokenScanner {
     input: String,
     index: usize,
+    token_matchers: Vec<(Regex, TokenType)>,
 }
 
 impl TokenScanner {
     pub fn new(input: &str) -> Self {
-        Self { input: input.to_string(), index: 0 }
+        Self {
+            input: input.to_string(),
+            index: 0,
+            token_matchers: vec![
+                (Regex::new("(PRINT).*").unwrap(), Print)
+            ],
+        }
     }
 
     pub fn next_token(&mut self) -> Result<Token, String> {

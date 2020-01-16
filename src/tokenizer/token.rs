@@ -27,18 +27,18 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn print() -> Self { Self::with_empty_value(Print) }
-    pub fn iff() -> Self { Self::with_empty_value(If) }
-    pub fn then() -> Self { Self::with_empty_value(Then) }
-    pub fn lett() -> Self { Self::with_empty_value(Let) }
+    pub fn print() -> Self { Self::with(Print, "PRINT") }
+    pub fn iff() -> Self { Self::with(If, "IF") }
+    pub fn then() -> Self { Self::with(Then, "THEN") }
+    pub fn lett() -> Self { Self::with(Let, "LET") }
     pub fn relop(op: char) -> Self { Self::with(RelOp, op) }
     pub fn number(value: i32) -> Self { Self::with(Number, value) }
     pub fn string(value: &str) -> Self { Self::with(StringLiteral, value) }
     pub fn var(name: char) -> Self { Self::with(Var, name) }
-    pub fn comma() -> Self { Self::with(Comma, ',')}
-    pub fn termop(op: char) -> Self {Self::with(TermOp, op)}
-    pub fn factop(op: char) -> Self {Self::with(FactOp, op)}
-    pub fn openbracket() -> Self { Self::with(OpenBracket, '(')}
+    pub fn comma() -> Self { Self::with(Comma, ',') }
+    pub fn termop(op: char) -> Self { Self::with(TermOp, op) }
+    pub fn factop(op: char) -> Self { Self::with(FactOp, op) }
+    pub fn openbracket() -> Self { Self::with(OpenBracket, '(') }
     pub fn closebracket() -> Self { Self::with(CloseBracket, ')') }
     pub fn end_of_stream() -> Self { Self::with_empty_value(EndOfStream) }
 
