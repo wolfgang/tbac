@@ -18,6 +18,8 @@ impl TokenScanner {
             token_matchers: vec![
                 (Regex::new("(PRINT).*").unwrap(), Print),
                 (Regex::new("(LET).*").unwrap(), Let),
+                (Regex::new("([0-9]+).*").unwrap(), Number),
+                (Regex::new("(\"[a-z]+\").*").unwrap(), StringLiteral),
             ],
         }
     }
@@ -37,7 +39,8 @@ impl TokenScanner {
                 let caps = regex.captures(&self.input[self.index..]).unwrap();
                 let captured = caps.get(1).unwrap().as_str();
                 self.index += captured.len();
-                return Ok(Token::with(*token_type, captured.to_string()));
+                let value = if *token_type == StringLiteral { &captured[1..captured.len() - 1] } else { captured };
+                return Ok(Token::with(*token_type, value));
             }
         }
 
@@ -59,6 +62,23 @@ fn returns_first_two_tokens_then_end_of_stream() {
     assert_eq!(scanner.next_token(), Ok(Token::lett()));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
 }
+
+#[test]
+fn scan_number_tokens() {
+    let mut scanner = TokenScanner::new("PRINT 1234");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn scan_string_tokens() {
+    let mut scanner = TokenScanner::new(r#"PRINT "abcd""#);
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::string("abcd")));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
 
 #[test]
 fn regex() {
