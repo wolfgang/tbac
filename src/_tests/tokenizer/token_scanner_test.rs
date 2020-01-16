@@ -23,9 +23,9 @@ fn scan_number_tokens() {
 
 #[test]
 fn scan_string_tokens() {
-    let mut scanner = TokenScanner::new(r#"PRINT "abcdABCD!""#);
+    let mut scanner = TokenScanner::new(r#"PRINT "abcdABCD1234""#);
     assert_eq!(scanner.next_token(), Ok(Token::print()));
-    assert_eq!(scanner.next_token(), Ok(Token::string("abcdABCD!")));
+    assert_eq!(scanner.next_token(), Ok(Token::string("abcdABCD1234")));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
 }
 
@@ -52,9 +52,10 @@ fn scan_termop_and_factop_tokens() {
 
 #[test]
 fn scan_vars() {
-    let mut scanner = TokenScanner::new("PRINT A Z");
+    let mut scanner = TokenScanner::new("PRINT A, Z");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::var('A')));
+    assert_eq!(scanner.next_token(), Ok(Token::comma()));
     assert_eq!(scanner.next_token(), Ok(Token::var('Z')));
 
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
@@ -75,8 +76,8 @@ fn scan_comma_and_friends() {
 fn handles_invalid_token_in_the_middle_of_valid_ones() {
     let mut scanner = TokenScanner::new("PRINT x 1234");
     assert_eq!(scanner.next_token(), Ok(Token::print()));
-    assert_eq!(scanner.next_token(), Err("Invalid token".to_string()));
-    assert_eq!(scanner.next_token(), Err("Invalid token".to_string()));
+    assert_eq!(scanner.next_token(), Err("Invalid token at 'x 1234'".to_string()));
+    assert_eq!(scanner.next_token(), Err("Invalid token at 'x 1234'".to_string()));
 }
 
 #[test]
@@ -92,4 +93,22 @@ fn handles_trailing_whitespace() {
     assert_eq!(scanner.next_token(), Ok(Token::print()));
     assert_eq!(scanner.next_token(), Ok(Token::number(1234)));
     assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn scan_multiple_tokens_of_same_type() {
+    let mut scanner = TokenScanner::new(r#"PRINT "hello" PRINT "world""#);
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::string("hello")));
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::string("world")));
+    assert_eq!(scanner.next_token(), Ok(Token::end_of_stream()));
+}
+
+#[test]
+fn return_error_or_invalid_uppercase_word() {
+    let mut scanner = TokenScanner::new("PRINT A NOPE");
+    assert_eq!(scanner.next_token(), Ok(Token::print()));
+    assert_eq!(scanner.next_token(), Ok(Token::var('A')));
+    assert_eq!(scanner.next_token(), Err("Invalid token at 'NOPE'".to_string()));
 }

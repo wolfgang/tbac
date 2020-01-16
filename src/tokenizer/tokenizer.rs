@@ -1,5 +1,6 @@
 use crate::tokenizer::token::{Token, TokenType};
-use crate::tokenizer::token::TokenType::{TermOp, RelOp, Comma, FactOp, OpenBracket, CloseBracket};
+use crate::tokenizer::token::TokenType::{CloseBracket, Comma, EndOfStream, FactOp, OpenBracket, RelOp, TermOp};
+use crate::tokenizer::token_scanner::TokenScanner;
 
 pub fn tokenize(input: &str) -> TokenizerResult {
     Tokenizer::new(input).tokenize()
@@ -11,6 +12,7 @@ pub struct Tokenizer {
     input_chars: Vec<char>,
     result: Vec<Token>,
     position: usize,
+    scanner: TokenScanner,
 }
 
 impl Tokenizer {
@@ -19,59 +21,74 @@ impl Tokenizer {
             input_chars: input.chars().collect(),
             result: Vec::with_capacity(128),
             position: 0,
+            scanner: TokenScanner::new(input),
         }
     }
 
     pub fn tokenize(&mut self) -> TokenizerResult {
-        while self.has_input() {
-            self.skip_whitespace();
-            if self.current_char_is(|c| c.is_uppercase()) {
-                self.read_uppercase_str()?;
-                continue;
-            }
-            if self.current_char_is_char('"') {
-                self.read_string()?;
-                continue;
-            }
-            if self.current_char_is(|c| c.is_digit(10)) {
-                self.read_number();
-                continue;
-            }
-            if self.current_char_is_relop() {
-                self.consume_char_as(RelOp);
-                continue;
-            }
+        loop {
+            match self.scanner.next_token() {
+                Err(e) => { return Err(e); }
+                Ok(token) => {
+                    if token.ttype == EndOfStream {
+                        return Ok(self.result.clone());
+                    }
 
-            if self.current_char_is_char(',') {
-                self.consume_char_as(Comma);
-                continue;
-            }
-
-            if self.current_char_is_termop() {
-                self.consume_char_as(TermOp);
-                continue;
-            }
-
-            if self.current_char_is_factop() {
-                self.consume_char_as(FactOp);
-                continue;
-            }
-
-            if self.current_char_is_char('(') {
-                self.consume_char_as(OpenBracket);
-                continue;
-            }
-
-            if self.current_char_is_char(')') {
-                self.consume_char_as(CloseBracket);
-                continue;
-            }
-
-            if self.has_input() {
-                return Err(format!("Unrecognized character '{}'", self.current_char()));
+                    self.result.push(token);
+                }
             }
         }
-        Ok(self.result.clone())
+
+
+//        while self.has_input() {
+//            self.skip_whitespace();
+//            if self.current_char_is(|c| c.is_uppercase()) {
+//                self.read_uppercase_str()?;
+//                continue;
+//            }
+//            if self.current_char_is_char('"') {
+//                self.read_string()?;
+//                continue;
+//            }
+//            if self.current_char_is(|c| c.is_digit(10)) {
+//                self.read_number();
+//                continue;
+//            }
+//            if self.current_char_is_relop() {
+//                self.consume_char_as(RelOp);
+//                continue;
+//            }
+//
+//            if self.current_char_is_char(',') {
+//                self.consume_char_as(Comma);
+//                continue;
+//            }
+//
+//            if self.current_char_is_termop() {
+//                self.consume_char_as(TermOp);
+//                continue;
+//            }
+//
+//            if self.current_char_is_factop() {
+//                self.consume_char_as(FactOp);
+//                continue;
+//            }
+//
+//            if self.current_char_is_char('(') {
+//                self.consume_char_as(OpenBracket);
+//                continue;
+//            }
+//
+//            if self.current_char_is_char(')') {
+//                self.consume_char_as(CloseBracket);
+//                continue;
+//            }
+//
+//            if self.has_input() {
+//                return Err(format!("Unrecognized character '{}'", self.current_char()));
+//            }
+//        }
+//        Ok(self.result.clone())
     }
 
     fn skip_whitespace(&mut self) {

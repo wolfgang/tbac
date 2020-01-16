@@ -44,7 +44,7 @@ fn compiles_brackets() {
 #[test]
 fn returns_error_if_tokenizing_goes_wrong() {
     verify_error("what",
-                 "Unrecognized character 'w'");
+                 "Invalid token at 'what'");
 }
 
 #[test]

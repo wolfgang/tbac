@@ -23,8 +23,8 @@ impl TokenScanner {
                 (Regex::new("^([+-])").unwrap(), TermOp),
                 (Regex::new("^([*/])").unwrap(), FactOp),
                 (Regex::new("^(^[0-9]+)").unwrap(), Number),
-                (Regex::new("^(\".*\")").unwrap(), StringLiteral),
-                (Regex::new("^([A-Z])").unwrap(), Var),
+                (Regex::new("^(\"[A-Za-z0-9]+\")").unwrap(), StringLiteral),
+                (Regex::new(r"^([A-Z])(?:[^A-Z]|$)").unwrap(), Var),
                 (Regex::new("^(,)").unwrap(), Comma),
                 (Regex::new("^(\\()").unwrap(), OpenBracket),
                 (Regex::new("^(\\))").unwrap(), CloseBracket),
@@ -50,16 +50,16 @@ impl TokenScanner {
             }
         }
 
-        return Err("Invalid token".to_string());
+        return Err(format!("Invalid token at '{}'", self.input[self.index..].to_string()));
     }
 
     fn skip_whitespace(&mut self) {
-        while self.index < self.input.len() && self.current_char_is_whitespace().is_whitespace() {
+        while self.index < self.input.len() && self.current_char_is_whitespace() {
             self.index += 1
         }
     }
 
-    fn current_char_is_whitespace(&mut self) -> char {
-        self.input.chars().nth(self.index).unwrap()
+    fn current_char_is_whitespace(&self) -> bool {
+        self.input.chars().nth(self.index).unwrap().is_whitespace()
     }
 }

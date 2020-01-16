@@ -114,17 +114,17 @@ fn handles_surrounding_whitespace() {
 #[test]
 fn returns_error_if_keyword_is_unknown() {
     assert_eq!(tokenize("PRINT NOPE"),
-               Err("Unknown keyword 'NOPE'".to_string()));
+               Err("Invalid token at 'NOPE'".to_string()));
 }
 
 #[test]
 fn returns_error_if_string_is_unterminated() {
     assert_eq!(tokenize(r#"PRINT "hello" PRINT "hellooo"#),
-               Err("Unterminated string 'hellooo'".to_string()));
+               Err("Invalid token at '\"hellooo'".to_string()));
 }
 
 #[test]
 fn returns_error_if_encountering_unknown_token() {
     assert_eq!(tokenize("PRINT 123 %"),
-               Err("Unrecognized character '%'".to_string()));
+               Err("Invalid token at '%'".to_string()));
 }
