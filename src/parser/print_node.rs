@@ -30,12 +30,8 @@ impl PrintNode {
 }
 
 impl Node for PrintNode {
-    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String {
-        evaluator.eval_print(&self)
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
+    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String { evaluator.eval_print(&self) }
+    fn as_any(&self) -> &dyn Any { self }
+    fn line(&self) -> u32 { self.line }
 }
 

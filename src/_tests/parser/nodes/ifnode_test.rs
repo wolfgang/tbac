@@ -2,6 +2,7 @@ use crate::_tests::parser::helpers::*;
 use crate::parser::ifnode::IfNode;
 use crate::parser::number_node::NumberNode;
 use crate::parser::print_node::PrintNode;
+use crate::parser::node::Node;
 
 #[test]
 fn eval() {
@@ -16,7 +17,7 @@ fn eval() {
     assert_number_node(&node.right, 2222);
     assert_eq!(node.relop, '>');
     assert_print_node(&node.then, "impossible");
-    assert_eq!(node.line, 3333);
+    assert_eq!(node.line(), 3333);
 
     assert_eq!(test_eval(&*node), "eval_if")
 }

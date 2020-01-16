@@ -1,6 +1,7 @@
+use std::any::Any;
+
 use crate::parser::node::{Node, NodeBox};
 use crate::parser::node_evaluator::NodeEvaluator;
-use std::any::Any;
 
 pub struct LetNode {
     pub var: char,
@@ -15,12 +16,8 @@ impl LetNode {
 }
 
 impl Node for LetNode {
-    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String {
-        evaluator.eval_let(self)
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
+    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String { evaluator.eval_let(self) }
+    fn as_any(&self) -> &dyn Any { self }
+    fn line(&self) -> u32 { self.line }
 }
 

@@ -8,7 +8,7 @@ pub struct IfNode {
     pub right: NodeBox,
     pub relop: char,
     pub then: NodeBox,
-    pub line: u32
+    pub line: u32,
 }
 
 impl IfNode {
@@ -22,11 +22,7 @@ impl IfNode {
 }
 
 impl Node for IfNode {
-    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String {
-        evaluator.eval_if(&self)
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
+    fn eval(&self, evaluator: &dyn NodeEvaluator) -> String { evaluator.eval_if(&self) }
+    fn as_any(&self) -> &dyn Any { self }
+    fn line(&self) -> u32 { self.line }
 }
