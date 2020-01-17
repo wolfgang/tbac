@@ -4,7 +4,7 @@ use TokenType::*;
 
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum TokenType {
-    Statement,
+    Keyword,
     Print,
     If,
     Let,
@@ -30,7 +30,7 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn statement(name: &str) -> Self { Self::with(Statement, name) }
+    pub fn keyword(name: &str) -> Self { Self::with(Keyword, name) }
     pub fn print() -> Self { Self::with(Print, "PRINT") }
     pub fn iff() -> Self { Self::with(If, "IF") }
     pub fn lett() -> Self { Self::with(Let, "LET") }

@@ -2,7 +2,7 @@ use crate::tokenizer::token::{Token, TokenType::*, TokenType};
 
 #[test]
 fn can_construct_tokens() {
-    assert_token(Token::statement("PRINT"), Statement, "PRINT");
+    assert_token(Token::keyword("PRINT"), Keyword, "PRINT");
 
 
     assert_token(Token::print(), Print, "PRINT");
