@@ -1,4 +1,4 @@
-use crate::tokenizer::{tokenize, Token};
+use crate::tokenizer::tokenize;
 use crate::parser::ifnode::IfNode;
 use crate::_tests::parser::helpers::*;
 use crate::_tests::parser::helpers::assert_number_node;
@@ -103,13 +103,13 @@ fn return_error_if_let_not_followed_by_equal_sign() {
 
 #[test]
 fn return_error_if_if_has_not_enough_parts() {
-    let tokens = tokenize(r#"IF A >"#).unwrap();
+    let tokens = tokenize("IF A >").unwrap();
     assert_parse_error(parse(&tokens), "Expected Var but reached the end");
 }
 
 
 #[test]
 fn return_error_if_statement_is_invalid() {
-    let tokens = vec![Token::statement("NOTPRINT")];
-    assert_parse_error(parse(&tokens), "Invalid statement 'NOTPRINT'");
+    let tokens = tokenize("INVALIDSTATEMENT 1234").unwrap();
+    assert_parse_error(parse(&tokens), "Invalid statement 'INVALIDSTATEMENT'");
 }

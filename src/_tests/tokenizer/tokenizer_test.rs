@@ -127,12 +127,6 @@ fn handles_some_special_chars_inside_strings() {
 
 
 #[test]
-fn returns_error_if_keyword_is_unknown() {
-    assert_eq!(tokenize("PRINT NOPE"),
-               Err("Invalid token at 'NOPE'".to_string()));
-}
-
-#[test]
 fn returns_error_if_string_is_unterminated() {
     assert_eq!(tokenize(r#"PRINT "hello" PRINT "hellooo"#),
                Err("Invalid token at '\"hellooo'".to_string()));
