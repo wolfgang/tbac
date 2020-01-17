@@ -52,7 +52,7 @@ impl Parser {
             "IF" => { self.parse_if(line) }
             "LET" => { self.parse_let(line) }
             "GOTO" => { self.parse_goto(line) }
-            _ => Err("WHAT".to_string())
+            _ => Err(format!("Invalid statement '{}'", token.value))
         }
     }
 
