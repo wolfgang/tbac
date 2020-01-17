@@ -30,12 +30,12 @@ pub struct Token {
 }
 
 impl Token {
+    pub fn print() -> Self { Self::keyword("PRINT") }
+    pub fn iff() -> Self { Self::keyword("IF") }
+    pub fn lett() -> Self { Self::keyword("LET") }
+    pub fn goto() -> Self { Self::keyword("GOTO") }
+    pub fn then() -> Self { Self::keyword("THEN") }
     pub fn keyword(name: &str) -> Self { Self::with(Keyword, name) }
-    pub fn print() -> Self { Self::with(Print, "PRINT") }
-    pub fn iff() -> Self { Self::with(If, "IF") }
-    pub fn lett() -> Self { Self::with(Let, "LET") }
-    pub fn goto() -> Self { Self::with(Goto, "GOTO") }
-    pub fn then() -> Self { Self::with(Then, "THEN") }
     pub fn relop(op: char) -> Self { Self::with(RelOp, op) }
     pub fn number(value: i32) -> Self { Self::with(Number, value) }
     pub fn string(value: &str) -> Self { Self::with(StringLiteral, value) }

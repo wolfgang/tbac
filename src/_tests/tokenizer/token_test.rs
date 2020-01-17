@@ -5,11 +5,11 @@ fn can_construct_tokens() {
     assert_token(Token::keyword("PRINT"), Keyword, "PRINT");
 
 
-    assert_token(Token::print(), Print, "PRINT");
-    assert_token(Token::iff(), If, "IF");
-    assert_token(Token::then(), Then, "THEN");
-    assert_token(Token::lett(), Let, "LET");
-    assert_token(Token::goto(), Goto, "GOTO");
+    assert_token(Token::print(), Keyword, "PRINT");
+    assert_token(Token::iff(), Keyword, "IF");
+    assert_token(Token::then(), Keyword, "THEN");
+    assert_token(Token::lett(), Keyword, "LET");
+    assert_token(Token::goto(), Keyword, "GOTO");
 
     assert_token(Token::relop('>'), RelOp, ">");
 
