@@ -5,10 +5,6 @@ use TokenType::*;
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum TokenType {
     Statement,
-    Print,
-    If,
-    Let,
-    Goto,
     Then,
     RelOp,
     Number,
