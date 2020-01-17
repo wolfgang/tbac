@@ -40,15 +40,19 @@ impl Parser {
         let mut line = 0;
         if token.ttype == Number {
             line = token.value_as_uint();
-            token = self.consume_token(Any)?;
+            token = self.consume_token(Statement)?;
         }
 
-        match token.ttype {
-            Print => { self.parse_print(line) }
-            If => { self.parse_if(line) }
-            Let => { self.parse_let(line) }
-            Goto => { self.parse_goto(line) }
-            _ => Err(format!("Expected command token but got {:?}", token.ttype))
+        if token.ttype != Statement {
+            return Err(format!("Expected command token but got {:?}", token.ttype));
+        }
+
+        match token.value.as_str() {
+            "PRINT" => { self.parse_print(line) }
+            "IF" => { self.parse_if(line) }
+            "LET" => { self.parse_let(line) }
+            "GOTO" => { self.parse_goto(line) }
+            _ => Err("WHAT".to_string())
         }
     }
 

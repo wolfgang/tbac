@@ -78,7 +78,7 @@ fn parsing_statements_with_line_numbers_produces_nodes_with_line_numbers() {
 fn return_error_if_if_token_not_followed_by_expression() {
     let tokens = tokenize("IF PRINT").unwrap();
 
-    assert_parse_error(parse(&tokens), "Expected Var but got Print");
+    assert_parse_error(parse(&tokens), "Expected Var but got Statement");
 }
 
 #[test]
