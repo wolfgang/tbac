@@ -76,7 +76,7 @@ fn tokenize_commas() {
 }
 
 #[test]
-fn tokeinize_termops() {
+fn tokenize_termops() {
     assert_eq!(tokenize("+ -"),
                Ok(vec![
                    Token::termop('+'),
@@ -84,7 +84,7 @@ fn tokeinize_termops() {
 }
 
 #[test]
-fn tokeinize_factops() {
+fn tokenize_factops() {
     assert_eq!(tokenize("* /"),
                Ok(vec![
                    Token::factop('*'),
@@ -92,7 +92,7 @@ fn tokeinize_factops() {
 }
 
 #[test]
-fn tokeinize_brackets() {
+fn tokenize_brackets() {
     assert_eq!(tokenize("( )"),
                Ok(vec![
                    Token::openbracket(),
