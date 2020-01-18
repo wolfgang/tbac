@@ -15,14 +15,14 @@ use crate::parser::goto_node::GotoNode;
 type NodeResult = Result<NodeBox, String>;
 type TokenResult = Result<Token, String>;
 
-pub struct Parser {
-    tokens: Vec<Token>,
+pub struct Parser<'a> {
+    tokens: &'a Vec<Token>,
     position: usize,
 }
 
-impl Parser {
-    pub fn new(tokens: &Vec<Token>) -> Self {
-        Self { tokens: tokens.clone(), position: 0 }
+impl<'a> Parser<'a> {
+    pub fn new(tokens: &'a Vec<Token>) -> Self {
+        Self { tokens, position: 0 }
     }
 
     pub fn parse(&mut self) -> Result<SequenceNode, String> {
